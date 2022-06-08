@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<h1>Main Page</h1>
+<h3>Functions</h3>
+<ul>
+    <li> <a href="{% url 'home' %}">Home </a></li>
+    <li> <a href="{% url 'flussdata:main' %}"> Flussdata Main Page </a></li>
+</ul>
+
+{% endblock %}
