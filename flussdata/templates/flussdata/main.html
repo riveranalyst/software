@@ -8,4 +8,27 @@
     <li> <a href="{% url 'flussdata:main' %}"> Flussdata Main Page </a></li>
 </ul>
 
+<p>
+    <input type="checkbox" name="class1"><br>
+    Freezecore </p><br>
+
+    <p><label for="inp06"> Which Database:
+        <select name="meas-table" id="inp05">
+            <option value=""> -- Please select -- </option>
+            <option value="slurp-drop"> Slurping </option>
+            <option value="fc-drop">Freezecore</option>
+        </select>
+    </label>
+    </p>
+
+
+    <form action="upload" method="POST" class="dropzone">
+        {%csrf_token%}
+        <div class="fallback">
+            <input name="table_fc" type="file" multiple />
+        </div>
+    </form>
+
+
+
 {% endblock %}
