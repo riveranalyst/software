@@ -22,5 +22,6 @@ from flussdata import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('admin/', admin.site.urls),
-    path('flussdata/', include('flussdata.urls'))
+    path('flussdata/', include('flussdata.urls')),
+    # path('flussdata/', views.table, name='table')
 ]

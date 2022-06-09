@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse  # added for flussdata
+from flussdata.models import Freezecore
 
 
 def home(request):
@@ -9,5 +10,7 @@ def home(request):
 def main(request):
     return render(request, 'flussdata/main.html')
 
-# def checktable(table_fc):
-#     if table_fc
+
+# def table(request):
+#     table_show = Freezecore.objects.all()
+#     return render(request, 'flussdata/table.html', {'table_show': table_show})
