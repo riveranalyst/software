@@ -6,12 +6,6 @@
 <div class="row">
     <div class="col-md">
         <div class="card card-body">
-            <h1>Querying the Database</h1>
-            <h3>Functions</h3>
-            <ul>
-                <li> <a href="{% url 'home' %}">Home </a></li>
-                <li> <a href="{% url 'flussdata:query' %}"> Flussdata Main Page </a></li>
-            </ul>
             <p>
             <input type="checkbox" name="class1"><br>
             Freezecore
@@ -35,7 +29,14 @@
                 </div>
             </form>
         </div>
+        <div class="card card-body">
+            <h1>Table</h1>
+            {% load render_table from django_tables2 %}
+            {{ myFilter.form }}
+            {% render_table table_show %}
+        </div>
     </div>
 </div>
 
 {% endblock %}
+

@@ -10,15 +10,6 @@ def home(request):
 
 
 def query(request):
-
-    return render(request, 'flussdata/query.html')
-
-
-def modify(request):
-    return render(request, 'flussdata/modify.html')
-
-
-def table(request):
     #  Get all measurement data from the table
     freezecore_objects = Freezecore.objects.all()
 
@@ -32,10 +23,20 @@ def table(request):
     table_show = flutb.FreezecoreTable(freezecore_objects)
 
     #  return this to the context
-    context = {'table_show': table_show, 'myFilter': myFilter}
+    context = {'myFilter': myFilter, 'table_show': table_show}
 
-    return render(
-        request,
-        'flussdata/table.html', context)
+    return render(request, 'flussdata/query.html', context)
+
+
+def modify(request):
+    return render(request, 'flussdata/modify.html')
+
+
+# def table(request):
+#
+#
+#     return render(
+#         request,
+#         'flussdata/query.html', context)
 
 
