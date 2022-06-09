@@ -14,7 +14,7 @@
         <title>{{title}}</title>
     {% else %}
     <!-- USE DEFAULT TITLE TEXT IF NO VARIABLE "title" IS PASSED BY THE VIEW -->
-        <title>My Films App</title>
+        <title>Flussdata</title>
     {% endif %}
 
   </head>
@@ -22,13 +22,13 @@
     <!-- BOOTSTRAP NAVBAR CODE -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="d-flex justify-content-between px-5 mx-auto" style="width: 90%;">
-            <span class="navbar-text text-white">FIRST DJANGO APP</span>
+            <span class="navbar-text text-white">Flussdata</span>
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
                     <a class="nav-link active" href="{% url 'home' %}">Home</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link active" href="{% url 'flussdata:main' %}">Films</a>
+                    <a class="nav-link active" href="{% url 'flussdata:main' %}">Database</a>
                 </li>
             </ul>
         </div>
