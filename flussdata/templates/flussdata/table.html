@@ -1,13 +1,9 @@
+{% extends 'base.html' %}
 {# flussdata/templates/flussdata/table.html #}
 {% load render_table from django_tables2 %}
-{% load static %}
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Table</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-    </head>
-    <body>
-        {% render_table table_show %}
-    </body>
-</html>
+{% block content %}
+
+{{ myFilter.form}}
+{% render_table table_show %}
+
+{% endblock %}

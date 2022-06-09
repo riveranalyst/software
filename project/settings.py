@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_tables2',  # added for displaying tables from the database
-    
+    'django_filters',
+
     # newly added app:
     'flussdata.apps.FlussdataConfig'
 ]

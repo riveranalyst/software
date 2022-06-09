@@ -4,5 +4,7 @@ from . import views
 app_name = 'flussdata'
 
 urlpatterns = [
-    path('', views.main, name='main'),
+    path('query', views.query, name='query'),
+    path('modify', views.modify, name='modify'),
+    path('table', views.table, name='table')
 ]
