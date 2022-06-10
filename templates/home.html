@@ -1,18 +1,68 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
 
-<h1>Welcome to Flussdata</h1>
-<p>Flussdata is a database management tool and repository for
-    field investigations maintained by the
-    Hydro-morphology Research Groud of the Department of Hydraulic
-    Engineering and Water Resources Management, University of Stuttgart (Germany).
-</p>
-<p>
-    Only authorized researchers are allowed to access the <strong>fluss</strong>database.
-    Check out the tab <em>Database</em> in the menu for user-authentication and further
-    usage.
-</p>
+            <h1>Welcome to Flussdata</h1>
+            <p>Flussdata is a database management tool and repository for
+            field investigations maintained by the
+            Hydro-morphology Research Groud of the Department of Hydraulic
+            Engineering and Water Resources Management, University of Stuttgart (Germany).
+            </p>
+            <p>
+            Only authorized researchers are allowed to access the <strong>fluss</strong>database.
+            Check out the tab <em>Database</em> in the menu for user-authentication and further
+            usage.
+            </p>
+        </div>
+    </div>
+</div>
+
+<br>
+
+<div class="row">
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center text-white  mb-3" id="total-orders">
+			  	<div class="card-header">
+			  		<h5 class="card-title">Freezecores samples</h5>
+			  	</div>
+			  	<div class="card-body">
+			    	<h3 class="card-title">{{amount_fc}}</h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center text-white  mb-3" id="orders-delivered">
+			  	<div class="card-header">
+			  		<h5 class="card-title">VertiCo measurements</h5>
+			  	</div>
+			  	<div class="card-body">
+<!--			    	<h3 class="card-title">{{delivered}}</h3>-->
+			  	</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center text-white  mb-3" id="orders-pending">
+			  	<div class="card-header">
+			  		<h5 class="card-title">Shovel samples</h5>
+			  	</div>
+			  	<div class="card-body">
+<!--			    	<h3 class="card-title">{{pending}}</h3>-->
+			  	</div>
+			</div>
+		</div>
+	</div>
+
+</div>
 
 
 {% endblock %}

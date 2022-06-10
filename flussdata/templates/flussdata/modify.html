@@ -7,22 +7,22 @@
     <input type="checkbox" name="class1"><br>
     Freezecore </p><br>
 
-    <p><label for="inp06"> Which Database:
-        <select name="meas-table" id="inp05">
-            <option value=""> -- Please select -- </option>
-            <option value="slurp-drop"> Slurping </option>
-            <option value="fc-drop">Freezecore</option>
-        </select>
-    </label>
-    </p>
+<!--    <p><label for="inp06"> Which Database:-->
+<!--        <select name="meas-table" id="inp05">-->
+<!--            <option value=""> &#45;&#45; Please select &#45;&#45; </option>-->
+<!--            <option value="slurp-drop"> Slurping </option>-->
+<!--            <option value="fc-drop">Freezecore</option>-->
+<!--        </select>-->
+<!--    </label>-->
+<!--    </p>-->
 
 
-    <form action="upload" method="POST" class="dropzone">
+    <form method="POST" >
+        <input name="myfile" type="file" class="form-control" accept=".xlsx, .csv" />
         {%csrf_token%}
-        <div class="fallback">
-            <input name="table_fc" type="file" multiple />
-        </div>
+        <button type="submit" class="btn btn-success">Upload</button>
     </form>
+    <p>{{ message }}</p>
 
 
 {% endblock %}

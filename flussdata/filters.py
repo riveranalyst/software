@@ -3,7 +3,12 @@ import django_filters
 from .models import *
 
 
-class OrderFilter(django_filters.FilterSet):
+class TableFilter(django_filters.FilterSet):
     class Meta:
         model = Freezecore
-        fields = '__all__'
+        fields = ['river',
+                  'sample_id',
+                  'sample_name',
+                  'site_name',
+                  'date',
+                  'time_stamp']

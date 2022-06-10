@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils import timezone
+import pandas as pd
 
 
 class Freezecore(models.Model):
@@ -55,3 +56,6 @@ class Freezecore(models.Model):
     def __str__(self):
         object_descrip = "{} ({})".format(self.sample_id, self.river)
         return object_descrip
+
+
+

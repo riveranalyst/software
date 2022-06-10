@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
+{% load render_table from django_tables2 %}
+
+
 {% block content %}
-
 <br>
-
 <div class="row">
     <div class="col-md">
         <div class="card card-body">
@@ -12,14 +13,14 @@
             </p>
             <br>
 
-            <p><label for="inp06"> Which Database:
-                <select name="meas-table" id="inp05">
-                    <option value=""> -- Please select -- </option>
-                    <option value="slurp-drop"> Slurping </option>
-                    <option value="fc-drop">Freezecore</option>
-                </select>
-                </label>
-            </p>
+<!--            <p><label for="inp06"> Which Database:-->
+<!--                <select name="meas-table" id="inp05">-->
+<!--                    <option value=""> &#45;&#45; Please select &#45;&#45; </option>-->
+<!--                    <option value="slurp-drop"> Slurping </option>-->
+<!--                    <option value="fc-drop">Freezecore</option>-->
+<!--                </select>-->
+<!--                </label>-->
+<!--            </p>-->
 
 
             <form action="upload" method="POST" class="dropzone">
@@ -31,8 +32,10 @@
         </div>
         <div class="card card-body">
             <h1>Table</h1>
-            {% load render_table from django_tables2 %}
-            {{ myFilter.form }}
+            <form method="get">
+                {{ myFilter.form }}
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
             {% render_table table_show %}
         </div>
     </div>

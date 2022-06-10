@@ -1,10 +1,8 @@
 import os
 import django
 from pathlib import Path
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 django.setup()
-
 import pandas as pd
 import flussdata.models as models
 
