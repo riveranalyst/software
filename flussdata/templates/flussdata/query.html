@@ -1,42 +1,47 @@
 {% extends 'base.html' %}
 {% load render_table from django_tables2 %}
 
+{% block head %}
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+{% endblock%}
 
 {% block content %}
 <br>
 <div class="row">
     <div class="col-md">
         <div class="card card-body">
-            <p>
-            <input type="checkbox" name="class1"><br>
-            Freezecore
-            </p>
-            <br>
-
-<!--            <p><label for="inp06"> Which Database:-->
-<!--                <select name="meas-table" id="inp05">-->
-<!--                    <option value=""> &#45;&#45; Please select &#45;&#45; </option>-->
-<!--                    <option value="slurp-drop"> Slurping </option>-->
-<!--                    <option value="fc-drop">Freezecore</option>-->
-<!--                </select>-->
-<!--                </label>-->
-<!--            </p>-->
-
-
-            <form action="upload" method="POST" class="dropzone">
-            {%csrf_token%}
-                <div class="fallback">
-                    <input name="table_fc" type="file" multiple />
-                </div>
-            </form>
-        </div>
-        <div class="card card-body">
             <h1>Table</h1>
             <form method="get">
                 {{ fcFilter.form }}
                 <button class="btn btn-primary" type="submit">Search</button>
             </form>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card text-center text-white  mb-3" id="total-orders">
+                    <div class="card-header">
+                        <h5 class="card-title">Total of samples</h5>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">{{fc_count}}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="card card-body">
+                {% autoescape off %}
+                    {{ mapboxfig }}
+                {% endautoescape %}
+                </div>
+            </div>
+	    </div>
+        <br>
+        <div clas="row">
+            <div class="card card-body">
             {% render_table table_show %}
+            </div>
         </div>
     </div>
 </div>

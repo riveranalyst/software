@@ -10,6 +10,8 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_http_methods
 from plotly.offline import plot
 import plotly.graph_objs as go
+import plotly.express as px
+from django_pandas.io import read_frame
 
 
 def home(request):
@@ -28,12 +30,33 @@ def query(request):
     # Apply filter, remaking the object
     freezecore_objects = fcFilter.qs
 
+    # creates df from filtered table
+    df = read_frame(freezecore_objects)
+
     # Shows the table from the flussdata tables, hosted on tables.py
     table_show = flutb.FreezecoreTable(freezecore_objects)
 
+    # Count the amout of samples alter filte ris applied
+    fc_count = freezecore_objects.count()
+
+    fig = px.scatter_mapbox(df,
+                            lat='lat',
+                            lon='lon',
+                            hover_name='sample_id',
+                            color='river',
+                            zoom=10)
+    fig.update_layout(
+        mapbox_style="open-street-map",
+    )
+    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
+    # mapbox div
+    mapboxdiv = plot(fig,
+                    output_type='div')
+
     #  return this to the context
     context = {'fcFilter': fcFilter, 'table_show': table_show,
-               'title': 'Flussdata: Query', 'navbar': 'activequery'}
+               'title': 'Flussdata: Query', 'navbar': 'activequery',
+               'fc_count': fc_count, 'mapboxfig': mapboxdiv}
 
     return render(request, 'flussdata/query.html', context)
 
@@ -45,9 +68,11 @@ def view_sample(request, id):
     ds = ['250', '125', '63', '31_5', '16', '8', '4', '2', '1', '0_5', '0_25', '0_125', '0_063', '0_031']
     ds_float = [250, 125, 63, 31.5, 16, 4, 2, 1, 0.5, 0.25, 0.125, 0.063, 0.031]
     ds_values = []
+
+    # loop through the sediment fractions, which are column names in the db
     for d in ds:
         ds_values.append(eval('sample.percent_finer_{0}mm'.format(d)))
-    print(ds_values)
+
     # graph embbeded ina  div to return to the template:
     fig = go.Figure()
 
