@@ -22,17 +22,17 @@ def query(request):
     #  Get all measurement data from the table
     freezecore_objects = Freezecore.objects.all()
 
-    # Get filter if the user selected any
-    myFilter = TableFilter(request.GET, queryset=freezecore_objects)
+    # Get filter if the user selected any from the listed in filters.py
+    fcFilter = TableFilter(request.GET, queryset=freezecore_objects)
 
     # Apply filter, remaking the object
-    freezecore_objects = myFilter.qs
+    freezecore_objects = fcFilter.qs
 
     # Shows the table from the flussdata tables, hosted on tables.py
     table_show = flutb.FreezecoreTable(freezecore_objects)
 
     #  return this to the context
-    context = {'myFilter': myFilter, 'table_show': table_show,
+    context = {'fcFilter': fcFilter, 'table_show': table_show,
                'title': 'Flussdata: Query', 'navbar': 'activequery'}
 
     return render(request, 'flussdata/query.html', context)
@@ -55,7 +55,6 @@ def view_sample(request, id):
     fig.add_trace(go.Scatter(x=ds_float, y=ds_values,
                              mode='lines', name='test',
                              opacity=0.8,
-                             #stackgroup='log'
                              ))
     fig.update_xaxes(type="log")
     fig.update_layout(
@@ -71,7 +70,6 @@ def view_sample(request, id):
 
     context = {'plot_div': plot_div}
     return render(request, 'flussdata/fc_sample.html', context)
-    pass
 
 
 # def table(request):
