@@ -10,7 +10,7 @@ from django.core.files.storage import FileSystemStorage
 
 def home(request):
     amount_fc = Freezecore.objects.count()
-    context = {'amount_fc': amount_fc}
+    context = {'amount_fc': amount_fc, 'navbar': 'home'}
     return render(request, 'home.html', context)
 
 
@@ -28,7 +28,7 @@ def query(request):
     table_show = flutb.FreezecoreTable(freezecore_objects)
 
     #  return this to the context
-    context = {'myFilter': myFilter, 'table_show': table_show, 'title': 'Flussdata: Query'}
+    context = {'myFilter': myFilter, 'table_show': table_show, 'title': 'Flussdata: Query', 'navbar': 'activequery'}
 
     return render(request, 'flussdata/query.html', context)
 
@@ -53,7 +53,7 @@ def modify(request):
             message = "Something went wrong while updating database table, check your columns names."
     else:
         message = "sOmething wron"
-    context = {'message': message, 'title': 'Flussdata: Modify'}
+    context = {'message': message, 'title': 'Flussdata: Modify', 'navbar': 'activemodify'}
     return render(request, 'flussdata/modify.html', context)
 
 
