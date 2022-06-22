@@ -12,6 +12,8 @@ from plotly.offline import plot
 import plotly.graph_objs as go
 import plotly.express as px
 from django_pandas.io import read_frame
+from django_tables2.config import RequestConfig
+from django_tables2.export.export import TableExport
 
 
 def home(request):
@@ -39,19 +41,28 @@ def query(request):
     # Count the amout of samples alter filte ris applied
     fc_count = freezecore_objects.count()
 
+    # creates fig for mapbox using the df created from the filtered table
     fig = px.scatter_mapbox(df,
                             lat='lat',
                             lon='lon',
                             hover_name='sample_id',
                             color='river',
-                            zoom=10)
+                            zoom=10,
+                            size='d50',)
     fig.update_layout(
         mapbox_style="open-street-map",
     )
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
+
     # mapbox div
     mapboxdiv = plot(fig,
                     output_type='div')
+
+    RequestConfig(request).configure(table_show)
+    export_format = request.GET.get("_export", None)
+    if TableExport.is_valid_format(export_format):
+        exporter = TableExport(export_format, table_show)
+        return exporter.response("table.{}".format(export_format))
 
     #  return this to the context
     context = {'fcFilter': fcFilter, 'table_show': table_show,
@@ -59,6 +70,7 @@ def query(request):
                'fc_count': fc_count, 'mapboxfig': mapboxdiv}
 
     return render(request, 'flussdata/query.html', context)
+
 
 
 @require_http_methods(["GET"])

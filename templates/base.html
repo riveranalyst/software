@@ -25,11 +25,9 @@
   <body>
     <!-- BOOTSTRAP NAVBAR CODE -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <img src="{% static 'images/favicon.ico' %}">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
         <div class="collapse navbar-collapse" id="navbarNav">
+            <img src="{% static 'images/favicon.ico' %}">
+            <img style="height: 16" src="{% static 'images/flussdataname.png' %}">
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link {% if navbar == 'home' %} active {% endif %}" href="{% url 'home' %}">Home</a>

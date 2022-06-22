@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load render_table from django_tables2 %}
+{% load querystring from django_tables2 %}
 
 {% block head %}
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
@@ -11,7 +12,7 @@
 <div class="row">
     <div class="col-md">
         <div class="card card-body">
-            <h1>Table</h1>
+            <h1>Filters</h1>
             <form method="get">
                 {{ fcFilter.form }}
                 <button class="btn btn-primary" type="submit">Search</button>
@@ -22,7 +23,23 @@
             <div class="col-md-3">
                 <div class="card text-center text-white  mb-3" id="total-orders">
                     <div class="card-header">
-                        <h5 class="card-title">Total of samples</h5>
+                        <h5 class="card-title">Freezecore samples</h5>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">{{fc_count}}</h3>
+                    </div>
+                </div>
+                <div class="card text-center text-white  mb-3" id="orders-delivered">
+                    <div class="card-header">
+                        <h5 class="card-title">IDOC/kf profiles</h5>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">{{fc_count}}/{{fc_count}}</h3>
+                    </div>
+                </div>
+                <div class="card text-center text-white  mb-3" id="orders-pending">
+                    <div class="card-header">
+                        <h5 class="card-title">Shovel samples</h5>
                     </div>
                     <div class="card-body">
                         <h3 class="card-title">{{fc_count}}</h3>
@@ -38,11 +55,17 @@
             </div>
 	    </div>
         <br>
-        <div clas="row">
+        <div class="row">
             <div class="card card-body">
-            {% render_table table_show %}
+                {% render_table table_show %}
             </div>
         </div>
+        <div class="col-md-3">
+            <a href="{% querystring '_export'='csv' %}"><button class="btn btn-primary">Download CSV</button></a>
+
+            <a href="{% querystring '_export'='xlsx' %}"><button class="btn btn-primary">Download XLSX</button></a>
+        </div>
+
     </div>
 </div>
 
