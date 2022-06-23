@@ -20,7 +20,7 @@
     <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
     <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
 
-    <form action="modify/upload" method="POST" class="dropzone dz">
+    <form action="modify/upload" method="POST" class="dropzone dz" id="my_dz">
         {%csrf_token%}
         <div class="fallback">
             <input name="myfile" type="file" multiple />
