@@ -11,17 +11,7 @@ class NumberColumn(tables.Column):
         return '{:0.2f}'.format(value)
 
 
-# class CustomTemplateColumn(tables.TemplateColumn):
-#     def render(self, record, table, value, bound_column, **kwargs):
-#          if record.grade == "G2":
-#              return ''
-#          return super(CustomTemplateColumn, self).render(record, table, value, bound_column, **kwargs)
-
 class FreezecoreTable(tables.Table):
-    # for field in Freezecore._meta.get_fields():
-    #     if type(field) == models.FloatField:
-    #         self._meta.get_field(field.name) = NumberColumn()
-
     porosity_sfm = NumberColumn()
     dm = NumberColumn()
     dg = NumberColumn()

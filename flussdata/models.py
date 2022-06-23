@@ -53,9 +53,34 @@ class Freezecore(models.Model):
     percent_finer_0_063mm = models.FloatField(null=True, blank=True)
     percent_finer_0_031mm = models.FloatField(null=True, blank=True)
 
+    class Meta:
+        ordering = ['date']
+
     def __str__(self):
         object_descrip = "{} ({})".format(self.sample_id, self.river)
         return object_descrip
 
+
+class VertiCo(models.Model):
+    river = models.CharField(max_length=100)
+    sample_id = models.CharField(max_length=200)
+    sample_name = models.CharField(max_length=200)
+    site_name = models.CharField(max_length=150)
+    date = models.DateField('date of measurement', blank=True)
+    time_stamp = models.CharField(max_length=150)
+    lon = models.FloatField(null=True, blank=True)
+    lat = models.FloatField(null=True, blank=True)
+    dp_position = models.IntegerField(null=True, blank=True)
+    sediment_depth_m = models.FloatField(null=True)
+    wl_m = models.FloatField(null=True, blank=True)
+    H_m = models.FloatField(null=True, blank=True)
+    slurp_rate_avg_mls = models.FloatField(null=True, blank=True)
+    idoc_mgl = models.FloatField(null=True, blank=True)
+    temp_c = models.FloatField(null=True, blank=True)
+    idoc_sat = models.FloatField(null=True, blank=True)
+    kf_ms = models.FloatField(null=True, blank=True)
+    comment = models.CharField(max_length=1000)
+
+    fc_sample = models.ManyToManyField(Freezecore)
 
 
