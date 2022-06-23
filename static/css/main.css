@@ -2,11 +2,19 @@ body{
     background-color: #ebeff5;
 }
 
+.dz {
+    border: dashed !important;
+    border-color: #ccc !important;
+    border-radius: 10px !important;
+}
+
+.dz:hover {
+    background-color: aliceblue !important;
+}
 
 #total-orders{
     background-color: #4cb4c7;
 }
-
 
 #orders-delivered{
     background-color: #7abecc;
@@ -15,3 +23,4 @@ body{
 #orders-pending{
     background-color: #7CD1C0;
 }
+

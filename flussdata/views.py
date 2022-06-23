@@ -1,10 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse  # added for flussdata
-from flussdata.models import Freezecore
 import flussdata.tables as flutb
 from .filters import TableFilter
 from .forms import *
-from alter_tables import *
+from .alter_tables import *
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_http_methods
@@ -14,7 +12,8 @@ import plotly.express as px
 from django_pandas.io import read_frame
 from django_tables2.config import RequestConfig
 from django_tables2.export.export import TableExport
-
+from django.views.generic import TemplateView
+from django.http import HttpResponse
 
 def home(request):
     amount_fc = Freezecore.objects.count()
@@ -37,7 +36,7 @@ def query(request):
 
     # Shows the table from the flussdata tables, hosted on tables.py
     table_show = flutb.FreezecoreTable(freezecore_objects)
-    #table_show.paginate(page=request.GET.get("page", 1), per_page=25)
+    # table_show.paginate(page=request.GET.get("page", 1), per_page=25)
 
     # Count the amout of samples alter filte ris applied
     fc_count = freezecore_objects.count()
@@ -49,7 +48,7 @@ def query(request):
                             hover_name='sample_id',
                             color='river',
                             zoom=10,
-                            size='d50',)
+                            size='d50', )
     fig.update_layout(
         mapbox_style="open-street-map",
     )
@@ -57,7 +56,7 @@ def query(request):
 
     # mapbox div
     mapboxdiv = plot(fig,
-                    output_type='div')
+                     output_type='div')
 
     RequestConfig(request).configure(table_show)
     export_format = request.GET.get("_export", None)
@@ -71,7 +70,6 @@ def query(request):
                'fc_count': fc_count, 'mapboxfig': mapboxdiv}
 
     return render(request, 'flussdata/query.html', context)
-
 
 
 @require_http_methods(["GET"])
@@ -110,30 +108,30 @@ def view_sample(request, id):
     return render(request, 'flussdata/fc_sample.html', context)
 
 
-def modify(request):
-    if request.method == 'POST' and request.FILES['myfile']:
-        myfile = request.FILES['myfile']
-        fs = FileSystemStorage()
-        filename = fs.save(myfile.name, myfile)
-        uploaded_file_url = fs.url(filename)
-        print('came here')
-        try:
-            append_freezecore(uploaded_file_url)
-            message = "Successfully updated database table"
-        except:
-            message = "Something went wrong while updating database table, " \
-                      "check your columns names."
-    else:
-        message = "sOmething wron"
-    context = {'message': message, 'title': 'Flussdata: Modify', 'navbar': 'activemodify'}
-    return render(request, 'flussdata/modify.html', context)
+class modifyView(TemplateView):
+    template_name = 'flussdata/modify.html'
 
 
-# def table(request):
-#
-#
-#     return render(
-#         request,
-#         'flussdata/query.html', context)
+def file_upload_view(request):
+    #context = {'title': 'Flussdata: Modify', 'navbar': 'activemodify'}
+    print(request.FILES)
+    return HttpResponse('modify/upload')
 
 
+    # if request.method == 'POST' and request.FILES['myfile']:
+    #     myfile = request.FILES['myfile']
+    #     print(myfile)
+    #     fs = FileSystemStorage()
+    #     filename = fs.save(myfile.name, myfile)
+    #     uploaded_file_url = fs.url(filename)
+    #     print('came here')
+    #     try:
+    #         append_freezecore(uploaded_file_url)
+    #         message = "Successfully updated database table"
+    #     except:
+    #         message = "Something went wrong while updating database table, " \
+    #                   "check your columns names."
+    # else:
+    #     message = "sOmething wron"
+    # context = {'message': message, 'title': 'Flussdata: Modify', 'navbar': 'activemodify'}
+    # return render(request, 'flussdata/modify.html', context)

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Modifying the Database</h1>
+<h1>FlussModify</h1>
 
 <p>
     <input type="checkbox" name="class1"><br>
@@ -16,13 +16,22 @@
 <!--    </label>-->
 <!--    </p>-->
 
+<!--    DRAG AND DROP ZONE-->
+    <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+    <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
 
-    <form method="POST" >
-        <input name="myfile" type="file" class="form-control" accept=".xlsx, .csv" />
+    <form action="modify/upload" method="POST" class="dropzone dz">
         {%csrf_token%}
-        <button type="submit" class="btn btn-success">Upload</button>
+        <div class="fallback">
+            <input name="myfile" type="file" multiple />
+        </div>
     </form>
-    <p>{{ message }}</p>
+<!--    <form method="POST" >-->
+<!--        {%csrf_token%}-->
+<!--        <input name="myfile" type="file" class="form-control" accept=".xlsx, .csv" />-->
+<!--        <button type="submit" class="btn btn-success">Upload</button>-->
+<!--    </form>-->
+<!--    <p>{{ message }}</p>-->
 
 
 {% endblock %}

@@ -51,7 +51,7 @@ class FreezecoreTable(tables.Table):
     percent_finer_0_125mm = NumberColumn()
     percent_finer_0_063mm = NumberColumn()
     percent_finer_0_031mm = NumberColumn()
-    
+
     class Meta:
         model = Freezecore
         template_name = "django_tables2/bootstrap-responsive.html"

@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+
 # added flussdata views:
 from flussdata import views
 
@@ -24,3 +25,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('flussdata/', include('flussdata.urls'))
 ]
+
