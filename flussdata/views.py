@@ -37,6 +37,7 @@ def query(request):
 
     # Shows the table from the flussdata tables, hosted on tables.py
     table_show = flutb.FreezecoreTable(freezecore_objects)
+    #table_show.paginate(page=request.GET.get("page", 1), per_page=25)
 
     # Count the amout of samples alter filte ris applied
     fc_count = freezecore_objects.count()
@@ -107,12 +108,6 @@ def view_sample(request, id):
 
     context = {'plot_div': plot_div}
     return render(request, 'flussdata/fc_sample.html', context)
-
-
-# def table(request):
-#     form = FreezecoreForm()
-#     context = {'form': form}
-#     return render(request, 'flussdata/table.html', context)
 
 
 def modify(request):
