@@ -7,31 +7,16 @@
     <input type="checkbox" name="class1"><br>
     Freezecore </p><br>
 
-<!--    <p><label for="inp06"> Which Database:-->
-<!--        <select name="meas-table" id="inp05">-->
-<!--            <option value=""> &#45;&#45; Please select &#45;&#45; </option>-->
-<!--            <option value="slurp-drop"> Slurping </option>-->
-<!--            <option value="fc-drop">Freezecore</option>-->
-<!--        </select>-->
-<!--    </label>-->
-<!--    </p>-->
-
 <!--    DRAG AND DROP ZONE-->
     <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
     <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
 
-    <form action="modify/upload" method="POST" class="dropzone dz" id="my_dz">
+    <form action="modify/upload" method="POST" class="dropzone dz" id="my-dropzone">
         {%csrf_token%}
         <div class="fallback">
             <input name="myfile" type="file" multiple />
         </div>
     </form>
-<!--    <form method="POST" >-->
-<!--        {%csrf_token%}-->
-<!--        <input name="myfile" type="file" class="form-control" accept=".xlsx, .csv" />-->
-<!--        <button type="submit" class="btn btn-success">Upload</button>-->
-<!--    </form>-->
-<!--    <p>{{ message }}</p>-->
 
 
 {% endblock %}

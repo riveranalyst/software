@@ -1,12 +1,21 @@
 import django_tables2 as tables
 from flussdata.models import Freezecore
 from django.db import models
+from django_tables2.utils import A
+from django.utils.html import format_html
+from django.urls import reverse
 
 
 class NumberColumn(tables.Column):
     def render(self, value):
         return '{:0.2f}'.format(value)
 
+
+# class CustomTemplateColumn(tables.TemplateColumn):
+#     def render(self, record, table, value, bound_column, **kwargs):
+#          if record.grade == "G2":
+#              return ''
+#          return super(CustomTemplateColumn, self).render(record, table, value, bound_column, **kwargs)
 
 class FreezecoreTable(tables.Table):
     # for field in Freezecore._meta.get_fields():
@@ -55,3 +64,7 @@ class FreezecoreTable(tables.Table):
     class Meta:
         model = Freezecore
         template_name = "django_tables2/bootstrap-responsive.html"
+
+    def render_id(self, record):
+        return format_html('<a href="{}">{}</a>', reverse('flussdata:view_sample', kwargs={'id': record.id}), record.id)
+

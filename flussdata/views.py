@@ -59,6 +59,7 @@ def query(request):
     mapboxdiv = plot(fig,
                      output_type='div')
 
+    # export of table
     RequestConfig(request).configure(table_show)
     export_format = request.GET.get("_export", None)
     if TableExport.is_valid_format(export_format):
@@ -123,7 +124,7 @@ def file_upload_view(request):
     #     filename = fs.save(my_file.name, my_file)
     #     uploaded_file_url = fs.url(filename)
         df = pd.read_csv(my_file.temporary_file_path(), encoding='utf-8', parse_dates=['date'])
-        print(df)
+        print(my_file.temporary_file_path())
         #  append data from df read into the database
         for index, row in df.iterrows():
             obj = models.Freezecore.objects.create(
