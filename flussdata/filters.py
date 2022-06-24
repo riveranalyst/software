@@ -7,9 +7,9 @@ class TableFilter(django_filters.FilterSet):
     class Meta:
         model = Freezecore
         fields = {
-                    'sample_id': ['exact', 'contains'],
-                    'sample_name': ['exact', 'contains'],
-                    'site_name': ['exact', 'contains'],
+                    'sample_id': ['contains'],
+                    'sample_name': ['contains'],
+                    'site_name': ['contains'],
                     'meas_station': ['exact'],
                     'meas_station__river': ['exact'],
                     'meas_station__campaign': ['exact'],

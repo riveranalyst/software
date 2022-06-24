@@ -10,13 +10,16 @@
 <br>
 <div class="row">
     <div class="col-md">
-        <div class="card card-body">
+        <div class="col-md-5">
+            <div class="card card-body">
             <h1>FlussQuery</h1>
-            <form method="get">
-                {{ fcFilter.form }}
-                <button class="btn btn-primary" type="submit">Search</button>
-            </form>
+                <form method="get">
+                    {{ fcFilter.form.as_p }}
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </form>
+            </div>
         </div>
+
         <br>
         <div class="row">
             <div class="col-md-3">
