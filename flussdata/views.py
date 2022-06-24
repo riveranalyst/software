@@ -1,6 +1,6 @@
 from django.shortcuts import render
 import flussdata.tables as flutb
-from .filters import TableFilter
+from .filters import *
 from .forms import *
 from .alter_tables import *
 from django.core.files.storage import FileSystemStorage
@@ -25,22 +25,30 @@ def home(request):
 def query(request):
     #  Get all measurement data from the table
     freezecore_objects = Freezecore.objects.all()
+    idoc_objects = Freezecore.objects.all()
 
     # Get filter if the user selected any from the listed in filters.py
-    fcFilter = TableFilter(request.GET, queryset=freezecore_objects)
+    # TODO modify or somehow adapt code below to instantiate a sort of
+    #  MeasPoint filter objects and use it for filtering both models
+    fcFilter = FreezecoreFilter(request.GET, queryset=freezecore_objects)
 
     # Apply filter, remaking the object
     freezecore_objects = fcFilter.qs
+    # idoc_objects =
+
 
     # creates df from filtered table
     df = read_frame(freezecore_objects)
 
     # Shows the table from the flussdata tables, hosted on tables.py
     table_show = flutb.FreezecoreTable(freezecore_objects)
+    idoc_show = flutb.IDOCTable(idoc_objects)
+
     # table_show.paginate(page=request.GET.get("page", 1), per_page=25)
 
     # Count the amout of samples alter filte ris applied
     fc_count = freezecore_objects.count()
+    # idoc_count =
 
     # creates fig for mapbox using the df created from the filtered table
     fig = px.scatter_mapbox(df,
@@ -56,12 +64,12 @@ def query(request):
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
 
     # mapbox div
-    mapboxdiv = plot(fig,
-                     output_type='div')
+    mapboxdiv = plot(fig, output_type='div')
 
-    # export of table
+    # export of sub. sed. table
     RequestConfig(request).configure(table_show)
     export_format = request.GET.get("_export", None)
+
     if TableExport.is_valid_format(export_format):
         exporter = TableExport(export_format, table_show)
         return exporter.response("table.{}".format(export_format))
@@ -69,7 +77,10 @@ def query(request):
     #  return this to the context
     context = {'fcFilter': fcFilter, 'table_show': table_show,
                'title': 'Flussdata: Query', 'navbar': 'activequery',
-               'fc_count': fc_count, 'mapboxfig': mapboxdiv}
+               'fc_count': fc_count,
+               # 'idoc_count': idoc_count,
+               'idoc_table': idoc_show,
+               'mapboxfig': mapboxdiv}
 
     return render(request, 'flussdata/query.html', context)
 

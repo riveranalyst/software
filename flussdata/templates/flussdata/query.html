@@ -62,12 +62,19 @@
                 <h3>Subsurface Sedimentological Parameters</h3>
                 {% load render_table from django_tables2 %}
                 {% render_table table_show %}
+                <div class="margin-right">
+                    <a href="{% querystring '_export'='csv' %}"><button class="btn btn-primary">Download CSV</button></a>
+                    <a href="{% querystring '_export'='xlsx' %}"><button class="btn btn-primary">Download XLSX</button></a>
+                </div>
             </div>
         </div>
+        <br>
         <div class="row">
-            <a href="{% querystring '_export'='csv' %}"><button class="btn btn-primary">Download CSV</button></a>
-
-            <a href="{% querystring '_export'='xlsx' %}"><button class="btn btn-primary">Download XLSX</button></a>
+            <div class="card card-body">
+                <h3>Intragravel Dissolved Oxygen Content</h3>
+                {% load render_table from django_tables2 %}
+                {% render_table idoc_table %}
+            </div>
         </div>
 
     </div>

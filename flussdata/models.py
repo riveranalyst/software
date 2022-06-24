@@ -1,11 +1,13 @@
 from django.db import models
+
+
 # from django.core.validators import MaxValueValidator, MinValueValidator
 # from django.utils import timezone
 # import pandas as pd
 
 
 class River(models.Model):
-    river = models.CharField(max_length=200)
+    river = models.CharField(max_length=200, unique=True)
 
     def __str__(self):
         return self.river
@@ -40,12 +42,13 @@ class MeasStation(models.Model):
 
 
 class Freezecore(models.Model):
-    meas_station = models.ForeignKey(MeasStation, verbose_name='Measurement station', on_delete=models.SET_NULL, null=True)
+    meas_station = models.ForeignKey(MeasStation, verbose_name='Measurement station', on_delete=models.SET_NULL,
+                                     null=True)
     sample_id = models.CharField(max_length=200)
     sample_name = models.CharField(max_length=200)
     site_name = models.CharField(max_length=150)
-    #date = models.DateField('date of measurement')
-    #time_stamp = models.CharField(max_length=150)
+    # date = models.DateField('date of measurement')
+    # time_stamp = models.CharField(max_length=150)
     lon = models.FloatField(null=True, blank=True)
     lat = models.FloatField(null=True, blank=True)
     porosity_sfm = models.FloatField(null=True, blank=True)
@@ -97,16 +100,17 @@ class Freezecore(models.Model):
 
 
 class IDOC(models.Model):
-    meas_station = models.ForeignKey(MeasStation, on_delete=models.SET_NULL, null=True)
+    meas_station = models.ForeignKey(MeasStation, verbose_name='Measurement station', on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
     lon = models.FloatField(null=True, blank=True)
     lat = models.FloatField(null=True, blank=True)
-    dp_position = models.IntegerField(null=True, blank=True)
-    sediment_depth_m = models.FloatField(null=True)
-    H_m = models.FloatField(null=True, blank=True)
-    idoc_mgl = models.FloatField(null=True, blank=True)
-    temp_c = models.FloatField(null=True, blank=True)
-    idoc_sat = models.FloatField(null=True, blank=True)
+    dp_position = models.IntegerField(null=True, blank=True, verbose_name='DP Position [-]')
+    sediment_depth_m = models.FloatField(null=True, verbose_name='Sediment Depth [m]')
+    wl_m = models.FloatField(null=True, blank=True, verbose_name='Water Level [m]')
+    H_m = models.FloatField(null=True, blank=True, verbose_name='H [m]')
+    idoc_mgl = models.FloatField(null=True, blank=True, verbose_name='IDOC [mg/l]',)
+    temp_c = models.FloatField(null=True, blank=True, verbose_name='Temperature [C°]')
+    idoc_sat = models.FloatField(null=True, blank=True, verbose_name='IDOS [%]')
     comment = models.CharField(max_length=1000)
 
     def __str__(self):
