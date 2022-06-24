@@ -1,6 +1,7 @@
 import os
 import django
 from pathlib import Path
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 django.setup()
 import pandas as pd
@@ -10,17 +11,34 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # filling initial data
 freezecore_df = pd.read_excel(BASE_DIR / 'media/db-baseline-FC.xlsx', engine='openpyxl')
-vertico_df = pd.read_excel(BASE_DIR/'media/db-baseline-SL.xlsx', engine='openpyxl')
+
+
+for river in freezecore_df['river'].unique():
+    new_river = models.River(river=river)
+    new_river.save()
+
+for campaign in freezecore_df['campaign'].unique():
+    new_campaign = models.Campaign(campaign=campaign)
+    new_campaign.save()
+
+for index, row in freezecore_df.drop_duplicates(subset=['meas_station']).iterrows():
+    new_measstation = models.MeasStation(
+        river=models.River.objects.get(river=row.river),
+        campaign=models.Campaign.objects.get(campaign=row.campaign),
+        method='FC',
+        name=row.meas_station,
+        date=row.date,  # 'date of measureemnt' is the verbose name (optional arg)
+        description=''
+    )
+    new_measstation.save()
 
 # fill database with the table just read preivously
 for index, row in freezecore_df.iterrows():
     new_freezecore_model = models.Freezecore(
-        river=row.river,
+        meas_station=models.MeasStation.objects.get(name=row.meas_station),
         sample_id=row.sample_id,
         sample_name=row.sample_name,
         site_name=row.site_name,
-        date=row.date,
-        time_stamp=row.time_stamp,
         lon=row.lon,
         lat=row.lat,
         porosity_sfm=row.porosity_sfm,
@@ -63,27 +81,3 @@ for index, row in freezecore_df.iterrows():
         percent_finer_0_063mm=row.percent_finer_0_063mm,
         percent_finer_0_031mm=row.percent_finer_0_031mm)
     new_freezecore_model.save()
-
-# fill database with the table just read preivously
-for index, row in vertico_df.iterrows():
-    new_vertico_model = models.VertiCo(
-        river=row.river,
-        sample_id=row.sample_id,
-        sample_name=row.sample_name,
-        site_name=row.site_name,
-        date=row.date,
-        time_stamp=row.time_stamp,
-        lon=row.lon,
-        lat=row.lat,
-        dp_position=row.dp_position,
-        sediment_depth_m = row.sediment_depth_m,
-        wl_m = row.wl_m,
-        H_m = row.H_m,
-        slurp_rate_avg_mls = row.slurp_rate_avg_mls,
-        idoc_mgl = row.idoc_mgl,
-        temp_c = row.temp_c,
-        idoc_sat = row.idoc_sat,
-        kf_ms = row.kf_ms,
-        comment = row.comment)
-    new_vertico_model.save()
-

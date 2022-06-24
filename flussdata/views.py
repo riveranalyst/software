@@ -47,7 +47,7 @@ def query(request):
                             lat='lat',
                             lon='lon',
                             hover_name='sample_id',
-                            color='river',
+                            color='meas_station',
                             zoom=10,
                             size='d50', )
     fig.update_layout(
@@ -96,7 +96,7 @@ def view_sample(request, id):
                              ))
     fig.update_xaxes(type="log")
     fig.update_layout(
-        title='Grain Size Distribution ({0}/{1})'.format(sample.sample_id, sample.river),
+        title='Grain Size Distribution ({0})'.format(sample.sample_id),
         xaxis_title='Grain size [mm]',
         yaxis_title='Percent finer [%]',
         height=420,
