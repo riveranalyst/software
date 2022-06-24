@@ -40,7 +40,7 @@ class MeasStation(models.Model):
 
 
 class Freezecore(models.Model):
-    meas_station = models.ForeignKey(MeasStation, on_delete=models.SET_NULL, null=True)
+    meas_station = models.ForeignKey(MeasStation, verbose_name='Measurement station', on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
     sample_name = models.CharField(max_length=200)
     site_name = models.CharField(max_length=150)
