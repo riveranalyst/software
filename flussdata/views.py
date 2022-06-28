@@ -127,6 +127,14 @@ def view_sample(request, id):
 class modifyView(TemplateView):
     # login_url = 'registration/login.html'
     template_name = 'flussdata/modify.html'
+    # login_url = 'login.html'
+    # context = {'title': 'Flussdata: Query', 'navbar': 'activequery'}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Flussdata: Modify'
+        context['navbar'] = 'activemodify'
+        return context
 
     def post(self, request):
         my_file = request.FILES['file']
