@@ -14,7 +14,7 @@ from django_tables2.config import RequestConfig
 from django_tables2.export.export import TableExport
 from django.views.generic import TemplateView
 from django.http import HttpResponse, JsonResponse
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .fill_fc_tab import *
 
@@ -43,13 +43,13 @@ def query(request):
 
     # Shows the table from the flussdata tables, hosted on tables.py
     table_show = flutb.FreezecoreTable(freezecore_objects)
-    idoc_show = flutb.IDOCTable(idoc_objects)
+    idoc_show = flutb.IDOCTable(idoc_objects).paginate(per_page=25)
 
     # table_show.paginate(page=request.GET.get("page", 1), per_page=25)
 
     # Count the amout of samples alter filte ris applied
     fc_count = freezecore_objects.count()
-    # idoc_count =
+    idoc_count = idoc_objects.values_list('sample_id').distinct().count()
 
     # creates fig for mapbox using the df created from the filtered table
     fig = px.scatter_mapbox(df,
@@ -81,7 +81,7 @@ def query(request):
                'table_show': table_show,
                'title': 'Flussdata: Query', 'navbar': 'activequery',
                'fc_count': fc_count,
-               # 'idoc_count': idoc_count,
+               'idoc_count': idoc_count,
                'idoc_table': idoc_show,
                'mapboxfig': mapboxdiv}
 
@@ -125,10 +125,7 @@ def view_sample(request, id):
 
 
 class modifyView(TemplateView):
-    # login_url = 'registration/login.html'
     template_name = 'flussdata/modify.html'
-    # login_url = 'login.html'
-    # context = {'title': 'Flussdata: Query', 'navbar': 'activequery'}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

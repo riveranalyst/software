@@ -61,7 +61,8 @@ class FreezecoreTable(tables.Table):
         template_name = "django_tables2/bootstrap-responsive.html"
 
     def render_sample_id(self, record):
-        return format_html('<a href="{}">{}</a>', reverse('flussdata:view_sample', kwargs={'id': record.id}), record.sample_id)
+        return format_html('<a href="{}">{}</a>', reverse('flussdata:view_sample', kwargs={'id': record.id}),
+                           record.sample_id)
 
 
 class IDOCTable(tables.Table):
