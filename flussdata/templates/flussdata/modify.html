@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
+{% if user.is_authenticated %}
 <h1>FlussModify</h1>
 
 <p>
@@ -11,12 +12,17 @@
     <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
     <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
 
-    <form action="modify/upload" method="POST" class="dropzone dz" id="my-dropzone">
+    <form action="modify" method="POST" class="dropzone dz" id="my-dropzone">
         {%csrf_token%}
         <div class="fallback">
             <input name="myfile" type="file" multiple />
         </div>
     </form>
-
+{% else %}
+<div class="card card-body">
+    <h2>User Authentication Required </h2>
+    <p><a href="{% url 'flussdata:login' %}?next={{ request.path }}">Login</a> to have access to the database.</p>
+</div>
+    {% endif %}
 
 {% endblock %}
