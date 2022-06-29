@@ -11,13 +11,10 @@ class FreezecoreFilter(django_filters.FilterSet):
                     # 'sample_name': ['contains'],
                     # 'site_name': ['contains'],
                     'meas_station': ['exact'],
-                    'meas_station__river': ['exact'],
-                    'meas_station__campaign': ['exact'],
         }
 
 
 class IDOCFilter(FreezecoreFilter):
-
     class Meta:
         model = IDOC
         fields = {
@@ -28,3 +25,11 @@ class IDOCFilter(FreezecoreFilter):
                     'meas_station__river': ['exact'],
                     'meas_station__campaign': ['exact'],
         }
+
+
+class StationFilter(django_filters.FilterSet):
+    class Meta:
+        model = MeasStation
+        fields = {'name': ['contains'],
+                  'river': ['exact'],
+                  'campaign': ['exact']}

@@ -11,6 +11,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 idoc_df = pd.read_excel(BASE_DIR/'media/db-baseline-idoc.xlsx', engine='openpyxl')
 
 
+#TODO
+# Use River. Campaign. and MeasStation.get_or_create() to initialize tables
+
 # loops through all unique values of the column river and create a River object
 # in case it is not contained already in the model/table
 for river in idoc_df['river'].unique():

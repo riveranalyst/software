@@ -75,4 +75,10 @@ class IDOCTable(tables.Table):
 
     class Meta:
         model = IDOC
+        # template_name = "django_tables2/bootstrap-responsive.html"
+
+
+class StationTable(tables.Table):
+    class Meta:
+        model = MeasStation
         template_name = "django_tables2/bootstrap-responsive.html"

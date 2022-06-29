@@ -29,14 +29,16 @@ def query(request):
     #  Get all measurement data from the table
     freezecore_objects = Freezecore.objects.all()
     idoc_objects = IDOC.objects.all()
+    station_objects = MeasStation.objects.all()
 
     # Get filter if the user selected any from the listed in filters.py
-    # TODO modify or somehow adapt code below to instantiate a sort of
-    #  MeasPoint filter objects and use it for filtering both models
     fcFilter = FreezecoreFilter(request.GET, queryset=freezecore_objects)
+    stFilter = StationFilter(request.GET, queryset=station_objects)
 
     # Apply filter, remaking the object
     freezecore_objects = fcFilter.qs
+    station_objects = stFilter.qs
+    freezecore_objects = freezecore_objects.filter(meas_station__name__in=station_objects.values('name'))
 
     # creates df from filtered table
     df = read_frame(freezecore_objects)
@@ -44,6 +46,7 @@ def query(request):
     # Shows the table from the flussdata tables, hosted on tables.py
     table_show = flutb.FreezecoreTable(freezecore_objects)
     idoc_show = flutb.IDOCTable(idoc_objects).paginate(per_page=25)
+    station_show = flutb.StationTable(station_objects).paginate(per_page=25)
 
     # table_show.paginate(page=request.GET.get("page", 1), per_page=25)
 
@@ -77,12 +80,15 @@ def query(request):
 
     #  return this to the context
     context = {'fcFilter': fcFilter,
+               'stFilter': stFilter,
                # 'idocFilter': idocFilter,
                'table_show': table_show,
-               'title': 'Flussdata: Query', 'navbar': 'activequery',
+               'title': 'Flussdata: Query',
+               'navbar': 'activequery',
                'fc_count': fc_count,
                'idoc_count': idoc_count,
                'idoc_table': idoc_show,
+               'station_table': station_show,
                'mapboxfig': mapboxdiv}
 
     return render(request, 'flussdata/query.html', context)
