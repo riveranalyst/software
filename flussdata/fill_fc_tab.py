@@ -10,36 +10,21 @@ import flussdata.models as models
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-def fill_river_model(df):
-    for river in df['river'].unique():
-        new_river = models.River(river=river)
-        new_river.save()
-
-
-def fill_campaign_model(df):
-    for campaign in df['campaign'].unique():
-        new_campaign = models.Campaign(campaign=campaign)
-        new_campaign.save()
-
-
-def fill_station_model(df):
-    for index, row in df.drop_duplicates(subset=['meas_station']).iterrows():
-        new_measstation = models.MeasStation(
-            river=models.River.objects.get(river=row.river),
-            campaign=models.Campaign.objects.get(campaign=row.campaign),
+# fill database with the table just read preivously
+def fill_fc_model(df):
+    for index, row in df.iterrows():
+        ri, created = models.River.objects.get_or_create(river=row.river)
+        ca, created = models.Campaign.objects.get_or_create(campaign=row.campaign)
+        st, created = models.MeasStation.objects.get_or_create(
+            river=ri,
+            campaign=ca,
             method='FC',
             name=row.meas_station,
             date=row.date,  # 'date of measureemnt' is the verbose name (optional arg)
             description=''
         )
-        new_measstation.save()
-
-
-# fill database with the table just read preivously
-def fill_fc_model(df):
-    for index, row in df.iterrows():
         new_freezecore_model = models.Freezecore(
-            meas_station=models.MeasStation.objects.get(name=row.meas_station),
+            meas_station=st,
             sample_id=row.sample_id,
             sample_name=row.sample_name,
             site_name=row.site_name,
@@ -90,7 +75,4 @@ def fill_fc_model(df):
 if __name__ == '__main__':
     # filling initial data
     freezecore_df = pd.read_excel(BASE_DIR / 'media/db-baseline-FC.xlsx', engine='openpyxl')
-    fill_river_model(freezecore_df)
-    fill_campaign_model(freezecore_df)
-    fill_station_model(freezecore_df)
     fill_fc_model(freezecore_df)
