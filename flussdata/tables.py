@@ -80,12 +80,14 @@ class IDOCTable(tables.Table):
 class StationTable(tables.Table):
     wl_m = NumberColumn()
     H_m = NumberColumn()
+    data = tables.Column(empty_values=())
 
     class Meta:
         model = MeasStation
         template_name = "django_tables2/bootstrap-responsive.html"
 
-    def render_name(self, record):
-        return format_html('<a href="{}"><button class="btn btn-primary" type="submit">{'
-                           '}</button></a>', reverse('flussdata:station_data', kwargs={'station_id': record.id}),
-                           record.name)
+    def render_data(self, record):
+        return format_html('<a href="{}"><button class="btn btn-primary" type="submit">View'
+                           '</button></a>',
+                           reverse('flussdata:station_data', kwargs={'station_id': record.id})
+                           )
