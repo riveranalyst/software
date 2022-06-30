@@ -63,13 +63,7 @@ def query(request):
                             color='meas_station',
                             zoom=10,
                             size='d50', )
-    idoc_mapbox = df_idoc[['sample_id', 'lat', 'lon']].drop_duplicates()
-    fig.add_trace(go.Scattermapbox(
-                                   lat=idoc_mapbox.lat,
-                                   lon=idoc_mapbox.lon,
-                                   text=idoc_mapbox.sample_id,
-                                   hoverinfo='text',
-                                   marker={'color': df_idoc['meas_station']},))
+
     fig.update_layout(
         mapbox_style="open-street-map",
     )

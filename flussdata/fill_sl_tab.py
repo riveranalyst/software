@@ -17,11 +17,9 @@ def fill_idoc_model(df):
 
         # is tht station already exist, then get it and add a method tag
         if models.MeasStation.objects.filter(name=row.meas_station.strip()).exists():
-            #print('entered the if')
             st = models.MeasStation.objects.get(name=row.meas_station.strip())
-            #print(st)
             st.method.add(models.Technique.objects.get(method='IDOC'))
-            #st.method.add(models.Technique.objects.get(method='FC'))
+
         # if station of the IDOC doesnt match with anything then create it
         else:
             st = models.MeasStation(
