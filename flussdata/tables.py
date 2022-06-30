@@ -67,8 +67,6 @@ class FreezecoreTable(tables.Table):
 
 class IDOCTable(tables.Table):
     sediment_depth_m = NumberColumn()
-    wl_m = NumberColumn()
-    H_m = NumberColumn()
     idoc_mgl = NumberColumn()
     temp_c = NumberColumn()
     idoc_sat = NumberColumn()
@@ -79,6 +77,9 @@ class IDOCTable(tables.Table):
 
 
 class StationTable(tables.Table):
+    wl_m = NumberColumn()
+    H_m = NumberColumn()
+
     class Meta:
         model = MeasStation
         template_name = "django_tables2/bootstrap-responsive.html"

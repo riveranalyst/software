@@ -16,23 +16,15 @@ def fill_fc_model(df):
         ri, created = models.River.objects.get_or_create(river=row.river.strip())
         ca, created = models.Campaign.objects.get_or_create(campaign=row.campaign)
         # me, created =
-        st, created = models.MeasStation.objects.get_or_create(
-            river=ri,
-            campaign=ca,
-            #method=models.Technique.objects.get(method='FC'),
+        print(row.meas_station.strip())
+        st = models.MeasStation.objects.get(
             name=row.meas_station.strip(),
-            date=row.date,  # 'date of measureemnt' is the verbose name (optional arg)
             #description=''
         )
         st.method.add(models.Technique.objects.get(method='FC'))
-        #st.save()
         new_freezecore = models.Freezecore(
             meas_station=st,
             sample_id=row.sample_id,
-            sample_name=row.sample_name,
-            site_name=row.site_name,
-            lon=row.lon,
-            lat=row.lat,
             porosity_sfm=row.porosity_sfm,
             dm=row.dm,
             dg=row.dg,

@@ -37,12 +37,16 @@ class Technique(models.Model):
 
 
 class MeasStation(models.Model):
+    name = models.CharField(max_length=100, default='to fill')
     river = models.ForeignKey(River, on_delete=models.SET_NULL, null=True)
     campaign = models.ForeignKey(Campaign, on_delete=models.SET_NULL, null=True)
     method = models.ManyToManyField(Technique)
-    name = models.CharField(max_length=100, default='to fill')
     date = models.DateField('date of measurement', null=True, blank=True)  # 'date of measureemnt' is the verbose name (optional arg)
     description = models.CharField(max_length=400, null=True, blank=True)
+    lon = models.FloatField(null=True, blank=True)
+    lat = models.FloatField(null=True, blank=True)
+    wl_m = models.FloatField(null=True, blank=True, verbose_name='Water Level [m]')
+    H_m = models.FloatField(null=True, blank=True, verbose_name='H [m]')
 
     def __str__(self):
         return self.name
@@ -52,12 +56,11 @@ class Freezecore(models.Model):
     meas_station = models.ForeignKey(MeasStation, verbose_name='Measurement station', on_delete=models.SET_NULL,
                                      null=True)
     sample_id = models.CharField(max_length=200)
-    sample_name = models.CharField(max_length=200)
-    site_name = models.CharField(max_length=150)
+    # sample_name = models.CharField(max_length=200)
+    # site_name = models.CharField(max_length=150)
     # date = models.DateField('date of measurement')
     # time_stamp = models.CharField(max_length=150)
-    lon = models.FloatField(null=True, blank=True)
-    lat = models.FloatField(null=True, blank=True)
+
     porosity_sfm = models.FloatField(null=True, blank=True)
     dm = models.FloatField(null=True, blank=True)
     dg = models.FloatField(null=True, blank=True)
@@ -109,12 +112,8 @@ class Freezecore(models.Model):
 class IDOC(models.Model):
     meas_station = models.ForeignKey(MeasStation, verbose_name='Measurement station', on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
-    lon = models.FloatField(null=True, blank=True)
-    lat = models.FloatField(null=True, blank=True)
     dp_position = models.IntegerField(null=True, blank=True, verbose_name='DP Position [-]')
     sediment_depth_m = models.FloatField(null=True, verbose_name='Sediment Depth [m]')
-    wl_m = models.FloatField(null=True, blank=True, verbose_name='Water Level [m]')
-    H_m = models.FloatField(null=True, blank=True, verbose_name='H [m]')
     idoc_mgl = models.FloatField(null=True, blank=True, verbose_name='IDOC [mg/l]',)
     temp_c = models.FloatField(null=True, blank=True, verbose_name='Temperature [C°]')
     idoc_sat = models.FloatField(null=True, blank=True, verbose_name='IDOS [%]')
@@ -127,11 +126,8 @@ class IDOC(models.Model):
 class Kf(models.Model):
     meas_station = models.ForeignKey(MeasStation, on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
-    lon = models.FloatField(null=True, blank=True)
-    lat = models.FloatField(null=True, blank=True)
     dp_position = models.IntegerField(null=True, blank=True)
     sediment_depth_m = models.FloatField(null=True)
-    wl_m = models.FloatField(null=True, blank=True)
     kf_ms = models.FloatField(null=True, blank=True)
     slurp_rate_avg_mls = models.FloatField(null=True, blank=True)
     comment = models.CharField(max_length=1000)
@@ -143,30 +139,22 @@ class Kf(models.Model):
 class ShovelSample(models.Model):
     meas_station = models.ForeignKey(MeasStation, on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
-    lon = models.FloatField(null=True, blank=True)
-    lat = models.FloatField(null=True, blank=True)
     # TODO fill parameters
 
 
 class FreezePanel(models.Model):
     meas_station = models.ForeignKey(MeasStation, on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
-    lon = models.FloatField(null=True, blank=True)
-    lat = models.FloatField(null=True, blank=True)
     # TODO fill parameters
 
 
 class LineSampling(models.Model):
     meas_station = models.ForeignKey(MeasStation, on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
-    lon = models.FloatField(null=True, blank=True)
-    lat = models.FloatField(null=True, blank=True)
     # TODO fill parameters
 
 
 class Flow(models.Model):
     meas_station = models.ForeignKey(MeasStation, on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
-    lon = models.FloatField(null=True, blank=True)
-    lat = models.FloatField(null=True, blank=True)
     # TODO fill parameters
