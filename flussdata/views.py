@@ -41,7 +41,8 @@ def query(request):
     freezecore_objects = freezecore_objects.filter(meas_station__name__in=station_objects.values('name'))
 
     # creates df from filtered table
-    df = read_frame(freezecore_objects)
+    df_fc = read_frame(freezecore_objects)
+    df_idoc = read_frame(idoc_objects)
 
     # Shows the table from the flussdata tables, hosted on tables.py
     table_show = flutb.FreezecoreTable(freezecore_objects)
@@ -55,13 +56,20 @@ def query(request):
     idoc_count = idoc_objects.values_list('sample_id').distinct().count()
 
     # creates fig for mapbox using the df created from the filtered table
-    fig = px.scatter_mapbox(df,
+    fig = px.scatter_mapbox(df_fc,
                             lat='lat',
                             lon='lon',
                             hover_name='sample_id',
                             color='meas_station',
                             zoom=10,
                             size='d50', )
+    idoc_mapbox = df_idoc[['sample_id', 'lat', 'lon']].drop_duplicates()
+    fig.add_trace(go.Scattermapbox(
+                                   lat=idoc_mapbox.lat,
+                                   lon=idoc_mapbox.lon,
+                                   text=idoc_mapbox.sample_id,
+                                   hoverinfo='text',
+                                   marker={'color': df_idoc['meas_station']},))
     fig.update_layout(
         mapbox_style="open-street-map",
     )

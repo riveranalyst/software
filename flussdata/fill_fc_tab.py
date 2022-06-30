@@ -13,17 +13,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # fill database with the table just read preivously
 def fill_fc_model(df):
     for index, row in df.iterrows():
-        ri, created = models.River.objects.get_or_create(river=row.river)
+        ri, created = models.River.objects.get_or_create(river=row.river.strip())
         ca, created = models.Campaign.objects.get_or_create(campaign=row.campaign)
+        # me, created =
         st, created = models.MeasStation.objects.get_or_create(
             river=ri,
             campaign=ca,
-            method='FC',
-            name=row.meas_station,
+            #method=models.Technique.objects.get(method='FC'),
+            name=row.meas_station.strip(),
             date=row.date,  # 'date of measureemnt' is the verbose name (optional arg)
-            description=''
+            #description=''
         )
-        new_freezecore_model = models.Freezecore(
+        st.method.add(models.Technique.objects.get(method='FC'))
+        #st.save()
+        new_freezecore = models.Freezecore(
             meas_station=st,
             sample_id=row.sample_id,
             sample_name=row.sample_name,
@@ -69,7 +72,7 @@ def fill_fc_model(df):
             percent_finer_0_125mm=row.percent_finer_0_125mm,
             percent_finer_0_063mm=row.percent_finer_0_063mm,
             percent_finer_0_031mm=row.percent_finer_0_031mm)
-        new_freezecore_model.save()
+        new_freezecore.save()
 
 
 if __name__ == '__main__':

@@ -16,5 +16,5 @@ admin.site.register(ShovelSample)
 admin.site.register(FreezePanel)
 admin.site.register(LineSampling)
 admin.site.register(Flow)
-
+admin.site.register(Technique)
 

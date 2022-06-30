@@ -20,7 +20,7 @@ class Campaign(models.Model):
         return self.campaign
 
 
-class MeasStation(models.Model):
+class Technique(models.Model):
     METHOD = (
         ('IDOC', 'Intragravel Dissolved Oxygen Content'),
         ('kf', 'Hydraulic Conductivity'),
@@ -30,11 +30,18 @@ class MeasStation(models.Model):
         ('LS', 'Line Sampling'),
         ('V', 'FlowTracker')
     )
+    method = models.CharField(max_length=200, null=True, choices=METHOD)
+
+    def __str__(self):
+        return self.method
+
+
+class MeasStation(models.Model):
     river = models.ForeignKey(River, on_delete=models.SET_NULL, null=True)
     campaign = models.ForeignKey(Campaign, on_delete=models.SET_NULL, null=True)
-    method = models.CharField(max_length=200, null=True, choices=METHOD)
+    method = models.ManyToManyField(Technique)
     name = models.CharField(max_length=100, default='to fill')
-    date = models.DateField('date of measurement')  # 'date of measureemnt' is the verbose name (optional arg)
+    date = models.DateField('date of measurement', null=True, blank=True)  # 'date of measureemnt' is the verbose name (optional arg)
     description = models.CharField(max_length=400, null=True, blank=True)
 
     def __str__(self):
