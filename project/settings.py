@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django_tables2',  # added for displaying tables from the database
     'django_filters',
     'django_extensions',
+    'bootstrap3',
 
     # newly added app:
     'flussdata.apps.FlussdataConfig'

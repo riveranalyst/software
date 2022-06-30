@@ -21,8 +21,12 @@ def fill_idoc_model(df):
             # description=''
         )
         st.method.add(models.Technique.objects.get(method='IDOC'))
-
-        new_vertico = models.IDOC(
+        if st.wl_m is None:
+            st.wl_m = row.wl_m
+        if st.H_m is None:
+            st.H_m = row.H_m
+        st.save()
+        vertico, created = models.IDOC.objects.get_or_create(
             meas_station=st,
             sample_id=row.sample_id,
             dp_position=row.dp_position,
@@ -31,7 +35,7 @@ def fill_idoc_model(df):
             temp_c=row.temp_c,
             idoc_sat=row.idoc_sat,
             comment=row.comment)
-        new_vertico.save()
+        vertico.save()
 
 
 if __name__ == '__main__':

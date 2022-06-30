@@ -5,6 +5,7 @@
 {% block head %}
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+    <!--{<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />-->
 {% endblock%}
 
 {% block content %}
@@ -84,6 +85,18 @@
         <br>
         <div class="row">
             <div class="card card-body">
+                <h3>Stations</h3>
+
+                {% render_table station_table %}
+                <div class="margin-right">
+                    <a href="{% querystring '_export_st'='csv' %}"><button class="btn btn-primary">Download CSV</button></a>
+                    <a href="{% querystring '_export_st'='xlsx' %}"><button class="btn btn-primary">Download XLSX</button></a>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="card card-body">
                 <h3>Subsurface Sedimentological Parameters</h3>
 
                 {% render_table table_show %}
@@ -96,20 +109,12 @@
         <br>
         <div class="row">
             <div class="card card-body">
-                <h3>Stations</h3>
-
-                {% render_table station_table %}
-                <div class="margin-right">
-                    <a href="{% querystring '_export'='csv' %}"><button class="btn btn-primary">Download CSV</button></a>
-                    <a href="{% querystring '_export'='xlsx' %}"><button class="btn btn-primary">Download XLSX</button></a>
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="card card-body">
                 <h3>Intragravel Dissolved Oxygen Content</h3>
                 {% render_table idoc_table %}
+                <div class="margin-right">
+                    <a href="{% querystring '_export_idoc'='csv' %}"><button class="btn btn-primary">Download CSV</button></a>
+                    <a href="{% querystring '_export_idoc'='xlsx' %}"><button class="btn btn-primary">Download XLSX</button></a>
+                </div>
             </div>
         </div>
 

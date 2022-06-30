@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<body>
+<h1>{{ station_name }}</h1>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card card-body">
+                {% autoescape off %}
+                    {{ plot_div }}
+                {% endautoescape %}
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="card card-body">
+                {% autoescape off %}
+                    {{ idoc_div }}
+                {% endautoescape %}
+            </div>
+        </div>
+
+    </div>
+</body>
+{% endblock %}

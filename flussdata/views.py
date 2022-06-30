@@ -39,10 +39,11 @@ def query(request):
     freezecore_objects = fcFilter.qs
     station_objects = stFilter.qs
     freezecore_objects = freezecore_objects.filter(meas_station__name__in=station_objects.values('name'))
+    idoc_objects = idoc_objects.filter(meas_station__name__in=station_objects.values('name'))
 
     # creates df from filtered table
     df_fc = read_frame(freezecore_objects)
-    #df_idoc = read_frame(idoc_objects)
+    # df_idoc = read_frame(idoc_objects)
     df_stations = read_frame(station_objects)
 
     # Shows the table from the flussdata tables, hosted on tables.py
@@ -60,10 +61,10 @@ def query(request):
     fig = px.scatter_mapbox(df_stations,
                             lat='lat',
                             lon='lon',
-                            #hover_name='sample_id',
+                            # hover_name='sample_id',
                             color='name',
                             zoom=10,
-                            #size='d50',
+                            # size='d50',
                             )
 
     fig.update_layout(
@@ -78,9 +79,23 @@ def query(request):
     RequestConfig(request).configure(table_show)
     export_format = request.GET.get("_export", None)
 
+    RequestConfig(request).configure(station_show)
+    export_format_st = request.GET.get("_export_st", None)
+
+    RequestConfig(request).configure(idoc_show)
+    export_format_idoc = request.GET.get("_export_idoc", None)
+
     if TableExport.is_valid_format(export_format):
         exporter = TableExport(export_format, table_show)
-        return exporter.response("table.{}".format(export_format))
+        return exporter.response("freezecore-samples.{}".format(export_format))
+
+    if TableExport.is_valid_format(export_format_st):
+        exporter = TableExport(export_format_st, station_show)
+        return exporter.response("stations.{}".format(export_format_st))
+
+    if TableExport.is_valid_format(export_format_idoc):
+        exporter = TableExport(export_format_idoc, idoc_show)
+        return exporter.response("idoc.{}".format(export_format_idoc))
 
     #  return this to the context
     context = {'fcFilter': fcFilter,
@@ -98,10 +113,11 @@ def query(request):
     return render(request, 'flussdata/query.html', context)
 
 
-@require_http_methods(["GET"])
+# @require_http_methods(["GET"])
 def view_sample(request, id):
     #  Get all measurement data from the table
     sample = get_object_or_404(Freezecore, id=id)
+    print(sample)
     ds = ['250', '125', '63', '31_5', '16', '8', '4', '2', '1', '0_5', '0_25', '0_125', '0_063', '0_031']
     ds_float = [250, 125, 63, 31.5, 16, 4, 2, 1, 0.5, 0.25, 0.125, 0.063, 0.031]
     ds_values = []
@@ -132,6 +148,73 @@ def view_sample(request, id):
 
     context = {'plot_div': plot_div}
     return render(request, 'flussdata/fc_sample.html', context)
+
+
+def station_data(request, station_id):
+    #  Get all measurement data from the table
+    station = MeasStation.objects.get(id=station_id)
+    fcs = Freezecore.objects.filter(meas_station=station_id)
+
+    # graph embbeded ina  div to return to the template:
+    fig = go.Figure()
+    fig.update_layout(
+        title='Grain Size Distribution',
+        xaxis_title='Grain size [mm]',
+        yaxis_title='Percent finer [%]',
+        height=420,
+        width=560)
+
+    for fc in fcs:
+        ds = ['250', '125', '63', '31_5', '16', '8', '4', '2', '1', '0_5', '0_25', '0_125', '0_063', '0_031']
+        ds_float = [250, 125, 63, 31.5, 16, 4, 2, 1, 0.5, 0.25, 0.125, 0.063, 0.031]
+        ds_values = []
+
+        # loop through the sediment fractions, which are column names in the db
+        for d in ds:
+            ds_values.append(eval('fc.percent_finer_{0}mm'.format(d)))
+
+        # create graph
+        fig.add_trace(go.Scatter(x=ds_float, y=ds_values,
+                                 mode='lines', name='test',
+                                 opacity=0.8,
+                                 hovertext=fc.sample_id,
+                                 ))
+
+    fig.update_xaxes(type="log")
+    # return graph div
+    plot_div = plot(fig, output_type='div')
+
+    idocs = IDOC.objects.filter(meas_station_id=station_id)
+    fig_idoc = go.Figure()
+    fig_idoc.update_layout(
+        #title='Intragravel Dissolved Oxygen Content',
+        xaxis_title='Dissolved oxygen concentration [mg/L]',
+        yaxis_title='Riverbed depth [m]',
+        height=560,
+        width=420)
+    idoc_df = read_frame(idocs)
+    for idoc in idoc_df['sample_id'].unique():
+        idoc_sample = idoc_df[idoc_df['sample_id'] == idoc]
+        fig_idoc.add_trace(go.Scatter(x=idoc_sample['idoc_mgl'],
+                                      y=idoc_sample['sediment_depth_m'],
+                                      mode='lines',
+                                      hovertext=idoc_sample['sample_id'],
+                                      ))
+    fig_idoc.update_layout(yaxis=dict(showline=True,
+                                      ticks='outside',
+                                      range=[0.55, 0],
+                                      tickvals=[0, 0.1, 0.2, 0.3, 0.4, 0.5]
+                                      ),
+                           xaxis=dict(showline=True,
+                                      ticks='outside',
+                                      range=[0, 12],
+                                      tickvals=[0, 2, 4, 6, 8, 10, 12],
+                                      side='top'
+                                      ))
+
+    idoc_div = plot(fig_idoc, output_type='div')
+    context = {'plot_div': plot_div, 'idoc_div': idoc_div, 'station_name': station.name}
+    return render(request, 'flussdata/station_data.html', context)
 
 
 class modifyView(TemplateView):
