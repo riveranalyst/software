@@ -1,9 +1,9 @@
 {% load static %}
-
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
       <!--    Custom css & js (dropzone)-->
         <link rel="stylesheet" type="text/css" href="{% static 'main.css' %}">
@@ -11,8 +11,8 @@
     <!-- favicon TO DO -->
     <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
     <!-- INSERT ADITIONAL INFORMATION TO THE HEAD TAG HERE-->
-    {% block head %}
-    {% endblock%}
+{% block head %}
+      {% endblock%}
 
     <!-- CHANGES THE PAGE TITLE IF THE VARIABLE "title" IS PASSED BY THE VIEW -->
     {% if title %}
