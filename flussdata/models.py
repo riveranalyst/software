@@ -157,4 +157,9 @@ class LineSampling(models.Model):
 class Flow(models.Model):
     meas_station = models.ForeignKey(MeasStation, on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
-    # TODO fill parameters
+    v_x = models.FloatField(null=True, blank=True, verbose_name='v_x [m/s]')
+    v_y = models.FloatField(null=True, blank=True, verbose_name='v_y [m/s]')
+    v_z = models.FloatField(null=True, blank=True, verbose_name='v_z [m/s]')
+    kt_norm = models.FloatField(null=True, blank=True, verbose_name='kt/U² [-]')
+    kt_2d_norm = models.FloatField(null=True, blank=True, verbose_name='kt 2d/U² [-]')
+    discharge = models.FloatField(null=True, blank=True, verbose_name='Q [m³/s]')
