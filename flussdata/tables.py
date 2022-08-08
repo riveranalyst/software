@@ -57,7 +57,7 @@ class FreezecoreTable(tables.Table):
     percent_finer_0_031mm = NumberColumn()
 
     class Meta:
-        model = Freezecore
+        model = SubsurfaceSed
         template_name = "django_tables2/bootstrap-responsive.html"
 
     def render_sample_id(self, record):

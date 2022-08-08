@@ -9,12 +9,11 @@ admin.site.register(MeasStation)
 
 
 # data valued tables
-admin.site.register(Freezecore)
+admin.site.register(SubsurfaceSed)
+admin.site.register(SurfaceSed)
+admin.site.register(SedSamplTechnique)
 admin.site.register(IDOC)
 admin.site.register(Kf)
-admin.site.register(ShovelSample)
-admin.site.register(FreezePanel)
-admin.site.register(LineSampling)
 admin.site.register(Flow)
-admin.site.register(Technique)
+admin.site.register(CollectedData)
 

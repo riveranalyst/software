@@ -21,10 +21,14 @@ def fill_fc_model(df):
             name=row.meas_station.strip(),
             #description=''
         )
-        st.method.add(models.Technique.objects.get(method='FC'))
-        new_freezecore = models.Freezecore(
+        samp_method = models.SedSamplTechnique.objects.get(
+            samp_techniques=row.sampling_method.strip()
+        )
+        st.collected_data.add(models.CollectedData.objects.get(collected_data='SubsurfSed'))
+        new_freezecore = models.SubsurfaceSed(
             meas_station=st,
             sample_id=row.sample_id,
+            sampling_method=samp_method,
             porosity_sfm=row.porosity_sfm,
             dm=row.dm,
             dg=row.dg,

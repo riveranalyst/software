@@ -1,9 +1,9 @@
 from django import forms
-from .models import Freezecore
+from .models import SubsurfaceSed
 
 
 class FreezecoreForm(forms.ModelForm):
     class Meta:
-        model = Freezecore
+        model = SubsurfaceSed
         fields = '__all__'
 

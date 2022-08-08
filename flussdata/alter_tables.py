@@ -19,7 +19,7 @@ def append_freezecore(file, ext='csv'):
 
     #  append data from df read into the database
     for index, row in df.iterrows():
-        obj = models.Freezecore.objects.create(
+        obj = models.SubsurfaceSed.objects.create(
             river=row.river,
             sample_id=row.sample_id,
             sample_name=row.sample_name,

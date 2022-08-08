@@ -20,7 +20,7 @@ def fill_idoc_model(df):
             name=row.meas_station.strip(),
             # description=''
         )
-        st.method.add(models.Technique.objects.get(method='IDOC'))
+        st.collected_data.add(models.CollectedData.objects.get(method='IDOC'))
         if st.wl_m is None:
             st.wl_m = row.wl_m
         if st.H_m is None:

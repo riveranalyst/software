@@ -5,7 +5,7 @@ from .models import *
 
 class FreezecoreFilter(django_filters.FilterSet):
     class Meta:
-        model = Freezecore
+        model = SubsurfaceSed
         fields = {
                     'sample_id': ['contains'],
                     # 'sample_name': ['contains'],

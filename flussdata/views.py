@@ -20,14 +20,14 @@ from .fill_fc_tab import *
 
 
 def home(request):
-    amount_fc = Freezecore.objects.count()
+    amount_fc = SubsurfaceSed.objects.count()
     context = {'amount_fc': amount_fc, 'navbar': 'home'}
     return render(request, 'home.html', context)
 
 
 def query(request):
     #  Get all measurement data from the table
-    freezecore_objects = Freezecore.objects.all()
+    freezecore_objects = SubsurfaceSed.objects.all()
     idoc_objects = IDOC.objects.all()
     station_objects = MeasStation.objects.all()
 
@@ -116,7 +116,7 @@ def query(request):
 # @require_http_methods(["GET"])
 def view_sample(request, id):
     #  Get all measurement data from the table
-    sample = get_object_or_404(Freezecore, id=id)
+    sample = get_object_or_404(SubsurfaceSed, id=id)
     print(sample)
     ds = ['250', '125', '63', '31_5', '16', '8', '4', '2', '1', '0_5', '0_25', '0_125', '0_063', '0_031']
     ds_float = [250, 125, 63, 31.5, 16, 4, 2, 1, 0.5, 0.25, 0.125, 0.063, 0.031]
@@ -153,7 +153,7 @@ def view_sample(request, id):
 def station_data(request, station_id):
     #  Get all measurement data from the table
     station = MeasStation.objects.get(id=station_id)
-    fcs = Freezecore.objects.filter(meas_station=station_id)
+    fcs = SubsurfaceSed.objects.filter(meas_station=station_id)
 
     # graph embbeded ina  div to return to the template:
     fig = go.Figure()
