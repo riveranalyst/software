@@ -6,27 +6,30 @@ django.setup()
 import pandas as pd
 import flussdata.models as models
 
+# necessary to find file within the project dir
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# fill database with the table just read preivously
+# fill database with the table template
 def fill_idoc_model(df):
     for index, row in df.iterrows():
-        ri, created = models.River.objects.get_or_create(river=row.river.strip())
-        ca, created = models.Campaign.objects.get_or_create(campaign=row.campaign)
-
-        # is tht station already exist, then get it and add a method tag
+        # get each station object from Station Class
         st = models.MeasStation.objects.get(
             name=row.meas_station.strip(),
-            # description=''
         )
-        st.collected_data.add(models.CollectedData.objects.get(method='IDOC'))
+
+        # Fill information about water levels if it wasn't available before
         if st.wl_m is None:
             st.wl_m = row.wl_m
         if st.H_m is None:
             st.H_m = row.H_m
         st.save()
-        vertico, created = models.IDOC.objects.get_or_create(
+
+        # Add information to the station that data is avaialble for idoc
+        st.collected_data.add(models.CollectedData.objects.get(collected_data='IDOC'))
+
+        # Create new idoc observation (row) from the input table
+        idoc, created = models.IDOC.objects.get_or_create(
             meas_station=st,
             sample_id=row.sample_id,
             dp_position=row.dp_position,
@@ -35,7 +38,7 @@ def fill_idoc_model(df):
             temp_c=row.temp_c,
             idoc_sat=row.idoc_sat,
             comment=row.comment)
-        vertico.save()
+        idoc.save()
 
 
 if __name__ == '__main__':

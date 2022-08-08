@@ -13,19 +13,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # fill database with the table just read preivously
 def fill_fc_model(df):
     for index, row in df.iterrows():
-        ri, created = models.River.objects.get_or_create(river=row.river.strip())
-        ca, created = models.Campaign.objects.get_or_create(campaign=row.campaign)
-        # me, created =
-        print(row.meas_station.strip())
+        # get each station object from Station Class
         st = models.MeasStation.objects.get(
             name=row.meas_station.strip(),
-            #description=''
         )
+
+        # get the sampling technique from the Sampling Class
         samp_method = models.SedSamplTechnique.objects.get(
             samp_techniques=row.sampling_method.strip()
         )
+
+        # Add information to the station that data is avaialble for subsurface sediments
         st.collected_data.add(models.CollectedData.objects.get(collected_data='SubsurfSed'))
-        new_freezecore = models.SubsurfaceSed(
+
+        # Create new sediment sample observation (row) from the input table
+        new_freezecore, created = models.SubsurfaceSed.objects.get_or_create(
             meas_station=st,
             sample_id=row.sample_id,
             sampling_method=samp_method,
