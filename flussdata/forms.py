@@ -1,9 +1,15 @@
 from django import forms
-from .models import SubsurfaceSed
+from .models import SubsurfaceSed, CollectedData
 
 
-class FreezecoreForm(forms.ModelForm):
+class SubsurfaceForm(forms.ModelForm):
     class Meta:
         model = SubsurfaceSed
+        fields = '__all__'
+
+
+class DataForm(forms.ModelForm):
+    class Meta:
+        model = CollectedData
         fields = '__all__'
 

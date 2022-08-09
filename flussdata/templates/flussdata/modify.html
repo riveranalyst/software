@@ -2,27 +2,29 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-<h1>FlussModify</h1>
+    <h1>FlussModify</h1>
+    <br>
+        <form method="GET" >
+            {% csrf_token %}
+            {{ dataform }}
+        </form>
 
-<p>
-    <input type="checkbox" name="class1"><br>
-    Freezecore </p><br>
+        <!--    DRAG AND DROP ZONE-->
+        <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+        <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
 
-<!--    DRAG AND DROP ZONE-->
-    <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
-    <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
+        <form action="modify" method="POST" class="dropzone dz" id="my-dropzone">
+            {%csrf_token%}
+            <div class="fallback">
+                <input name="myfile" type="file" multiple />
+            </div>
+        </form>
 
-    <form action="modify" method="POST" class="dropzone dz" id="my-dropzone">
-        {%csrf_token%}
-        <div class="fallback">
-            <input name="myfile" type="file" multiple />
-        </div>
-    </form>
 {% else %}
-<div class="card card-body">
-    <h2>User Authentication Required </h2>
-    <p><a href="{% url 'flussdata:login' %}?next={{ request.path }}">Login</a> to have access to the database.</p>
-</div>
-    {% endif %}
+    <div class="card card-body">
+        <h2>User Authentication Required </h2>
+        <p><a href="{% url 'flussdata:login' %}?next={{ request.path }}">Login</a> to have access to the database.</p>
+    </div>
+{% endif %}
 
 {% endblock %}

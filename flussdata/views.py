@@ -16,7 +16,7 @@ from django.views.generic import TemplateView
 from django.http import HttpResponse, JsonResponse
 from django.db.models import Q, Count
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .fill_fc_tab import *
+from .fill_fc_tab import fill_fc_model
 
 
 def home(request):
@@ -190,11 +190,22 @@ def station_data(request, station_id):
     # graph embbeded ina  div to return to the template:
     fig = go.Figure()
     fig.update_layout(
-        title='Grain Size Distribution',
+        title='Subsurface Grain Size Distribution',
         xaxis_title='Grain size [mm]',
         yaxis_title='Percent finer [%]',
-        height=420,
-        width=560)
+        # height=420,  # if height and width are given, the figure is not resized within the div when user zooms in/out
+        # width=560,
+        margin={"r": 30, "t": 30, "l": 30, "b": 30},
+        yaxis=dict(showline=True,
+                   ticks='outside',
+                   range=[0, 100]),
+
+        xaxis=dict(showline=True,
+                   ticks='outside',
+                   type="log"
+                   # range=[0.063, 250]
+                   )
+    )
 
     for fc in fcs:
         ds = ['250', '125', '63', '31_5', '16', '8', '4', '2', '1', '0_5', '0_25', '0_125', '0_063', '0_031']
@@ -212,7 +223,8 @@ def station_data(request, station_id):
                                  hovertext=fc.sample_id,
                                  ))
 
-    fig.update_xaxes(type="log")
+    # fig.update_xaxes(type="log")
+
     # return graph div
     plot_div = plot(fig, output_type='div')
 
@@ -222,8 +234,9 @@ def station_data(request, station_id):
         # title='Intragravel Dissolved Oxygen Content',
         xaxis_title='Dissolved oxygen concentration [mg/L]',
         yaxis_title='Riverbed depth [m]',
-        height=560,
-        width=420)
+        # height=560,
+        # width=420,
+        margin={"r": 30, "t": 30, "l": 30, "b": 30})
     idoc_df = read_frame(idocs)
     for idoc in idoc_df['sample_id'].unique():
         idoc_sample = idoc_df[idoc_df['sample_id'] == idoc]
@@ -251,17 +264,22 @@ def station_data(request, station_id):
 
 class modifyView(TemplateView):
     template_name = 'flussdata/modify.html'
+    dataform = DataForm()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Flussdata: Modify'
         context['navbar'] = 'activemodify'
+        context['dataform'] = self.dataform
         return context
 
     def post(self, request):
         my_file = request.FILES['file']
+        form = DataForm(request.POST)
+        print(form)
         df = pd.read_csv(my_file.temporary_file_path(), encoding='utf-8', parse_dates=['date'])
 
         #  append data from df read into the database
         fill_fc_model(df)
         return JsonResponse({'post': 'false'})
+
