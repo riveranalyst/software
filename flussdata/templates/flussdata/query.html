@@ -28,9 +28,9 @@
             </div>
             <div class="col-md-5">
                 <div class="card card-body">
-                <h3>Freezecore</h3>
+                <h3>Subsurface Sediment Samples</h3>
                     <form method="get">
-                        {{ fcFilter.form.as_p }}
+                        {{ subSurfFilter.form.as_p }}
                         <button class="btn btn-primary" type="submit">Search</button>
                     </form>
                 </div>
@@ -100,7 +100,7 @@
             <div class="card card-body">
                 <h3>Subsurface Sedimentological Parameters</h3>
 
-                {% render_table table_show %}
+                {% render_table subsurf_tb_show %}
                 <div class="margin-right">
                     <a href="{% querystring '_export'='csv' %}"><button class="btn btn-primary">Download CSV</button></a>
                     <a href="{% querystring '_export'='xlsx' %}"><button class="btn btn-primary">Download XLSX</button></a>

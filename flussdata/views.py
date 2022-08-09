@@ -32,11 +32,11 @@ def query(request):
     station_objects = MeasStation.objects.all()
 
     # Get filter if the user selected any from the listed in filters.py
-    fcFilter = FreezecoreFilter(request.GET, queryset=freezecore_objects)
+    subSurfFilter = FreezecoreFilter(request.GET, queryset=freezecore_objects)
     stFilter = StationFilter(request.GET, queryset=station_objects)
 
     # Apply filter, remaking the object
-    freezecore_objects = fcFilter.qs
+    freezecore_objects = subSurfFilter.qs
     station_objects = stFilter.qs
     freezecore_objects = freezecore_objects.filter(meas_station__name__in=station_objects.values('name'))
     idoc_objects = idoc_objects.filter(meas_station__name__in=station_objects.values('name'))
@@ -47,11 +47,11 @@ def query(request):
     df_stations = read_frame(station_objects)
 
     # Shows the table from the flussdata tables, hosted on tables.py
-    table_show = flutb.FreezecoreTable(freezecore_objects)
+    subsurf_tb_show = flutb.FreezecoreTable(freezecore_objects)
     idoc_show = flutb.IDOCTable(idoc_objects).paginate(per_page=25)
     station_show = flutb.StationTable(station_objects).paginate(per_page=25)
 
-    # table_show.paginate(page=request.GET.get("page", 1), per_page=25)
+    # subsurf_tb_show.paginate(page=request.GET.get("page", 1), per_page=25)
 
     # Count the amout of samples alter filte ris applied
     fc_count = freezecore_objects.count()
@@ -76,7 +76,7 @@ def query(request):
     mapboxdiv = plot(fig, output_type='div')
 
     # export of sub. sed. table
-    RequestConfig(request).configure(table_show)
+    RequestConfig(request).configure(subsurf_tb_show)
     export_format = request.GET.get("_export", None)
 
     RequestConfig(request).configure(station_show)
@@ -86,7 +86,7 @@ def query(request):
     export_format_idoc = request.GET.get("_export_idoc", None)
 
     if TableExport.is_valid_format(export_format):
-        exporter = TableExport(export_format, table_show)
+        exporter = TableExport(export_format, subsurf_tb_show)
         return exporter.response("freezecore-samples.{}".format(export_format))
 
     if TableExport.is_valid_format(export_format_st):
@@ -98,16 +98,24 @@ def query(request):
         return exporter.response("idoc.{}".format(export_format_idoc))
 
     #  return this to the context
-    context = {'fcFilter': fcFilter,
-               'stFilter': stFilter,
-               # 'idocFilter': idocFilter,
-               'table_show': table_show,
-               'title': 'Flussdata: Query',
-               'navbar': 'activequery',
+    context = {'title': 'Flussdata: Query',  # pagetitle
+               'navbar': 'activequery',  # make the tab 'query' highlighted
+
+               # number of measurements for the selected query
                'fc_count': fc_count,
                'idoc_count': idoc_count,
+
+               # filters
+               'subSurfFilter': subSurfFilter,
+               'stFilter': stFilter,
+               # 'idocFilter': idocFilter,
+
+               # tables
+               'subsurf_tb_show': subsurf_tb_show,
                'idoc_table': idoc_show,
                'station_table': station_show,
+
+               # mapbox
                'mapboxfig': mapboxdiv}
 
     return render(request, 'flussdata/query.html', context)
@@ -187,7 +195,7 @@ def station_data(request, station_id):
     idocs = IDOC.objects.filter(meas_station_id=station_id)
     fig_idoc = go.Figure()
     fig_idoc.update_layout(
-        #title='Intragravel Dissolved Oxygen Content',
+        # title='Intragravel Dissolved Oxygen Content',
         xaxis_title='Dissolved oxygen concentration [mg/L]',
         yaxis_title='Riverbed depth [m]',
         height=560,
