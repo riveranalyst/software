@@ -13,7 +13,7 @@
             </p>
             <p>
             	Only authorized researchers are allowed to query and modify the database.
-				Credentials are granted by our team in the spirit of research collaboration.
+				Credentials can be granted by our team in the spirit of research collaboration.
 			</p>
 			<p><a href="mailto:beatriz.negreiros@iws.uni-stuttgart.de"><button class="btn btn-primary" type="submit">Get in touch</button></a></p>
         </div>
@@ -27,10 +27,10 @@
 		<div class="col-md">
 			<div class="card text-center text-white  mb-3" id="total-orders">
 			  	<div class="card-header">
-			  		<h5 class="card-title">Freezecores samples</h5>
+			  		<h5 class="card-title">Subsurface/Surface Sediment Samples</h5>
 			  	</div>
 			  	<div class="card-body">
-			    	<h3 class="card-title">{{amount_fc}}</h3>
+			    	<h3 class="card-title">{{total_subsurf}}/{{total_surf}}</h3>
 			  	</div>
 			</div>
 		</div>
@@ -40,10 +40,10 @@
 		<div class="col-md">
 			<div class="card text-center text-white  mb-3" id="orders-delivered">
 			  	<div class="card-header">
-			  		<h5 class="card-title">VertiCo measurements</h5>
+			  		<h5 class="card-title">IDOC/kf Vertical Profiles</h5>
 			  	</div>
 			  	<div class="card-body">
-<!--			    	<h3 class="card-title">{{delivered}}</h3>-->
+			    	<h3 class="card-title">{{total_idoc}}/{{total_kf}}</h3>
 			  	</div>
 			</div>
 		</div>
@@ -53,10 +53,10 @@
 		<div class="col-md">
 			<div class="card text-center text-white  mb-3" id="orders-pending">
 			  	<div class="card-header">
-			  		<h5 class="card-title">Shovel samples</h5>
+			  		<h5 class="card-title">Flow Velocity Measurements</h5>
 			  	</div>
 			  	<div class="card-body">
-<!--			    	<h3 class="card-title">{{pending}}</h3>-->
+			    	<h3 class="card-title">{{total_v}}</h3>
 			  	</div>
 			</div>
 		</div>

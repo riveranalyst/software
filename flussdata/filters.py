@@ -3,7 +3,7 @@ import django_filters
 from .models import *
 
 
-class FreezecoreFilter(django_filters.FilterSet):
+class SubSurfFilter(django_filters.FilterSet):
     class Meta:
         model = SubsurfaceSed
         fields = {
@@ -14,7 +14,7 @@ class FreezecoreFilter(django_filters.FilterSet):
         }
 
 
-class IDOCFilter(FreezecoreFilter):
+class IDOCFilter(SubSurfFilter):
     class Meta:
         model = IDOC
         fields = {

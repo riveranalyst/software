@@ -19,7 +19,7 @@
         <div class="row">
             <div class="col-md-5">
                 <div class="card card-body">
-                <h3>Station</h3>
+                <h3>Stations</h3>
                     <form method="get">
                         {{ stFilter.form.as_p }}
                         <button class="btn btn-primary" type="submit">Search</button>
@@ -52,26 +52,26 @@
             <div class="col-md-3">
                 <div class="card text-center text-white  mb-3" id="total-orders">
                     <div class="card-header">
-                        <h5 class="card-title">Freezecore samples</h5>
+                        <h5 class="card-title">Subsurface/Surface Sediment Samples</h5>
                     </div>
                     <div class="card-body">
-                        <h3 class="card-title">{{fc_count}}</h3>
+                        <h3 class="card-title">{{subsurf_count}}/{{surf_count}}</h3>
                     </div>
                 </div>
                 <div class="card text-center text-white  mb-3" id="orders-delivered">
                     <div class="card-header">
-                        <h5 class="card-title">IDOC/kf profiles</h5>
+                        <h5 class="card-title">IDOC/kf Profiles</h5>
                     </div>
                     <div class="card-body">
-                        <h3 class="card-title">{{idoc_count}}/{{fc_count}}</h3>
+                        <h3 class="card-title">{{idoc_count}}/{{kf_count}}</h3>
                     </div>
                 </div>
                 <div class="card text-center text-white  mb-3" id="orders-pending">
                     <div class="card-header">
-                        <h5 class="card-title">Shovel samples</h5>
+                        <h5 class="card-title">Flow Velocity Measurements</h5>
                     </div>
                     <div class="card-body">
-                        <h3 class="card-title">{{fc_count}}</h3>
+                        <h3 class="card-title">{{v_count}}</h3>
                     </div>
                 </div>
             </div>
@@ -98,7 +98,7 @@
         <br>
         <div class="row">
             <div class="card card-body">
-                <h3>Subsurface Sedimentological Parameters</h3>
+                <h3>Subsurface Sediment SamplesS</h3>
 
                 {% render_table subsurf_tb_show %}
                 <div class="margin-right">

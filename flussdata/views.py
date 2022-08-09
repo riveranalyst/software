@@ -20,41 +20,62 @@ from .fill_fc_tab import *
 
 
 def home(request):
-    amount_fc = SubsurfaceSed.objects.count()
-    context = {'amount_fc': amount_fc, 'navbar': 'home'}
+    total_subsurf = SubsurfaceSed.objects.count()
+    total_surf = SurfaceSed.objects.count()
+    total_idoc = IDOC.objects.values_list('sample_id').distinct().count()
+    total_kf = Kf.objects.values_list('sample_id').distinct().count()
+    total_v = Flow.objects.count()
+
+    context = {'navbar': 'home',
+               'total_subsurf': total_subsurf,
+               'total_surf': total_surf,
+               'total_idoc': total_idoc,
+               'total_kf': total_kf,
+               'total_v': total_v}
     return render(request, 'home.html', context)
 
 
 def query(request):
     #  Get all measurement data from the table
-    freezecore_objects = SubsurfaceSed.objects.all()
+    subsurf_objects = SubsurfaceSed.objects.all()
+    surf_objects = SurfaceSed.objects.all()
     idoc_objects = IDOC.objects.all()
     station_objects = MeasStation.objects.all()
+    kf_objects = Kf.objects.all()
+    v_objects = Flow.objects.all()
 
     # Get filter if the user selected any from the listed in filters.py
-    subSurfFilter = FreezecoreFilter(request.GET, queryset=freezecore_objects)
+    subSurfFilter = SubSurfFilter(request.GET, queryset=subsurf_objects)
     stFilter = StationFilter(request.GET, queryset=station_objects)
 
     # Apply filter, remaking the object
-    freezecore_objects = subSurfFilter.qs
+    subsurf_objects = subSurfFilter.qs
     station_objects = stFilter.qs
-    freezecore_objects = freezecore_objects.filter(meas_station__name__in=station_objects.values('name'))
+    subsurf_objects = subsurf_objects.filter(meas_station__name__in=station_objects.values('name'))
+
     idoc_objects = idoc_objects.filter(meas_station__name__in=station_objects.values('name'))
+    surf_objects = surf_objects.filter(meas_station__name__in=station_objects.values('name'))
+    kf_objects = kf_objects.filter(meas_station__name__in=station_objects.values('name'))
+    v_objects = v_objects.filter(meas_station__name__in=station_objects.values('name'))
 
     # creates df from filtered table
-    df_fc = read_frame(freezecore_objects)
+    df_fc = read_frame(subsurf_objects)
     # df_idoc = read_frame(idoc_objects)
     df_stations = read_frame(station_objects)
 
     # Shows the table from the flussdata tables, hosted on tables.py
-    subsurf_tb_show = flutb.FreezecoreTable(freezecore_objects)
+    subsurf_tb_show = flutb.FreezecoreTable(subsurf_objects)
     idoc_show = flutb.IDOCTable(idoc_objects).paginate(per_page=25)
     station_show = flutb.StationTable(station_objects).paginate(per_page=25)
 
     # subsurf_tb_show.paginate(page=request.GET.get("page", 1), per_page=25)
 
-    # Count the amout of samples alter filte ris applied
-    fc_count = freezecore_objects.count()
+    # Count the number of samples alter filte ris applied
+    subsurf_count = subsurf_objects.count()
+    surf_count = surf_objects.count()
+    kf_count = kf_objects.count()
+    v_count = v_objects.count()
+
     idoc_count = idoc_objects.values_list('sample_id').distinct().count()
 
     # creates fig for mapbox using the df created from the filtered table
@@ -87,7 +108,7 @@ def query(request):
 
     if TableExport.is_valid_format(export_format):
         exporter = TableExport(export_format, subsurf_tb_show)
-        return exporter.response("freezecore-samples.{}".format(export_format))
+        return exporter.response("subsurface-samples.{}".format(export_format))
 
     if TableExport.is_valid_format(export_format_st):
         exporter = TableExport(export_format_st, station_show)
@@ -102,8 +123,11 @@ def query(request):
                'navbar': 'activequery',  # make the tab 'query' highlighted
 
                # number of measurements for the selected query
-               'fc_count': fc_count,
+               'subsurf_count': subsurf_count,
+               'surf_count': surf_count,
                'idoc_count': idoc_count,
+               'kf_count': kf_count,
+               'v_count': v_count,
 
                # filters
                'subSurfFilter': subSurfFilter,
