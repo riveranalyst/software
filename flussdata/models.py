@@ -28,7 +28,9 @@ class CollectedData(models.Model):
         ('SubsurfSed', 'Subsurface Sediment Sampling'),
         ('Hydraulics', 'FlowTracker')
     )
-    collected_data = models.CharField(max_length=200, null=True, choices=DATACOLLECTION)
+    collected_data = models.CharField(max_length=200, null=True,
+                                      choices=DATACOLLECTION,
+                                      verbose_name='Measurement Data')
 
     def __str__(self):
         return self.collected_data
@@ -54,12 +56,18 @@ class MeasStation(models.Model):
     river = models.ForeignKey(River, on_delete=models.SET_NULL, null=True)
     campaign = models.ForeignKey(Campaign, on_delete=models.SET_NULL, null=True)
     collected_data = models.ManyToManyField(CollectedData)
-    date = models.DateField('date of measurement', null=True, blank=True)  # 'date of measureemnt' is the verbose name (optional arg)
+    # ate = models.DateField # 'date of measureemnt' is the verbose name (optional arg)
+    datetime = models.DateTimeField('Date/time of measurement', null=True, blank=True)
     description = models.CharField(max_length=400, null=True, blank=True)
     lon = models.FloatField(null=True, blank=True)
     lat = models.FloatField(null=True, blank=True)
-    wl_m = models.FloatField(null=True, blank=True, verbose_name='Water Level [m]')
-    H_m = models.FloatField(null=True, blank=True, verbose_name='H [m]')
+    pos_rel_WB = models.FloatField(null=True, blank=True,
+                                   verbose_name='Distance from wetted boundary (+ for wetted locations) [m]')
+    discharge = models.FloatField(null=True, blank=True,
+                                  verbose_name='Discharge at recording time [m³/s]')
+    wl_m = models.FloatField(null=True, blank=True, verbose_name='Water level at recording time [m]')
+    algae_cover = models.BooleanField(null=True, blank=True)
+    imbrication = models.BooleanField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -70,6 +78,7 @@ class SubsurfaceSed(models.Model):
                                      null=True)
     sample_id = models.CharField(max_length=200)
     sampling_method = models.ForeignKey(SedSamplTechnique, on_delete=models.SET_NULL, null=True)
+    operator_name = models.CharField(null=True, blank=True)
     porosity_sfm = models.FloatField(null=True, blank=True)
     dm = models.FloatField(null=True, blank=True)
     dg = models.FloatField(null=True, blank=True)
@@ -180,6 +189,7 @@ class IDOC(models.Model):
     idoc_mgl = models.FloatField(null=True, blank=True, verbose_name='IDOC [mg/l]',)
     temp_c = models.FloatField(null=True, blank=True, verbose_name='Temperature [C°]')
     idoc_sat = models.FloatField(null=True, blank=True, verbose_name='IDOS [%]')
+    H_m = models.FloatField(null=True, blank=True, verbose_name='Height of filter pipe (Slurping) above bed [m]')
     comment = models.CharField(max_length=1000)
 
     def __str__(self):
@@ -193,13 +203,14 @@ class Kf(models.Model):
     sediment_depth_m = models.FloatField(null=True)
     kf_ms = models.FloatField(null=True, blank=True)
     slurp_rate_avg_mls = models.FloatField(null=True, blank=True)
+    H_m = models.FloatField(null=True, blank=True, verbose_name='Height of filter pipe (Slurping) above bed [m]')
     comment = models.CharField(max_length=1000)
 
     def __str__(self):
         return self.sample_id
 
 
-class Flow(models.Model):
+class Hydraulics(models.Model):
     meas_station = models.ForeignKey(MeasStation, on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
     v_x = models.FloatField(null=True, blank=True, verbose_name='v_x [m/s]')
@@ -207,4 +218,5 @@ class Flow(models.Model):
     v_z = models.FloatField(null=True, blank=True, verbose_name='v_z [m/s]')
     kt_norm = models.FloatField(null=True, blank=True, verbose_name='kt/U² [-]')
     kt_2d_norm = models.FloatField(null=True, blank=True, verbose_name='kt 2d/U² [-]')
-    discharge = models.FloatField(null=True, blank=True, verbose_name='Q [m³/s]')
+    water_temperature = models.FloatField(null=True, blank=True, verbose_name='Water temperature [°C]')
+    turbidity = models.FloatField(null=True, blank=True, verbose_name='Turbidity [NTU]')
