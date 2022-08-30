@@ -16,7 +16,7 @@ class SubSurfFilter(django_filters.FilterSet):
 
 class IDOCFilter(SubSurfFilter):
     class Meta:
-        model = IDOC
+        model = IDO
         fields = {
                     'sample_id': ['contains'],
                     # 'sample_name': ['contains'],
@@ -32,4 +32,6 @@ class StationFilter(django_filters.FilterSet):
         model = MeasStation
         fields = {'name': ['contains'],
                   'river': ['exact'],
-                  'campaign': ['exact']}
+                  'campaign': ['exact'],
+                  # 'collected_data': ['exact'],
+                  'discharge': ['gte']}

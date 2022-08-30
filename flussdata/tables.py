@@ -73,7 +73,7 @@ class IDOCTable(tables.Table):
     idoc_sat = NumberColumn()
 
     class Meta:
-        model = IDOC
+        model = IDO
         # template_name = "django_tables2/bootstrap-responsive.html"
 
 

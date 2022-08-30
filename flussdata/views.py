@@ -3,28 +3,24 @@ import flussdata.tables as flutb
 from .filters import *
 from .forms import *
 from .alter_tables import *
-from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
-from django.views.decorators.http import require_http_methods
 from plotly.offline import plot
 import plotly.graph_objs as go
 import plotly.express as px
 from django_pandas.io import read_frame
 from django_tables2.config import RequestConfig
 from django_tables2.export.export import TableExport
-from django.views.generic import TemplateView
-from django.http import HttpResponse, JsonResponse
-from django.db.models import Q, Count
-from django.contrib.auth.mixins import LoginRequiredMixin
-from .fill_fc_tab import fill_fc_model
+from django.views.generic import CreateView
+from django.http import JsonResponse
+from flussdata.utils.fill_subsurf_tab import fill_fc_model
 
 
 def home(request):
     total_subsurf = SubsurfaceSed.objects.count()
     total_surf = SurfaceSed.objects.count()
-    total_idoc = IDOC.objects.values_list('sample_id').distinct().count()
+    total_idoc = IDO.objects.values_list('sample_id').distinct().count()
     total_kf = Kf.objects.values_list('sample_id').distinct().count()
-    total_v = Flow.objects.count()
+    total_v = Hydraulics.objects.count()
 
     context = {'navbar': 'home',
                'total_subsurf': total_subsurf,
@@ -39,17 +35,17 @@ def query(request):
     #  Get all measurement data from the table
     subsurf_objects = SubsurfaceSed.objects.all()
     surf_objects = SurfaceSed.objects.all()
-    idoc_objects = IDOC.objects.all()
+    idoc_objects = IDO.objects.all()
     station_objects = MeasStation.objects.all()
     kf_objects = Kf.objects.all()
-    v_objects = Flow.objects.all()
+    v_objects = Hydraulics.objects.all()
 
     # Get filter if the user selected any from the listed in filters.py
-    subSurfFilter = SubSurfFilter(request.GET, queryset=subsurf_objects)
+    # subSurfFilter = SubSurfFilter(request.GET, queryset=subsurf_objects)
     stFilter = StationFilter(request.GET, queryset=station_objects)
 
     # Apply filter, remaking the object
-    subsurf_objects = subSurfFilter.qs
+    # subsurf_objects = subSurfFilter.qs
     station_objects = stFilter.qs
     subsurf_objects = subsurf_objects.filter(meas_station__name__in=station_objects.values('name'))
 
@@ -87,9 +83,9 @@ def query(request):
                             zoom=10,
                             # size='d50',
                             )
-
     fig.update_layout(
         mapbox_style="open-street-map",
+        legend_title_text='Stations'
     )
     fig.update_layout(margin={"r": 10, "t": 10, "l": 10, "b": 10})
 
@@ -130,7 +126,7 @@ def query(request):
                'v_count': v_count,
 
                # filters
-               'subSurfFilter': subSurfFilter,
+               # 'subSurfFilter': subSurfFilter,
                'stFilter': stFilter,
                # 'idocFilter': idocFilter,
 
@@ -228,7 +224,7 @@ def station_data(request, station_id):
     # return graph div
     plot_div = plot(fig, output_type='div')
 
-    idocs = IDOC.objects.filter(meas_station_id=station_id)
+    idocs = IDO.objects.filter(meas_station_id=station_id)
     fig_idoc = go.Figure()
     fig_idoc.update_layout(
         # title='Intragravel Dissolved Oxygen Content',
@@ -262,24 +258,30 @@ def station_data(request, station_id):
     return render(request, 'flussdata/station_data.html', context)
 
 
-class modifyView(TemplateView):
+class modifyView(CreateView):
     template_name = 'flussdata/modify.html'
-    dataform = DataForm()
+    model = CollectedData
+    form_class = DataForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Flussdata: Modify'
         context['navbar'] = 'activemodify'
-        context['dataform'] = self.dataform
         return context
 
-    def post(self, request):
-        my_file = request.FILES['file']
+    def post(self, request, *args, **kwargs):
         form = DataForm(request.POST)
-        print(form)
-        df = pd.read_csv(my_file.temporary_file_path(), encoding='utf-8', parse_dates=['date'])
+        if form.is_valid():
+            answer = form.cleaned_data['collected_data']
+            if answer == 'SubsurfSed':
+                files = request.FILES.getlist('file')  # gets all files from the post request
+                # # print(files)
+                my_file = request.FILES['file']  # gets the table file from the post request
+                # # print(request.FILES['file'])
+                df = pd.read_csv(my_file.temporary_file_path(), encoding='utf-8',
+                                 parse_dates=['date'])
 
-        #  append data from df read into the database
-        fill_fc_model(df)
+                #  append data from df read into the database
+                fill_fc_model(df)
         return JsonResponse({'post': 'false'})
 

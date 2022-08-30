@@ -14,27 +14,27 @@
 {% if user.is_authenticated %}
 <br>
 <div class="row">
-    <h1>FlussQuery</h1>
+
     <div class="col-md">
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md">
                 <div class="card card-body">
-                <h3>Stations</h3>
+                <h3>Filter by stations</h3>
                     <form method="get">
                         {{ stFilter.form.as_p }}
                         <button class="btn btn-primary" type="submit">Search</button>
                     </form>
                 </div>
             </div>
-            <div class="col-md-5">
-                <div class="card card-body">
-                <h3>Subsurface Sediment Samples</h3>
-                    <form method="get">
-                        {{ subSurfFilter.form.as_p }}
-                        <button class="btn btn-primary" type="submit">Search</button>
-                    </form>
-                </div>
-            </div>
+<!--            <div class="col-md-5">-->
+<!--                <div class="card card-body">-->
+<!--                <h3>Subsurface Sediment Samples</h3>-->
+<!--                    <form method="get">-->
+<!--                        {{ subSurfFilter.form.as_p }}-->
+<!--                        <button class="btn btn-primary" type="submit">Search</button>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
 
 <!--        <div class="col-md-5">-->
@@ -60,7 +60,7 @@
                 </div>
                 <div class="card text-center text-white  mb-3" id="orders-delivered">
                     <div class="card-header">
-                        <h5 class="card-title">IDOC/kf Profiles</h5>
+                        <h5 class="card-title">IDO/kf Profiles</h5>
                     </div>
                     <div class="card-body">
                         <h3 class="card-title">{{idoc_count}}/{{kf_count}}</h3>
@@ -86,7 +86,7 @@
         <br>
         <div class="row">
             <div class="card card-body">
-                <h3>Stations</h3>
+                <h3>Measurement Stations</h3>
 
                 {% render_table station_table %}
                 <div class="margin-right">
@@ -98,7 +98,7 @@
         <br>
         <div class="row">
             <div class="card card-body">
-                <h3>Subsurface Sediment SamplesS</h3>
+                <h3>Subsurface Sediment Samples</h3>
 
                 {% render_table subsurf_tb_show %}
                 <div class="margin-right">
@@ -110,7 +110,7 @@
         <br>
         <div class="row">
             <div class="card card-body">
-                <h3>Intragravel Dissolved Oxygen Content</h3>
+                <h3>Intragravel Dissolved Oxygen</h3>
                 {% render_table idoc_table %}
                 <div class="margin-right">
                     <a href="{% querystring '_export_idoc'='csv' %}"><button class="btn btn-primary">Download CSV</button></a>

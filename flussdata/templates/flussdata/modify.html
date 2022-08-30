@@ -2,23 +2,103 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-    <h1>FlussModify</h1>
-    <br>
-        <form method="GET" >
-            {% csrf_token %}
-            {{ dataform }}
-        </form>
 
+    <br>
         <!--    DRAG AND DROP ZONE-->
         <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
         <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
-
-        <form action="modify" method="POST" class="dropzone dz" id="my-dropzone">
-            {%csrf_token%}
-            <div class="fallback">
-                <input name="myfile" type="file" multiple />
-            </div>
+        <h2>Upload area</h2>
+        <div>
+            <p>For adding data to the DB, upload in the dropzones below
+            the corresponding data tables as csv files. Alternatively,
+            the DB can also be updated (both edits and add-ons) in the
+            admin page (link here).</p>
+        </div>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Upload to Database" />
         </form>
+
+        <div class="row">
+            <div class="col-md">
+                <div class="card card-body">
+                    <h3><b>Stations</b> Data</h3>
+                        <form action="" method="post" class="dropzone dz" id="my-dropzone5">
+                        {%csrf_token%}
+                            <div class="fallback">
+                                <input name="st_file" type="file" multiple />
+<!--                                <input type="submit" value="Upload to Database" />-->
+                            </div>
+                        </form>
+                </div>
+            </div>
+        </div>
+
+<!--            <div class="col-md">-->
+<!--                <div class="card card-body">-->
+<!--                    <h3><b>Flow</b> Data</h3>-->
+<!--                        <form action="modify" method="POST" class="dropzone dz" id="my-dropzone6">-->
+<!--                        {%csrf_token%}-->
+<!--                            <div class="fallback">-->
+<!--                                <input name="v_file" type="file" multiple />-->
+<!--                            </div>-->
+<!--                        </form>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <br>-->
+<!--        <div class="row">-->
+<!--            <div class="col-md">-->
+<!--                <div class="card card-body">-->
+<!--                    <h3><b>Subsurface</b> Sediment Data</h3>-->
+<!--                        <form action="modify" method="POST" class="dropzone dz" id="my-dropzone">-->
+<!--                        {%csrf_token%}-->
+<!--                            <div class="fallback">-->
+<!--                                <input name="subsurf_file" type="file" multiple />-->
+<!--                            </div>-->
+<!--                        </form>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md">-->
+<!--                <div class="card card-body">-->
+<!--                    <h3><b>Surface</b> Sediment Data</h3>-->
+<!--                        <form action="modify" method="POST" class="dropzone dz" id="my-dropzone2">-->
+<!--                        {%csrf_token%}-->
+<!--                            <div class="fallback">-->
+<!--                                <input name="surf_file" type="file" multiple />-->
+<!--                            </div>-->
+<!--                        </form>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    <br>-->
+<!--        <div class="row">-->
+<!--            <div class="col-md">-->
+<!--                <div class="card card-body">-->
+<!--                    <h3><b>IDOC</b> Data</h3>-->
+<!--                        <form action="modify" method="POST" class="dropzone dz" id="my-dropzone3">-->
+<!--                        {%csrf_token%}-->
+<!--                            <div class="fallback">-->
+<!--                                <input name="idoc_file" type="file" multiple />-->
+<!--                            </div>-->
+<!--                        </form>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md">-->
+<!--                <div class="card card-body">-->
+<!--                    <h3><b>kf</b> Data</h3>-->
+<!--                        <form action="modify" method="POST" class="dropzone dz" id="my-dropzone4">-->
+<!--                        {%csrf_token%}-->
+<!--                            <div class="fallback">-->
+<!--                                <input name="kf_file" type="file" multiple />-->
+<!--                            </div>-->
+<!--                        </form>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+
 
 {% else %}
     <div class="card card-body">

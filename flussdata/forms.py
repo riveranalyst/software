@@ -11,5 +11,6 @@ class SubsurfaceForm(forms.ModelForm):
 class DataForm(forms.ModelForm):
     class Meta:
         model = CollectedData
-        fields = '__all__'
+        fields = ['collected_data']
+
 
