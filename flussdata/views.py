@@ -11,7 +11,7 @@ from django_pandas.io import read_frame
 from django_tables2.config import RequestConfig
 from django_tables2.export.export import TableExport
 from django.views.generic import CreateView
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from flussdata.utils.fill_subsurf_tab import fill_fc_model
 
 
@@ -269,19 +269,28 @@ class modifyView(CreateView):
         context['navbar'] = 'activemodify'
         return context
 
-    def post(self, request, *args, **kwargs):
-        form = DataForm(request.POST)
-        if form.is_valid():
-            answer = form.cleaned_data['collected_data']
-            if answer == 'SubsurfSed':
-                files = request.FILES.getlist('file')  # gets all files from the post request
-                # # print(files)
-                my_file = request.FILES['file']  # gets the table file from the post request
-                # # print(request.FILES['file'])
-                df = pd.read_csv(my_file.temporary_file_path(), encoding='utf-8',
-                                 parse_dates=['date'])
+    # def post(self, request, *args, **kwargs):
+    #
+    #     if form.is_valid():
+    #         answer = form.cleaned_data['collected_data']
+    #         print(answer)
+    #     return HttpResponse('File sucessfully uploaded to database')
 
-                #  append data from df read into the database
-                fill_fc_model(df)
+
+def upload_file(request):
+    if request.method == 'POST':
+        if 'collecteddata' in request.POST:
+            print(request.POST['collecteddata'])
+            # files = request.FILES.getlist('file')  # gets all files from the post request
+            # # print(files)
+            my_file = request.FILES['file']  # gets the table file from the post request
+            print(my_file)
+            # # print(request.FILES['file'])
+            df = pd.read_csv(my_file.temporary_file_path(), encoding='utf-8',
+                             parse_dates=['date'])
+
+            #  append data from df read into the database
+            fill_fc_model(df)
+            return HttpResponse('')
         return JsonResponse({'post': 'false'})
 

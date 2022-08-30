@@ -2,7 +2,7 @@ from django.urls import path, include
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
-
+# from flussdata.views import
 app_name = 'flussdata'
 
 urlpatterns = [
@@ -11,7 +11,7 @@ urlpatterns = [
     # path('table', views.table, name='table')
     path('query/<int:id>/', views.view_sample, name='view_sample'),
     path('query/station<int:station_id>', views.station_data, name='station_data'),
-    # path('modify/upload', views.file_upload_view, name='modify/upload'),
+    path('modify/upload/', views.upload_file, name='modify/upload'),
     path('accounts/', include("django.contrib.auth.urls")),  # new
 ]
 
