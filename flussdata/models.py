@@ -22,7 +22,7 @@ class Campaign(models.Model):
 
 class CollectedData(models.Model):
     DATACOLLECTION = (
-        ('IDOC', 'Intragravel Dissolved Oxygen Content'),
+        ('IDO', 'Intragravel Dissolved Oxygen'),
         ('kf', 'Hydraulic Conductivity'),
         ('SurfSed', 'Surface Sediment Sampling'),
         ('SubsurfSed', 'Subsurface Sediment Sampling'),
@@ -52,12 +52,11 @@ class SedSamplTechnique(models.Model):
 
 
 class MeasStation(models.Model):
-    name = models.CharField(max_length=100, default='to fill')
+    name = models.CharField(max_length=100, default='to fill', unique=True)
     river = models.ForeignKey(River, on_delete=models.SET_NULL, null=True)
     campaign = models.ForeignKey(Campaign, on_delete=models.SET_NULL, null=True)
     collected_data = models.ManyToManyField(CollectedData)
-    # ate = models.DateField # 'date of measureemnt' is the verbose name (optional arg)
-    datetime = models.DateTimeField('Date/time of measurement', null=True, blank=True)
+    date = models.DateField('Date/time of measurement', null=True, blank=True)
     description = models.CharField(max_length=400, null=True, blank=True)
     lon = models.FloatField(null=True, blank=True)
     lat = models.FloatField(null=True, blank=True)
@@ -67,8 +66,18 @@ class MeasStation(models.Model):
                                   verbose_name='Discharge at recording time [m³/s]')
     wl_m = models.FloatField(null=True, blank=True, verbose_name='Water level measured in-situ at recording time [m]')
     wl_model_m = models.FloatField(null=True, blank=True, verbose_name='Modelled water level [m]')
-    algae_cover = models.BooleanField(null=True, blank=True)
-    imbrication = models.BooleanField(null=True, blank=True)
+    ALGAE = (
+        ('YES', 'Yes'),
+        ('NO', 'No'),
+        ('BLANK', 'Blank'),
+    )
+    algae_cover = models.CharField(null=True, max_length=100, choices=ALGAE, blank=True)
+    IMBRI = (
+        ('YES', 'Yes'),
+        ('NO', 'No'),
+        ('BLANK', 'Blank'),
+    )
+    imbrication = models.CharField(null=True, max_length=100, choices=IMBRI, blank=True)
     bed_slope = models.FloatField(null=True, blank=True)
 
     def __str__(self):
@@ -80,9 +89,9 @@ class SubsurfaceSed(models.Model):
                                      null=True)
     sample_id = models.CharField(max_length=200)
     sampling_method = models.ForeignKey(SedSamplTechnique, on_delete=models.SET_NULL, null=True)
-    operator_name = models.CharField(null=True, blank=True)
+    operator_name = models.CharField(null=True, blank=True, max_length=100)
     porosity_sfm = models.FloatField(null=True, blank=True)
-    
+
     # Actual variables
     dm = models.FloatField(null=True, blank=True, verbose_name='Dm (Mean grain size) [mm]')
     dg = models.FloatField(null=True, blank=True, verbose_name='Dg (Geom. Mean Grain size) [mm]')
@@ -136,7 +145,7 @@ class SurfaceSed(models.Model):
                                      null=True)
     sample_id = models.CharField(max_length=200)
     sampling_method = models.ForeignKey(SedSamplTechnique, on_delete=models.SET_NULL, null=True)
-    operator_name = models.CharField(null=True, blank=True)
+    operator_name = models.CharField(null=True, blank=True, max_length=100)
 
     # Actual variables
     dm = models.FloatField(null=True, blank=True, verbose_name='Dm (Mean grain size) [mm]')
@@ -184,7 +193,7 @@ class SurfaceSed(models.Model):
         return object_descrip
 
 
-class IDOC(models.Model):
+class IDO(models.Model):
     meas_station = models.ForeignKey(MeasStation, verbose_name='Measurement station', on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
     dp_position = models.IntegerField(null=True, blank=True, verbose_name='DP Position [-]')
@@ -193,7 +202,7 @@ class IDOC(models.Model):
     temp_c = models.FloatField(null=True, blank=True, verbose_name='Temperature [°C]')
     idoc_sat = models.FloatField(null=True, blank=True, verbose_name='IDOS [%]')
     H_m = models.FloatField(null=True, blank=True, verbose_name='Height of filter pipe (Slurping) above bed [m]')
-    operator_name = models.CharField(null=True, blank=True)
+    operator_name = models.CharField(null=True, blank=True, max_length=100)
     comment = models.CharField(max_length=1000)
 
     def __str__(self):
@@ -208,7 +217,7 @@ class Kf(models.Model):
     kf_ms = models.FloatField(null=True, blank=True, verbose_name='kf [m/s]')
     slurp_rate_avg_mls = models.FloatField(null=True, blank=True, verbose_name='Slurping rate [mg/L]')
     H_m = models.FloatField(null=True, blank=True, verbose_name='Height of filter pipe (Slurping) above bed [m]')
-    operator_name = models.CharField(null=True, blank=True)
+    operator_name = models.CharField(null=True, blank=True, max_length=100)
     comment = models.CharField(max_length=1000)
 
     def __str__(self):
@@ -225,5 +234,5 @@ class Hydraulics(models.Model):
     kt_2d_norm = models.FloatField(null=True, blank=True, verbose_name='kt 2d/U² [-]')
     water_temperature = models.FloatField(null=True, blank=True, verbose_name='Water temperature [°C]')
     turbidity = models.FloatField(null=True, blank=True, verbose_name='Turbidity [NTU]')
-    operator_name = models.CharField(null=True, blank=True)
+    operator_name = models.CharField(null=True, blank=True, max_length=100)
     ship_influence = models.BooleanField(null=True, blank=True)
