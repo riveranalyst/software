@@ -127,7 +127,7 @@ FILE_UPLOAD_HANDLERS = ['django.core.files.uploadhandler.TemporaryFileUploadHand
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap.html"
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [BASE_DIR, 'static']
 
 # Media files (workbooks etc)
 MEDIA_URL = '/media/'

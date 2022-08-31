@@ -271,17 +271,20 @@ class modifyView(CreateView):
 
 def upload_file(request):
     if request.method == 'POST':
-        if request.POST['collected_data'].is_valid():
-            my_file = request.FILES['file']  # gets the table file from the post request
-            df = pd.read_csv(my_file.temporary_file_path(), encoding='utf-8',
-                             parse_dates=['date'])
+        if request.POST['collected_data']:
+            try:
+                my_file = request.FILES['file']  # gets the table file from the post request
+                df = pd.read_csv(my_file.temporary_file_path(), encoding='utf-8',
+                                 parse_dates=['date'])
 
-            #  append data from df read into the database
-            append_db(request.POST['collected_data'], df)
-            return HttpResponse('')
+                #  append data from df read into the database
+                append_db(request.POST['collected_data'], df)
+            except:
+                return render(request, 'flussdata/modify.html', {'message': 'Incorrect data'})
+        return HttpResponse('')
         #TODO
         # send message to user to make him selecte a collected data
-        return JsonResponse({'post': 'false'})
+    return JsonResponse({'post': 'false'})
 
 
 
