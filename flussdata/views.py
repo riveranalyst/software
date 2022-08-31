@@ -227,7 +227,6 @@ def station_data(request, station_id):
     idocs = IDO.objects.filter(meas_station_id=station_id)
     fig_idoc = go.Figure()
     fig_idoc.update_layout(
-        # title='Intragravel Dissolved Oxygen Content',
         xaxis_title='Dissolved oxygen concentration [mg/L]',
         yaxis_title='Riverbed depth [m]',
         # height=560,
@@ -269,23 +268,11 @@ class modifyView(CreateView):
         context['navbar'] = 'activemodify'
         return context
 
-    # def post(self, request, *args, **kwargs):
-    #
-    #     if form.is_valid():
-    #         answer = form.cleaned_data['collected_data']
-    #         print(answer)
-    #     return HttpResponse('File sucessfully uploaded to database')
-
 
 def upload_file(request):
     if request.method == 'POST':
-        if 'collecteddata' in request.POST:
-            print(request.POST['collecteddata'])
-            # files = request.FILES.getlist('file')  # gets all files from the post request
-            # # print(files)
+        if request.POST['collected_data'] == 'SubsurfSed':
             my_file = request.FILES['file']  # gets the table file from the post request
-            print(my_file)
-            # # print(request.FILES['file'])
             df = pd.read_csv(my_file.temporary_file_path(), encoding='utf-8',
                              parse_dates=['date'])
 

@@ -1,3 +1,7 @@
+body {
+    background-color: #ebeff5 !important;
+}
+
 #button-addon1 {
   color: #ffc371;
 }
@@ -26,7 +30,7 @@ i {
     background-color: aliceblue !important;
 }
 
-a { color: #C0C0C0 !important; }
+a { color: #43464B }
 
 #total-orders{
     background-color: #4cb4c7;
