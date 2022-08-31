@@ -20,8 +20,9 @@
             <div class="col-md">
                 <div class="card card-body">
                         <form action="modify/upload/" method="POST" class="dropzone dz" id="my-dropzone">
-                            {{ form.as_p }}
                             {%csrf_token%}
+                            {{ form.as_p }}
+
                             <div class="fallback">
                                 <input name="file" type="file" multiple />
 <!--                                <input type="submit" value="Upload to Database" />-->

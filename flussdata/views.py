@@ -12,7 +12,7 @@ from django_tables2.config import RequestConfig
 from django_tables2.export.export import TableExport
 from django.views.generic import CreateView
 from django.http import JsonResponse, HttpResponse
-from flussdata.utils.fill_subsurf_tab import fill_fc_model
+from flussdata.utils.tables_append import append_db
 
 
 def home(request):
@@ -271,13 +271,17 @@ class modifyView(CreateView):
 
 def upload_file(request):
     if request.method == 'POST':
-        if request.POST['collected_data'] == 'SubsurfSed':
+        if request.POST['collected_data'].is_valid():
             my_file = request.FILES['file']  # gets the table file from the post request
             df = pd.read_csv(my_file.temporary_file_path(), encoding='utf-8',
                              parse_dates=['date'])
 
             #  append data from df read into the database
-            fill_fc_model(df)
+            append_db(request.POST['collected_data'], df)
             return HttpResponse('')
+        #TODO
+        # send message to user to make him selecte a collected data
         return JsonResponse({'post': 'false'})
+
+
 
