@@ -29,14 +29,14 @@ def fill_hydraulics_model(df):
         hydraulics, created = models.Hydraulics.objects.get_or_create(
             meas_station=st,
             sample_id = row.sample_id,
-            v_x = row.v_x,
-            v_y = row.v_y,
-            v_z = row.v_z,
+            v_x_ms = row.v_x_ms,
+            v_y_ms = row.v_y_ms,
+            v_z_ms = row.v_z_ms,
             kt = row.kt,
             kt_2d = row.kt_2d,
             v_bulk=row.v_bulk,
             water_temperature = row.water_temperature,
-            turbidity = row.turbidity,
+            turbidity_ntu = row.turbidity_ntu,
             operator_name = row.operator_name,
             ship_influence = row.ship_influence,
         )

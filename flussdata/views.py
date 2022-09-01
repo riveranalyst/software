@@ -13,6 +13,7 @@ from django_tables2.export.export import TableExport
 from django.views.generic import CreateView
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from flussdata.utils.tables_append import append_db
+from flussdata.utils.coord_mgmt import convert_coord_for_mapbox
 from django.urls import reverse
 from django.contrib import messages
 
@@ -76,10 +77,14 @@ def query(request):
 
     idoc_count = idoc_objects.values_list('sample_id').distinct().count()
 
+    # create new columns with computed lat and log in the projection
+    # accepted by the mapbox (epsg:4326)
+    # df_mapbox = convert_coord_for_mapbox(df_stations)
+
     # creates fig for mapbox using the df created from the filtered table
     fig = px.scatter_mapbox(df_stations,
-                            lat='lat',
-                            lon='lon',
+                            lat='y_epsg4326',
+                            lon='x_epsg4326',
                             # hover_name='sample_id',
                             color='name',
                             zoom=10,
