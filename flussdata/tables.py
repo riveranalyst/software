@@ -89,5 +89,4 @@ class StationTable(tables.Table):
     def render_data(self, record):
         return format_html('<a href="{}"><button class="btn btn-primary" type="submit">View'
                            '</button></a>',
-                           reverse('flussdata:station_data', kwargs={'station_id': record.id})
-                           )
+                           reverse('flussdata:station_data', kwargs={'station_id': record.id}))

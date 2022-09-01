@@ -11,8 +11,10 @@ from django_pandas.io import read_frame
 from django_tables2.config import RequestConfig
 from django_tables2.export.export import TableExport
 from django.views.generic import CreateView
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from flussdata.utils.tables_append import append_db
+from django.urls import reverse
+from django.contrib import messages
 
 
 def home(request):
@@ -270,6 +272,8 @@ class modifyView(CreateView):
 
 
 def upload_file(request):
+    global MESSAGE
+    MESSAGE = 'Fail: Please select the collected data.'
     if request.method == 'POST':
         if request.POST['collected_data']:
             try:
@@ -279,12 +283,16 @@ def upload_file(request):
 
                 #  append data from df read into the database
                 append_db(request.POST['collected_data'], df)
-            except:
-                return render(request, 'flussdata/modify.html', {'message': 'Incorrect data'})
-        return HttpResponse('')
-        #TODO
-        # send message to user to make him selecte a collected data
+                MESSAGE = 'Success: File was parsed and appended to the database.'
+            except Exception as e:
+                # TODO
+                # send message to user to make him selecte a collected data
+                # return render(request, 'flussdata/modify.html', {'message': 'Incorrect data'})
+                MESSAGE = 'Fail: File could not be parsed and appended ' \
+                          'to the database. Error messages: \n' + str(e)
     return JsonResponse({'post': 'false'})
 
 
+def success_upload(request):
+    return render(request, 'flussdata/success_upload.html', {'message': MESSAGE})
 
