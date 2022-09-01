@@ -31,7 +31,7 @@ def fill_surf_model(df):
         st.collected_data.add(data_type)
 
         # Create new sediment sample observation (row) from the input table
-        new_freezecore, created = models.SubsurfaceSed.objects.get_or_create(
+        new_sample, created = models.SubsurfaceSed.objects.get_or_create(
             meas_station=st,
             sample_id = row.sample_id,
             sampling_method = samp_method,
@@ -76,10 +76,10 @@ def fill_surf_model(df):
             percent_finer_0_125mm = row.percent_finer_0_125mm,
             percent_finer_0_063mm = row.percent_finer_0_063mm,
             percent_finer_0_031mm = row.percent_finer_0_031mm,)
-        new_freezecore.save()
+        new_sample.save()
 
 
 if __name__ == '__main__':
     # filling initial data
-    freezecore_df = pd.read_excel(BASE_DIR / 'media/db-baseline-Surf.xlsx', engine='openpyxl')
-    fill_surf_model(freezecore_df)
+    subsurf_df = pd.read_excel(BASE_DIR / 'media/db-baseline-Surf.xlsx', engine='openpyxl')
+    fill_surf_model(subsurf_df)
