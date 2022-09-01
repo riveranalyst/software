@@ -225,6 +225,11 @@ class Kf(models.Model):
 
 
 class Hydraulics(models.Model):
+    SHIP = (
+        ('YES', 'Yes'),
+        ('NO', 'No'),
+        ('BLANK', 'Blank'),
+    )
     meas_station = models.ForeignKey(MeasStation, on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
     v_x = models.FloatField(null=True, blank=True, verbose_name='v_x [m/s]')
@@ -232,7 +237,8 @@ class Hydraulics(models.Model):
     v_z = models.FloatField(null=True, blank=True, verbose_name='v_z [m/s]')
     kt_norm = models.FloatField(null=True, blank=True, verbose_name='kt/U² [-]')
     kt_2d_norm = models.FloatField(null=True, blank=True, verbose_name='kt 2d/U² [-]')
+    v_bulk = models.FloatField(null=True, blank=True, verbose_name='U bulk [m/s]')
     water_temperature = models.FloatField(null=True, blank=True, verbose_name='Water temperature [°C]')
     turbidity = models.FloatField(null=True, blank=True, verbose_name='Turbidity [NTU]')
     operator_name = models.CharField(null=True, blank=True, max_length=100)
-    ship_influence = models.BooleanField(null=True, blank=True)
+    ship_influence = models.CharField(null=True, max_length=100, choices=SHIP, blank=True)
