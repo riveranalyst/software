@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # fill database with the table just read preivously
-def fill_fc_model(df):
+def fill_subsurf_model(df):
     for index, row in df.iterrows():
         # get each station object from Station Class
         st = models.MeasStation.objects.get(
@@ -83,4 +83,4 @@ def fill_fc_model(df):
 if __name__ == '__main__':
     # filling initial data
     freezecore_df = pd.read_excel(BASE_DIR / 'media/db-baseline-FC.xlsx', engine='openpyxl')
-    fill_fc_model(freezecore_df)
+    fill_subsurf_model(freezecore_df)
