@@ -296,3 +296,112 @@ def upload_file(request):
 def success_upload(request):
     return render(request, 'flussdata/success_upload.html', {'message': MESSAGE})
 
+
+def dashboard(request):
+    #  Get all measurement data from the table
+    subsurf_objects = SubsurfaceSed.objects.all()
+    surf_objects = SurfaceSed.objects.all()
+    idoc_objects = IDO.objects.all()
+    station_objects = MeasStation.objects.all()
+    kf_objects = Kf.objects.all()
+    v_objects = Hydraulics.objects.all()
+
+    # Get filter if the user selected any from the listed in filters.py
+    # subSurfFilter = SubSurfFilter(request.GET, queryset=subsurf_objects)
+    stFilter = StationFilter(request.GET, queryset=station_objects)
+
+    # Apply filter, remaking the object
+    # subsurf_objects = subSurfFilter.qs
+    station_objects = stFilter.qs
+    subsurf_objects = subsurf_objects.filter(meas_station__name__in=station_objects.values('name'))
+
+    idoc_objects = idoc_objects.filter(meas_station__name__in=station_objects.values('name'))
+    surf_objects = surf_objects.filter(meas_station__name__in=station_objects.values('name'))
+    kf_objects = kf_objects.filter(meas_station__name__in=station_objects.values('name'))
+    v_objects = v_objects.filter(meas_station__name__in=station_objects.values('name'))
+
+    # creates df from filtered table
+    df_fc = read_frame(subsurf_objects)
+    # df_idoc = read_frame(idoc_objects)
+    df_stations = read_frame(station_objects)
+
+    # Shows the table from the flussdata tables, hosted on tables.py
+    subsurf_tb_show = flutb.FreezecoreTable(subsurf_objects)
+    idoc_show = flutb.IDOCTable(idoc_objects).paginate(per_page=25)
+    station_show = flutb.StationTable(station_objects).paginate(per_page=25)
+
+    # subsurf_tb_show.paginate(page=request.GET.get("page", 1), per_page=25)
+
+    # Count the number of samples alter filte ris applied
+    subsurf_count = subsurf_objects.count()
+    surf_count = surf_objects.count()
+    kf_count = kf_objects.count()
+    v_count = v_objects.count()
+
+    idoc_count = idoc_objects.values_list('sample_id').distinct().count()
+
+    # creates fig for mapbox using the df created from the filtered table
+    fig = px.scatter_mapbox(df_stations,
+                            lat='lat',
+                            lon='lon',
+                            # hover_name='sample_id',
+                            color='name',
+                            zoom=10,
+                            # size='d50',
+                            )
+    fig.update_layout(
+        mapbox_style="open-street-map",
+        legend_title_text='Stations'
+    )
+    fig.update_layout(margin={"r": 10, "t": 10, "l": 10, "b": 10})
+
+    # mapbox div
+    mapboxdiv = plot(fig, output_type='div')
+
+    # export of sub. sed. table
+    RequestConfig(request).configure(subsurf_tb_show)
+    export_format = request.GET.get("_export", None)
+
+    RequestConfig(request).configure(station_show)
+    export_format_st = request.GET.get("_export_st", None)
+
+    RequestConfig(request).configure(idoc_show)
+    export_format_idoc = request.GET.get("_export_idoc", None)
+
+    if TableExport.is_valid_format(export_format):
+        exporter = TableExport(export_format, subsurf_tb_show)
+        return exporter.response("subsurface-samples.{}".format(export_format))
+
+    if TableExport.is_valid_format(export_format_st):
+        exporter = TableExport(export_format_st, station_show)
+        return exporter.response("stations.{}".format(export_format_st))
+
+    if TableExport.is_valid_format(export_format_idoc):
+        exporter = TableExport(export_format_idoc, idoc_show)
+        return exporter.response("idoc.{}".format(export_format_idoc))
+
+    #  return this to the context
+    context = {'title': 'Flussdata: Dashboard',  # pagetitle
+               'navbar': 'activedash',  # make the tab 'query' highlighted
+
+               # number of measurements for the selected query
+               'subsurf_count': subsurf_count,
+               'surf_count': surf_count,
+               'idoc_count': idoc_count,
+               'kf_count': kf_count,
+               'v_count': v_count,
+
+               # filters
+               # 'subSurfFilter': subSurfFilter,
+               'stFilter': stFilter,
+               # 'idocFilter': idocFilter,
+
+               # tables
+               'subsurf_tb_show': subsurf_tb_show,
+               'idoc_table': idoc_show,
+               'station_table': station_show,
+
+               # mapbox
+               'mapboxfig': mapboxdiv}
+
+    return render(request, 'flussdata/dashboard.html', context)

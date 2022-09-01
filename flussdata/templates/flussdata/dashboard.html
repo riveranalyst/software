@@ -1,7 +1,16 @@
 {% extends 'base.html' %}
 {% load django_tables2 %}
+<!--{% load querystring from django_tables2 %}-->
+
+{% block head %}
+<!--    <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">-->
+<!--    <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>-->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />-->
+
+{% endblock%}
 
 {% block content %}
+
 {% if user.is_authenticated %}
 <br>
 <div class="row">
@@ -17,8 +26,26 @@
                     </form>
                 </div>
             </div>
-
+<!--            <div class="col-md-5">-->
+<!--                <div class="card card-body">-->
+<!--                <h3>Subsurface Sediment Samples</h3>-->
+<!--                    <form method="get">-->
+<!--                        {{ subSurfFilter.form.as_p }}-->
+<!--                        <button class="btn btn-primary" type="submit">Search</button>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
+
+<!--        <div class="col-md-5">-->
+<!--            <div class="card card-body">-->
+<!--            <h1>FlussQuery</h1>-->
+<!--                <form method="get">-->
+<!--                    {{ idocFilter.form.as_p }}-->
+<!--                    <button class="btn btn-primary" type="submit">Search</button>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
 
         <br>
         <div class="row">
@@ -33,7 +60,7 @@
                 </div>
                 <div class="card text-center text-white  mb-3" id="orders-delivered">
                     <div class="card-header">
-                        <h5 class="card-title">IDO/kf Depth Profiles</h5>
+                        <h5 class="card-title">IDO/kf Profiles</h5>
                     </div>
                     <div class="card-body">
                         <h3 class="card-title">{{idoc_count}}/{{kf_count}}</h3>
@@ -41,7 +68,7 @@
                 </div>
                 <div class="card text-center text-white  mb-3" id="orders-pending">
                     <div class="card-header">
-                        <h5 class="card-title">Points of Hydraulic Measurements</h5>
+                        <h5 class="card-title">Flow Velocity Measurements</h5>
                     </div>
                     <div class="card-body">
                         <h3 class="card-title">{{v_count}}</h3>
