@@ -63,6 +63,7 @@ class MeasStation(models.Model):
     x_epsg4326 = models.FloatField(null=True, blank=True)
     y_epsg4326 = models.FloatField(null=True, blank=True)
     bed_elevation_wgs84 = models.FloatField(null=True, blank=True)
+    bed_elevation_dhhn = models.FloatField(null=True, blank=True)
     coord_system = models.CharField(max_length=15)
     pos_rel_WB = models.FloatField(null=True, blank=True,
                                    verbose_name='Distance from wetted boundary (+ for wetted locations) [m]')
