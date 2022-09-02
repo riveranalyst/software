@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
 
 <div class="row">
@@ -65,6 +67,42 @@
 	</div>
 
 </div>
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <h2>Methods</h2>
+				<p><h4>MultiPAC</h4></p>
+					<p>The MultiPAC method (Seitz, 2020) consists of quantifying riverbed quality through multiple
+			physico-chemical parameters, namely: grain size characteristics, riverbed porosity, intersticial
+			dissolved oxygen (IDO), and hydraulic conductivity. The grain size and riverbed porosity is derived from
+			freeze cores and represent bulk parameters for a given x-y point. The interstitial
+			dissovled oxygen (IDO) and hydraulic conductivity (kf) are measured as vertical profiles along the riverbed
+						depth and thus enable to locate depths with low hyporheic habitat quality.</p>
+			<div class="row text-center">
+				<div class="col-md"><img src="{% static 'images/slurp-pic.jpg' %}" alt="Slurp" width="500"></div>
+
+				<div class="col-md"><img src="{% static 'images/fieldwork.jpg' %}" alt="Fieldwork" width="520"></div>
+			</div>
+
+			<p><h4> FlowTracker2</h4></p>
+
+				<p>The FlowTracker2 is an ADV measurement device which enables to determine flow velocity vectors in all
+			directions (x, y, and z). Through these, we can calculate turbulent kinetic energy in 3d (kt) an 2d (tke 2d,
+					using only the components in x and y).</p>
+
+			<p><h4> Shovel/bucket sampling</h4></p>
+				<p>We perform sediment sampling from both the overlayer (surficial sediments) and underlayer (subsurface),
+					we we thereafter sieve in the lab.</p>
+
+
+<!--			<p><a href="mailto:beatriz.negreiros@iws.uni-stuttgart.de"><button class="btn btn-primary" type="submit">Get in touch</button></a></p>-->
+        </div>
+		<br>
+
+
+    </div>
+</div>
+
 <br>
 <div>
 <h4>Selected Publications:</h4>
