@@ -6,7 +6,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 django.setup()
 import pandas as pd
 import flussdata.models as models
-from pyproj import transform, CRS, Proj
+from pyproj import transform, CRS, Proj, exceptions
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -19,18 +19,24 @@ def fill_st_model(df):
         ri, created = models.River.objects.get_or_create(river=row.river.strip())
         ca, created = models.Campaign.objects.get_or_create(campaign=row.campaign)
 
-        if row.coord_system == outproj_str:
-            y_epsg4326 = row.y
-            x_epsg4326 = row.x
-        # for gauss kruger, the easting and northing are inversed, see eg.: https://epsg.io/31468
-        if (row.coord_system == 'epsg:31468') or (row.coord_system == 'epsg:5684'):
-            y_epsg4326, x_epsg4326 = transform(
-                CRS.from_string(row.coord_system), proj_4326, row.x, row.y)
-        else:
-            x_epsg4326, y_epsg4326 = transform(
-                CRS.from_string(row.coord_system), proj_4326, row.x, row.y)
+        try:
+            # check for coord system and if necessary reproject coords to epsg4326
+            if row.coord_system == outproj_str:
+                y_epsg4326 = row.y
+                x_epsg4326 = row.x
+            # for gauss kruger, the easting and northing are inversed, see eg.: https://epsg.io/31468
+            if (row.coord_system == 'epsg:31468') or (row.coord_system == 'epsg:5684'):
+                y_epsg4326, x_epsg4326 = transform(
+                    CRS.from_string(row.coord_system), proj_4326, row.x, row.y)
+            else:
+                x_epsg4326, y_epsg4326 = transform(
+                    CRS.from_string(row.coord_system), proj_4326, row.x, row.y)
+        except exceptions.CRSError:
+            y_epsg4326 = np.nan
+            x_epsg4326 = np.nan
 
         # coll_data, created = models.CollectedData.objects.get_or_create(collected_data=row.collected_data)
+        print(row.meas_station)
         st = models.MeasStation.objects.create(
             name=row.meas_station.strip(),
             river=ri,
@@ -43,6 +49,7 @@ def fill_st_model(df):
             x_epsg4326 = x_epsg4326,
             coord_system = row.coord_system,
             bed_elevation_wgs84 = row.bed_elevation_wgs84,
+            bed_elevation_dhhn = row.bed_elevation_dhhn,
             pos_rel_WB=row.pos_rel_WB_m,
             discharge=row.dis_cumec,
             wl_m=row.wl_m,
