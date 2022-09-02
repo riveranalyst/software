@@ -22,7 +22,7 @@ def fill_do_model(df):
         if st.wl_m is None:
             st.wl_m = row.wl_m
         st.save()
-
+        # print(row.meas_station)
         # get or create the data class and add it to the stations information
         data_station = models.CollectedData.objects
         data_type, created = data_station.get_or_create(collected_data='IDO')
@@ -46,5 +46,6 @@ def fill_do_model(df):
 
 
 if __name__ == '__main__':
+    models.IDO.objects.all().delete()
     idoc_df = pd.read_excel(BASE_DIR / 'media/db-baseline-idoc.xlsx', engine='openpyxl')
     fill_do_model(idoc_df)
