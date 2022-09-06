@@ -1,4 +1,5 @@
 import plotly.graph_objs as go
+import plotly.express as px
 from django_pandas.io import read_frame
 
 
@@ -69,3 +70,20 @@ def plot_ido(idocs):
                                       side='top'
                                       ))
     return fig_idoc
+
+
+def plot_map(df_stations):
+    fig = px.scatter_mapbox(df_stations,
+                            lat='y_epsg4326',
+                            lon='x_epsg4326',
+                            # hover_name='sample_id',
+                            color='name',
+                            zoom=10,
+                            # size='d50',
+                            )
+    fig.update_layout(
+        mapbox_style="open-street-map",
+        legend_title_text='Stations'
+    )
+    fig.update_layout(margin={"r": 10, "t": 10, "l": 10, "b": 10})
+    return fig

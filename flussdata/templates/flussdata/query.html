@@ -83,6 +83,18 @@
         <br>
         <div class="row">
             <div class="card card-body">
+                <h3>Surface Sediment Samples</h3>
+
+                {% render_table surf_tb_show %}
+                <div class="margin-right">
+                    <a href="{% querystring '_export'='csv' %}"><button class="btn btn-primary">Download CSV</button></a>
+                    <a href="{% querystring '_export'='xlsx' %}"><button class="btn btn-primary">Download XLSX</button></a>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="card card-body">
                 <h3>Intragravel Dissolved Oxygen</h3>
                 {% render_table idoc_table %}
                 <div class="margin-right">
