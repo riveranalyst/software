@@ -7,7 +7,7 @@ app_name = 'flussdata'
 
 urlpatterns = [
     path('query', views.query, name='query'),
-    path('modify', views.modifyView.as_view(), name='modify'),
+    path('modify', views.modify, name='modify'),
     path('dashboard', views.dashboard, name='dashboard'),
     # path('query/<int:id>/', views.view_sample, name='view_sample'),
     path('query/station<int:station_id>', views.station_data, name='station_data'),

@@ -106,9 +106,10 @@
 
     </div>
 </div>
-
-<p><a href="{% url 'flussdata:logout' %}?next={{ request.path }}"><button class="btn btn-primary">Log out</button></a></p>
-
+<br>
+<div class="row">
+    <p><a href="{% url 'flussdata:logout' %}?next={{ request.path }}"><button class="btn btn-primary">Log out</button></a></p>
+</div>
 
 {% else %}
 <div class="card card-body">

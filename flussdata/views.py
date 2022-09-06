@@ -10,10 +10,11 @@ import plotly.express as px
 from django_pandas.io import read_frame
 from django_tables2.config import RequestConfig
 from django_tables2.export.export import TableExport
-from django.views.generic import CreateView
+from django.views.generic import CreateView, View
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from flussdata.utils.tables_append import append_db
 from flussdata.utils.plotter import plot_gsd, plot_ido, plot_map
+from flussdata.utils.fill_stations_tab import fill_st_model
 from flussdata.utils.coord_mgmt import convert_coord_for_mapbox
 from django.urls import reverse
 from django.contrib import messages
@@ -210,16 +211,11 @@ def station_data(request, station_id):
     return render(request, 'flussdata/station_data.html', context)
 
 
-class modifyView(CreateView):
-    template_name = 'flussdata/modify.html'
-    model = CollectedData
-    form_class = DataForm
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Flussdata: Modify'
-        context['navbar'] = 'activemodify'
-        return context
+def modify(request):
+    context = {'title': 'Flussdata: Modify',
+               'form': FileForm,
+               'navbar': 'activemodify'}
+    return render(request, 'flussdata/modify.html', context)
 
 
 def upload_file(request):
@@ -246,6 +242,18 @@ def upload_file(request):
 
 def success_upload(request):
     return render(request, 'flussdata/success_upload.html', {'message': MESSAGE})
+
+
+# def upload_stations(request):
+#     if request.method == 'POST':
+#         my_file = request.FILES['file']  # gets the table file from the post request
+#         df = pd.read_csv(my_file.temporary_file_path(), encoding='utf-8',
+#                          parse_dates=['date'])
+#
+#         #  append data from df read into the database
+#         fill_st_model(df)
+#         return Htt
+#     return JsonResponse({'post': 'false'})
 
 
 def dashboard(request):
