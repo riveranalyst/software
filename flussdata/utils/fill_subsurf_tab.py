@@ -29,7 +29,7 @@ def fill_subsurf_model(df):
 
         # Add information to the station that data is avaialble for subsurface sediments
         st.collected_data.add(data_type)
-
+        print(row.meas_station)
         # Create new sediment sample observation (row) from the input table
         new_freezecore, created = models.SubsurfaceSed.objects.get_or_create(
             meas_station=st,
@@ -81,6 +81,8 @@ def fill_subsurf_model(df):
 
 
 if __name__ == '__main__':
+    models.SubsurfaceSed.objects.all().delete()
+
     # filling initial data
-    freezecore_df = pd.read_excel(BASE_DIR / 'media/db-baseline-FC.xlsx', engine='openpyxl')
+    freezecore_df = pd.read_excel(BASE_DIR / 'media/db-baseline-subsurf.xlsx', engine='openpyxl')
     fill_subsurf_model(freezecore_df)

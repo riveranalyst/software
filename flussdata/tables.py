@@ -85,6 +85,7 @@ class StationTable(tables.Table):
     class Meta:
         model = MeasStation
         template_name = "django_tables2/bootstrap-responsive.html"
+        sequence = ('id', 'name', 'data', '...')
 
     def render_data(self, record):
         return format_html('<a href="{}"><button class="btn btn-primary" type="submit">View'

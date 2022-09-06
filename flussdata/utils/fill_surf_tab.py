@@ -31,7 +31,7 @@ def fill_surf_model(df):
         st.collected_data.add(data_type)
 
         # Create new sediment sample observation (row) from the input table
-        new_sample, created = models.SubsurfaceSed.objects.get_or_create(
+        new_sample, created = models.SurfaceSed.objects.get_or_create(
             meas_station=st,
             sample_id = row.sample_id,
             sampling_method = samp_method,
@@ -80,6 +80,8 @@ def fill_surf_model(df):
 
 
 if __name__ == '__main__':
+    models.SurfaceSed.objects.all().delete()
+
     # filling initial data
     subsurf_df = pd.read_excel(BASE_DIR / 'media/db-baseline-Surf.xlsx', engine='openpyxl')
     fill_surf_model(subsurf_df)

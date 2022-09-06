@@ -254,7 +254,7 @@ def station_data(request, station_id):
                                       ),
                            xaxis=dict(showline=True,
                                       ticks='outside',
-                                      range=[0, 12],
+                                      range=[0, 13],
                                       tickvals=[0, 2, 4, 6, 8, 10, 12],
                                       side='top'
                                       ))

@@ -165,7 +165,7 @@ class SurfaceSed(models.Model):
     n_carling = models.FloatField(null=True, blank=True, verbose_name='Porosity (Carling & Reader, 1982) [-]')
     n_wu_wang = models.FloatField(null=True, blank=True, verbose_name='Porosity (Wu & Wang, 206) [-]')
     n_wooster = models.FloatField(null=True, blank=True, verbose_name='Porosity (Wooster et al., 2008) [-]')
-    # n_frings = models.FloatField(null=True, blank=True, verbose_name='Porosity (Frings et al., 2011) [-]')
+    n_frings = models.FloatField(null=True, blank=True, verbose_name='Porosity (Frings et al., 2011) [-]')
     n_user = models.FloatField(null=True, blank=True, verbose_name='Porosity (Seitz et al., 2018) [-]')
     d10 = models.FloatField(null=True, blank=True, verbose_name='D10 [mm]')
     d16 = models.FloatField(null=True, blank=True, verbose_name='D16 [mm]')
