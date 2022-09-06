@@ -10,11 +10,22 @@
         <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
         <h2>Upload area</h2>
         <div>
-            <p>For adding data to the DB, select the <b>type of collected data</b>, and upload in the dropzones below
-            the data tables as csv files. Please load only tables according to the tables template (see
-                <a href="query">here</a>). Alternatively,
-            the DB can also be updated (both edits and add-ons) in the
-            admin page (link <a href="/admin">here</a>). </p>
+            <p>For adding data to the DB, follow these steps:
+            <ol>
+                <li>Important: use only the template csvs as shown in the  <a href="query">query tab </a>. Swapping column
+                    positions or leaving selected fields blank is not a problem, but don't remove nor rename any
+                    column names.</li>
+                <li>First, upload the general information regarding the measurement points (option 'Stations') using
+                the appropriate template csv. Name the "measurement stations" carefully. They will link
+                the database across multiple tables to gather parametrical data for that measurement point. </li>
+                <li>Upload the collected data (following the corresponding template) by selecting the data type and
+                    uploading the csv in the dropzone below. As long as the measurement stations (step 2) are
+                uploaded to the database, the order for uploading the remaining parametrical data doensn't matter.
+                    Important: <b>the measurement station of the parametrical data needs to exactly match one of the
+                        "meas_station" you provided in step 2, otherwise an error message will be shown. </b></li>
+            </ol>
+
+            Alternatively, the DB can also be managed in the admin page (link <a href="/admin">here</a>). </p>
 
         </div>
         <div class="row">
