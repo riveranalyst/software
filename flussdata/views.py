@@ -13,6 +13,7 @@ from django_tables2.export.export import TableExport
 from django.views.generic import CreateView
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from flussdata.utils.tables_append import append_db
+from flussdata.utils.plotter import plot_gsd, plot_ido
 from flussdata.utils.coord_mgmt import convert_coord_for_mapbox
 from django.urls import reverse
 from django.contrib import messages
@@ -187,80 +188,28 @@ def view_sample(request, id):
 
 def station_data(request, station_id):
     #  Get all measurement data from the table
+    gsds = []
     station = MeasStation.objects.get(id=station_id)
-    fcs = SubsurfaceSed.objects.filter(meas_station=station_id)
+    subsurf_sample = SubsurfaceSed.objects.filter(meas_station=station_id)
+    surf_sample = SurfaceSed.objects.filter(meas_station=station_id)
 
-    # graph embbeded ina  div to return to the template:
-    fig = go.Figure()
-    fig.update_layout(
-        title='Subsurface Grain Size Distribution',
-        xaxis_title='Grain size [mm]',
-        yaxis_title='Percent finer [%]',
-        # height=420,  # if height and width are given, the figure is not resized within the div when user zooms in/out
-        # width=560,
-        margin={"r": 30, "t": 30, "l": 30, "b": 30},
-        yaxis=dict(showline=True,
-                   ticks='outside',
-                   range=[0, 100]),
+    if surf_sample:
+        fig_surf = plot_gsd(surf_sample, title='Surface Grain Size Distribution')
+        # return graph div
+        plot_div = plot(fig_surf, output_type='div')
+        gsds.append(plot_div)
 
-        xaxis=dict(showline=True,
-                   ticks='outside',
-                   type="log"
-                   # range=[0.063, 250]
-                   )
-    )
+    if subsurf_sample:
+        fig_subsurf = plot_gsd(subsurf_sample, title='Subsurface Grain Size Distribution')
+        # return graph div
+        plot_div = plot(fig_subsurf, output_type='div')
+        gsds.append(plot_div)
 
-    for fc in fcs:
-        ds = ['250', '125', '63', '31_5', '16', '8', '4', '2', '1', '0_5', '0_25', '0_125', '0_063', '0_031']
-        ds_float = [250, 125, 63, 31.5, 16, 4, 2, 1, 0.5, 0.25, 0.125, 0.063, 0.031]
-        ds_values = []
-
-        # loop through the sediment fractions, which are column names in the db
-        for d in ds:
-            ds_values.append(eval('fc.percent_finer_{0}mm'.format(d)))
-
-        # create graph
-        fig.add_trace(go.Scatter(x=ds_float, y=ds_values,
-                                 mode='lines', name='test',
-                                 opacity=0.8,
-                                 hovertext=fc.sample_id,
-                                 ))
-
-    # fig.update_xaxes(type="log")
-
-    # return graph div
-    plot_div = plot(fig, output_type='div')
-
+    # generating fig for idocs
     idocs = IDO.objects.filter(meas_station_id=station_id)
-    fig_idoc = go.Figure()
-    fig_idoc.update_layout(
-        xaxis_title='Dissolved oxygen concentration [mg/L]',
-        yaxis_title='Riverbed depth [m]',
-        # height=560,
-        # width=420,
-        margin={"r": 30, "t": 30, "l": 30, "b": 30})
-    idoc_df = read_frame(idocs)
-    for idoc in idoc_df['sample_id'].unique():
-        idoc_sample = idoc_df[idoc_df['sample_id'] == idoc]
-        fig_idoc.add_trace(go.Scatter(x=idoc_sample['idoc_mgl'],
-                                      y=idoc_sample['sediment_depth_m'],
-                                      mode='lines',
-                                      hovertext=idoc_sample['sample_id'],
-                                      ))
-    fig_idoc.update_layout(yaxis=dict(showline=True,
-                                      ticks='outside',
-                                      range=[0.55, 0],
-                                      tickvals=[0, 0.1, 0.2, 0.3, 0.4, 0.5]
-                                      ),
-                           xaxis=dict(showline=True,
-                                      ticks='outside',
-                                      range=[0, 13],
-                                      tickvals=[0, 2, 4, 6, 8, 10, 12],
-                                      side='top'
-                                      ))
-
+    fig_idoc = plot_ido(idocs)
     idoc_div = plot(fig_idoc, output_type='div')
-    context = {'plot_div': plot_div, 'idoc_div': idoc_div, 'station_name': station.name}
+    context = {'gsds': gsds, 'idoc_div': idoc_div, 'station_name': station.name}
     return render(request, 'flussdata/station_data.html', context)
 
 

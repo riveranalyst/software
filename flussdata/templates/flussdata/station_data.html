@@ -5,13 +5,17 @@
 <body>
 <h1>{{ station_name }}</h1>
     <div class="row">
-        <div class="col-md-7">
-            <div class="card card-body">
-                {% autoescape off %}
-                    {{ plot_div }}
-                {% endautoescape %}
+        {% for gsd in gsds %}
+            <div class="col-md-7">
+                <div class="card card-body">
+                    {% autoescape off %}
+                        {{ gsd }}
+                    {% endautoescape %}
+                </div>
             </div>
-        </div>
+        {% endfor %}
+        
+        {% if idocs %}
         <div class="col-md-4">
             <div class="card card-body">
                 {% autoescape off %}
@@ -19,6 +23,7 @@
                 {% endautoescape %}
             </div>
         </div>
+        {% endif %}
 
     </div>
 </body>
