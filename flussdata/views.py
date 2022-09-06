@@ -10,6 +10,8 @@ from django_tables2.export.export import TableExport
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from flussdata.utils.tables_append import append_db
 from flussdata.utils.plotter import plot_gsd, plot_ido, plot_map
+from django.contrib.auth.decorators import login_required, permission_required
+import pandas as pd
 
 
 def home(request):
@@ -28,6 +30,8 @@ def home(request):
     return render(request, 'home.html', context)
 
 
+@login_required
+@permission_required('flussdata.view_collecteddata', raise_exception=True)
 def query(request):
     #  Get all measurement data from the table
     subsurf_objects = SubsurfaceSed.objects.all()
@@ -134,6 +138,8 @@ def query(request):
     return render(request, 'flussdata/query.html', context)
 
 
+@login_required
+@permission_required('flussdata.view_collected_data', raise_exception=True)
 def station_data(request, station_id):
     #  Get all measurement data from the table
     gsds = []
@@ -164,6 +170,8 @@ def station_data(request, station_id):
     return render(request, 'flussdata/station_data.html', context)
 
 
+@login_required
+@permission_required('flussdata.add_collected_data', raise_exception=True)
 def modify(request):
     context = {'title': 'Flussdata: Modify',
                'form': FileForm,
@@ -171,6 +179,8 @@ def modify(request):
     return render(request, 'flussdata/modify.html', context)
 
 
+@login_required
+@permission_required('flussdata.add_collected_data', raise_exception=True)
 def upload_file(request):
     global MESSAGE
     MESSAGE = 'Fail: Please select the collected data.'
@@ -193,6 +203,8 @@ def upload_file(request):
     return JsonResponse({'post': 'false'})
 
 
+@login_required
+@permission_required('flussdata.add_collected_data', raise_exception=True)
 def success_upload(request):
     return render(request, 'flussdata/success_upload.html', {'message': MESSAGE})
 

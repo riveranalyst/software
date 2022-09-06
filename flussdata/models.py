@@ -56,7 +56,7 @@ class MeasStation(models.Model):
     river = models.ForeignKey(River, on_delete=models.SET_NULL, null=True)
     campaign = models.ForeignKey(Campaign, on_delete=models.SET_NULL, null=True)
     collected_data = models.ManyToManyField(CollectedData)
-    date = models.DateField('Date/time of measurement', null=True, blank=True)
+    date = models.DateField('Date of measurement', null=True, blank=True)
     description = models.CharField(max_length=400, null=True, blank=True)
     x = models.FloatField(null=True, blank=True)
     y = models.FloatField(null=True, blank=True)

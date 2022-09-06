@@ -2,7 +2,7 @@
 {% load django_tables2 %}
 
 {% block content %}
-{% if user.is_authenticated %}
+<!--{% if user.is_authenticated %}-->
 <br>
 <div class="row">
 
@@ -111,11 +111,11 @@
     <p><a href="{% url 'flussdata:logout' %}?next={{ request.path }}"><button class="btn btn-primary">Log out</button></a></p>
 </div>
 
-{% else %}
-<div class="card card-body">
-    <h2>User Authentication Required </h2>
-    <p><a href="{% url 'flussdata:login' %}?next={{ request.path }}">Login</a> to have access to the database.</p>
-</div>
-{% endif %}
+<!--{% else %}-->
+<!--<div class="card card-body">-->
+<!--    <h2>User Authentication Required </h2>-->
+<!--    <p><a href="{% url 'flussdata:login' %}?next={{ request.path }}">Login</a> to have access to the database.</p>-->
+<!--</div>-->
+<!--{% endif %}-->
 {% endblock %}
 
