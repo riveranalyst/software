@@ -16,5 +16,6 @@ CHOICES = (('Stations', 'Stations Information'),
            ('Hydraulics', 'FlowTracker')
            )
 
+
 class FileForm(forms.Form):
     collected_data = forms.MultipleChoiceField(choices=CHOICES)

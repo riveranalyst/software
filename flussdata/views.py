@@ -60,8 +60,6 @@ def query(request):
     idoc_show = flutb.IDOCTable(idoc_objects).paginate(per_page=25)
     station_show = flutb.StationTable(station_objects).paginate(per_page=25)
 
-    # subsurf_tb_show.paginate(page=request.GET.get("page", 1), per_page=25)
-
     # Count the number of samples alter filte ris applied
     subsurf_count = subsurf_objects.count()
     surf_count = surf_objects.count()
@@ -157,8 +155,11 @@ def station_data(request, station_id):
 
     # generating fig for idocs
     idocs = IDO.objects.filter(meas_station_id=station_id)
-    fig_idoc = plot_ido(idocs)
-    idoc_div = plot(fig_idoc, output_type='div')
+    if idocs:
+        fig_idoc = plot_ido(idocs)
+        idoc_div = plot(fig_idoc, output_type='div')
+    else:
+        idoc_div = None
     context = {'gsds': gsds, 'idoc_div': idoc_div, 'station_name': station.name}
     return render(request, 'flussdata/station_data.html', context)
 
