@@ -4,8 +4,6 @@ from pathlib import Path
 import numpy as np
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 django.setup()
-import pandas as pd
-import flussdata.models as models
 from pyproj import transform, CRS
 
 

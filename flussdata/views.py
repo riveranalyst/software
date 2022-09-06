@@ -2,22 +2,14 @@ from django.shortcuts import render
 import flussdata.tables as flutb
 from .filters import *
 from .forms import *
-from .alter_tables import *
-from django.shortcuts import get_object_or_404
 from plotly.offline import plot
-import plotly.graph_objs as go
 import plotly.express as px
 from django_pandas.io import read_frame
 from django_tables2.config import RequestConfig
 from django_tables2.export.export import TableExport
-from django.views.generic import CreateView, View
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from flussdata.utils.tables_append import append_db
 from flussdata.utils.plotter import plot_gsd, plot_ido, plot_map
-from flussdata.utils.fill_stations_tab import fill_st_model
-from flussdata.utils.coord_mgmt import convert_coord_for_mapbox
-from django.urls import reverse
-from django.contrib import messages
 
 
 def home(request):
@@ -60,8 +52,6 @@ def query(request):
     v_objects = v_objects.filter(meas_station__name__in=station_objects.values('name'))
 
     # creates df from filtered table
-    df_fc = read_frame(subsurf_objects)
-    # df_idoc = read_frame(idoc_objects)
     df_stations = read_frame(station_objects)
 
     # Shows the table from the flussdata tables, hosted on tables.py
@@ -82,7 +72,6 @@ def query(request):
 
     # create new columns with computed lat and log in the projection
     # accepted by the mapbox (epsg:4326)
-    # df_mapbox = convert_coord_for_mapbox(df_stations)
 
     # creates fig for mapbox using the df created from the filtered table
     fig = plot_map(df_stations)
@@ -147,43 +136,6 @@ def query(request):
     return render(request, 'flussdata/query.html', context)
 
 
-# @require_http_methods(["GET"])
-# def view_sample(request, id):
-#     #  Get all measurement data from the table
-#     sample = get_object_or_404(SubsurfaceSed, id=id)
-#     print(sample)
-#     ds = ['250', '125', '63', '31_5', '16', '8', '4', '2', '1', '0_5', '0_25', '0_125', '0_063', '0_031']
-#     ds_float = [250, 125, 63, 31.5, 16, 4, 2, 1, 0.5, 0.25, 0.125, 0.063, 0.031]
-#     ds_values = []
-#
-#     # loop through the sediment fractions, which are column names in the db
-#     for d in ds:
-#         ds_values.append(eval('sample.percent_finer_{0}mm'.format(d)))
-#
-#     # graph embbeded ina  div to return to the template:
-#     fig = go.Figure()
-#
-#     # create graph
-#     fig.add_trace(go.Scatter(x=ds_float, y=ds_values,
-#                              mode='lines', name='test',
-#                              opacity=0.8,
-#                              ))
-#     fig.update_xaxes(type="log")
-#     fig.update_layout(
-#         title='Grain Size Distribution ({0})'.format(sample.sample_id),
-#         xaxis_title='Grain size [mm]',
-#         yaxis_title='Percent finer [%]',
-#         height=420,
-#         width=560)
-#
-#     # return graph div
-#     plot_div = plot(fig,
-#                     output_type='div')
-#
-#     context = {'plot_div': plot_div}
-#     return render(request, 'flussdata/fc_sample.html', context)
-
-
 def station_data(request, station_id):
     #  Get all measurement data from the table
     gsds = []
@@ -242,18 +194,6 @@ def upload_file(request):
 
 def success_upload(request):
     return render(request, 'flussdata/success_upload.html', {'message': MESSAGE})
-
-
-# def upload_stations(request):
-#     if request.method == 'POST':
-#         my_file = request.FILES['file']  # gets the table file from the post request
-#         df = pd.read_csv(my_file.temporary_file_path(), encoding='utf-8',
-#                          parse_dates=['date'])
-#
-#         #  append data from df read into the database
-#         fill_st_model(df)
-#         return Htt
-#     return JsonResponse({'post': 'false'})
 
 
 def dashboard(request):

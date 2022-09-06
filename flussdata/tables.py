@@ -1,7 +1,5 @@
 import django_tables2 as tables
 from flussdata.models import *
-from django.db import models
-from django_tables2.utils import A
 from django.utils.html import format_html
 from django.urls import reverse
 
@@ -108,11 +106,6 @@ class SurfaceTable(tables.Table):
     class Meta:
         model = SurfaceSed
         template_name = "django_tables2/bootstrap-responsive.html"
-
-    # def render_sample_id(self, record):
-    #     return format_html('<a href="{}"><button class="btn btn-primary" type="submit">{'
-    #                        '}</button></a>', reverse('flussdata:view_sample', kwargs={'id': record.id}),
-    #                        record.sample_id)
 
 
 class IDOCTable(tables.Table):
