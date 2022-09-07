@@ -7,7 +7,7 @@ import plotly.express as px
 from django_pandas.io import read_frame
 from django_tables2.config import RequestConfig
 from django_tables2.export.export import TableExport
-from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.http import JsonResponse
 from flussdata.utils.tables_append import append_db
 from flussdata.utils.plotter import plot_gsd, plot_ido, plot_map, plot_kf
 from django.contrib.auth.decorators import login_required, permission_required

@@ -202,7 +202,7 @@ class IDO(models.Model):
     idoc_sat = models.FloatField(null=True, blank=True, verbose_name='IDOS [%]')
     H_m = models.FloatField(null=True, blank=True, verbose_name='Height of filter pipe (Slurping) above bed [m]')
     operator_name = models.CharField(null=True, blank=True, max_length=100)
-    comment = models.CharField(max_length=1000)
+    comment = models.CharField(max_length=1000, null=True, blank=True)
 
     def __str__(self):
         return self.sample_id

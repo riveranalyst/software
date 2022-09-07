@@ -31,7 +31,7 @@ def fill_kf_model(df):
 
         # Add information to the station that data is avaialble for subsurface sediments
         st.collected_data.add(data_type)
-        print(row.meas_station)
+
         # Create new idoc observation (row) from the input table
         kf, created = models.Kf.objects.get_or_create(
             meas_station=st,
@@ -47,5 +47,6 @@ def fill_kf_model(df):
 
 
 if __name__ == '__main__':
+    models.Kf.objects.all().delete()
     kf_df = pd.read_excel(BASE_DIR / 'media/db-baseline-kf.xlsx', engine='openpyxl')
     fill_kf_model(kf_df)
