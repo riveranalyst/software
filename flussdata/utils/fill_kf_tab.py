@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # fill database with the table template
 def fill_kf_model(df):
-
+    df = df.replace({np.nan: None})
     for index, row in df.iterrows():
         # get each station object from Station Class
         st = models.MeasStation.objects.get(
@@ -48,6 +48,4 @@ def fill_kf_model(df):
 
 if __name__ == '__main__':
     kf_df = pd.read_excel(BASE_DIR / 'media/db-baseline-kf.xlsx', engine='openpyxl')
-    # kf_df_fillna = kf_df.where(pd.notnull(kf_df), None)
-    df = kf_df.replace({np.nan: None})
-    fill_kf_model(df)
+    fill_kf_model(kf_df)

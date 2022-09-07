@@ -90,7 +90,6 @@ class SubsurfaceSed(models.Model):
     sample_id = models.CharField(max_length=200)
     sampling_method = models.ForeignKey(SedSamplTechnique, on_delete=models.SET_NULL, null=True)
     operator_name = models.CharField(null=True, blank=True, max_length=100)
-    porosity_sfm = models.FloatField(null=True, blank=True)
 
     # Actual variables
     dm = models.FloatField(null=True, blank=True, verbose_name='Dm (Mean grain size) [mm]')

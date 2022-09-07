@@ -7,12 +7,13 @@ django.setup()
 import pandas as pd
 import flussdata.models as models
 from pyproj import transform, CRS, Proj, exceptions
-
+import numpy as np
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # fill database with the table just read preivously
 def fill_st_model(df):
+    df = df.replace({np.nan: None})
     outproj_str = 'epsg:4326'
     proj_4326 = CRS.from_string(outproj_str)
     for index, row in df.iterrows():

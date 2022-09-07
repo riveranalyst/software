@@ -5,13 +5,14 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 django.setup()
 import pandas as pd
 import flussdata.models as models
-
+import numpy as np
 # necessary to find file within the project dir
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # fill database with the table template
 def fill_hydraulics_model(df):
+    df = df.replace({np.nan: None})
     for index, row in df.iterrows():
         # get each station object from Station Class
         st = models.MeasStation.objects.get(

@@ -6,12 +6,14 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 django.setup()
 import pandas as pd
 import flussdata.models as models
+import numpy as np
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # fill database with the table just read preivously
 def fill_surf_model(df):
+    df = df.replace({np.nan: None})
     for index, row in df.iterrows():
         # get each station object from Station Class
         st = models.MeasStation.objects.get(
