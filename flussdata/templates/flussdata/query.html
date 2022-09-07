@@ -95,11 +95,22 @@
         <br>
         <div class="row">
             <div class="card card-body">
-                <h3>Intragravel Dissolved Oxygen</h3>
+                <h3>Intragravel Dissolved Oxygen (IDO)</h3>
                 {% render_table idoc_table %}
                 <div class="margin-right">
                     <a href="{% querystring '_export_idoc'='csv' %}"><button class="btn btn-primary">Download CSV</button></a>
                     <a href="{% querystring '_export_idoc'='xlsx' %}"><button class="btn btn-primary">Download XLSX</button></a>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="card card-body">
+                <h3>Hydraulic Conductivity (kf) </h3>
+                {% render_table kf_table %}
+                <div class="margin-right">
+                    <a href="{% querystring '_export_kf'='csv' %}"><button class="btn btn-primary">Download CSV</button></a>
+                    <a href="{% querystring '_export_kf'='xlsx' %}"><button class="btn btn-primary">Download XLSX</button></a>
                 </div>
             </div>
         </div>

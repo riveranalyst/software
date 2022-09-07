@@ -1,11 +1,6 @@
 from django.db import models
 
 
-# from django.core.validators import MaxValueValidator, MinValueValidator
-# from django.utils import timezone
-# import pandas as pd
-
-
 class River(models.Model):
     river = models.CharField(max_length=200, unique=True)
 
@@ -223,7 +218,7 @@ class Kf(models.Model):
     slurp_rate_avg_mls = models.FloatField(null=True, blank=True, verbose_name='Slurping rate [mg/L]')
     H_m = models.FloatField(null=True, blank=True, verbose_name='Height of filter pipe (Slurping) above bed [m]')
     operator_name = models.CharField(null=True, blank=True, max_length=100)
-    comment = models.CharField(max_length=1000)
+    comment = models.CharField(max_length=1000, null=True, blank=True)
 
     def __str__(self):
         return self.sample_id

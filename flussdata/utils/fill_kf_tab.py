@@ -5,6 +5,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 django.setup()
 import pandas as pd
 import flussdata.models as models
+import numpy as np
 
 # necessary to find file within the project dir
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -12,6 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # fill database with the table template
 def fill_kf_model(df):
+
     for index, row in df.iterrows():
         # get each station object from Station Class
         st = models.MeasStation.objects.get(
@@ -29,7 +31,7 @@ def fill_kf_model(df):
 
         # Add information to the station that data is avaialble for subsurface sediments
         st.collected_data.add(data_type)
-
+        print(row.meas_station)
         # Create new idoc observation (row) from the input table
         kf, created = models.Kf.objects.get_or_create(
             meas_station=st,
@@ -38,7 +40,6 @@ def fill_kf_model(df):
             sediment_depth_m=row.sediment_depth_m,
             kf_ms=row.kf_ms,
             slurp_rate_avg_mls=row.slurp_rate_avg_mls,
-            idoc_sat=row.idoc_sat,
             operator_name=row.operator_name,
             H_m=row.H_m,
             comment=row.comment)
@@ -47,4 +48,6 @@ def fill_kf_model(df):
 
 if __name__ == '__main__':
     kf_df = pd.read_excel(BASE_DIR / 'media/db-baseline-kf.xlsx', engine='openpyxl')
-    fill_kf_model(kf_df)
+    # kf_df_fillna = kf_df.where(pd.notnull(kf_df), None)
+    df = kf_df.replace({np.nan: None})
+    fill_kf_model(df)

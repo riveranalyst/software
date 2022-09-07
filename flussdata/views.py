@@ -59,17 +59,17 @@ def query(request):
     df_stations = read_frame(station_objects)
 
     # Shows the table from the flussdata tables, hosted on tables.py
-    subsurf_tb_show = flutb.SubsurfaceTable(subsurf_objects)
-    surf_tb_show = flutb.SurfaceTable(surf_objects)
-    idoc_show = flutb.IDOCTable(idoc_objects).paginate(per_page=25)
-    station_show = flutb.StationTable(station_objects).paginate(per_page=25)
+    subsurf_tb_show = flutb.SubsurfaceTable(subsurf_objects).paginate(per_page=20)
+    surf_tb_show = flutb.SurfaceTable(surf_objects).paginate(per_page=20)
+    idoc_show = flutb.IDOCTable(idoc_objects).paginate(per_page=20)
+    station_show = flutb.StationTable(station_objects).paginate(per_page=20)
+    kf_show = flutb.KfTable(kf_objects).paginate(per_page=20)
 
     # Count the number of samples alter filte ris applied
     subsurf_count = subsurf_objects.count()
     surf_count = surf_objects.count()
-    kf_count = kf_objects.count()
+    kf_count = kf_objects.values_list('sample_id').distinct().count()
     v_count = v_objects.count()
-
     idoc_count = idoc_objects.values_list('sample_id').distinct().count()
 
     # create new columns with computed lat and log in the projection
@@ -94,6 +94,9 @@ def query(request):
     RequestConfig(request).configure(idoc_show)
     export_format_idoc = request.GET.get("_export_idoc", None)
 
+    RequestConfig(request).configure(kf_show)
+    export_format_kf = request.GET.get("_export_kf", None)
+
     if TableExport.is_valid_format(export_format):
         exporter = TableExport(export_format, subsurf_tb_show)
         return exporter.response("subsurface-samples.{}".format(export_format))
@@ -109,6 +112,10 @@ def query(request):
     if TableExport.is_valid_format(export_format_idoc):
         exporter = TableExport(export_format_idoc, idoc_show)
         return exporter.response("idoc.{}".format(export_format_idoc))
+
+    if TableExport.is_valid_format(export_format_kf):
+        exporter = TableExport(export_format_kf, kf_show)
+        return exporter.response("kf.{}".format(export_format_kf))
 
     #  return this to the context
     context = {'title': 'Flussdata: Query',  # pagetitle
@@ -131,6 +138,7 @@ def query(request):
                'idoc_table': idoc_show,
                'station_table': station_show,
                'surf_tb_show': surf_tb_show,
+               'kf_table': kf_show,
 
                # mapbox
                'mapboxfig': mapboxdiv}
