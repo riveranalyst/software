@@ -9,7 +9,7 @@ from django_tables2.config import RequestConfig
 from django_tables2.export.export import TableExport
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from flussdata.utils.tables_append import append_db
-from flussdata.utils.plotter import plot_gsd, plot_ido, plot_map
+from flussdata.utils.plotter import plot_gsd, plot_ido, plot_map, plot_kf
 from django.contrib.auth.decorators import login_required, permission_required
 import pandas as pd
 
@@ -59,11 +59,11 @@ def query(request):
     df_stations = read_frame(station_objects)
 
     # Shows the table from the flussdata tables, hosted on tables.py
-    subsurf_tb_show = flutb.SubsurfaceTable(subsurf_objects).paginate(per_page=20)
-    surf_tb_show = flutb.SurfaceTable(surf_objects).paginate(per_page=20)
-    idoc_show = flutb.IDOCTable(idoc_objects).paginate(per_page=20)
-    station_show = flutb.StationTable(station_objects).paginate(per_page=20)
-    kf_show = flutb.KfTable(kf_objects).paginate(per_page=20)
+    subsurf_tb_show = flutb.SubsurfaceTable(subsurf_objects).paginate(per_page=10)
+    surf_tb_show = flutb.SurfaceTable(surf_objects).paginate(per_page=10)
+    idoc_show = flutb.IDOCTable(idoc_objects).paginate(per_page=10)
+    station_show = flutb.StationTable(station_objects).paginate(per_page=10)
+    kf_show = flutb.KfTable(kf_objects).paginate(per_page=10)
 
     # Count the number of samples alter filte ris applied
     subsurf_count = subsurf_objects.count()
@@ -174,7 +174,15 @@ def station_data(request, station_id):
         idoc_div = plot(fig_idoc, output_type='div')
     else:
         idoc_div = None
-    context = {'gsds': gsds, 'idoc_div': idoc_div, 'station_name': station.name}
+
+    # generating fig for kf
+    kfs = Kf.objects.filter(meas_station_id=station_id)
+    if kfs:
+        fig_kf = plot_kf(kfs)
+        kf_div = plot(fig_kf, output_type='div')
+    else:
+        kf_div = None
+    context = {'gsds': gsds, 'idoc_div': idoc_div, 'kf_div': kf_div, 'station_name': station.name}
     return render(request, 'flussdata/station_data.html', context)
 
 

@@ -114,7 +114,7 @@ class IDOCTable(tables.Table):
     kf_ms = NumberColumn()
 
     class Meta:
-        model = Kf
+        model = IDO
 
 
 class KfTable(tables.Table):
@@ -124,7 +124,7 @@ class KfTable(tables.Table):
     idoc_sat = NumberColumn()
 
     class Meta:
-        model = IDO
+        model = Kf
         # template_name = "django_tables2/bootstrap-responsive.html"
 
 

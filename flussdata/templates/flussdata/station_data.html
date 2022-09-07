@@ -14,7 +14,9 @@
                 </div>
             </div>
         {% endfor %}
-        
+    </div>
+    <br>
+    <div class="row">
         {% if idoc_div %}
         <div class="col-md-4">
             <div class="card card-body">
@@ -25,6 +27,16 @@
         </div>
         {% endif %}
 
+        {% if kf_div %}
+        <br>
+            <div class="col-md-4">
+                <div class="card card-body">
+                    {% autoescape off %}
+                        {{ kf_div }}
+                    {% endautoescape %}
+                </div>
+            </div>
+        {% endif %}
     </div>
 </body>
 {% endblock %}

@@ -65,8 +65,8 @@ def plot_ido(idocs):
                                       ),
                            xaxis=dict(showline=True,
                                       ticks='outside',
-                                      range=[0, 13],
-                                      tickvals=[0, 2, 4, 6, 8, 10, 12],
+                                      range=[0, 14],
+                                      tickvals=[0, 2, 4, 6, 8, 10, 12, 14],
                                       side='top'
                                       ))
     return fig_idoc
@@ -86,4 +86,35 @@ def plot_map(df_stations):
         legend_title_text='Stations'
     )
     fig.update_layout(margin={"r": 10, "t": 10, "l": 10, "b": 10})
+    return fig
+
+
+def plot_kf(kfs):
+    fig = go.Figure()
+    fig.update_layout(
+        xaxis_title='Hydraulic Conductivity [m/s]',
+        yaxis_title='Riverbed depth [m]',
+        # height=560,
+        # width=420,
+        margin={"r": 30, "t": 30, "l": 30, "b": 30})
+    kf_df = read_frame(kfs)
+    for kf in kf_df['sample_id'].unique():
+        kf_sample = kf_df[kf_df['sample_id'] == kf]
+        fig.add_trace(go.Scatter(x=kf_sample['kf_ms'],
+                                 y=kf_sample['sediment_depth_m'],
+                                 mode='lines',
+                                 hovertext=kf_sample['sample_id'],
+                                 ))
+    fig.update_layout(yaxis=dict(showline=True,
+                                 ticks='outside',
+                                 range=[0.55, 0],
+                                 # tickvals=[0, 0.1, 0.2, 0.3, 0.4, 0.5]
+                                 ),
+                      xaxis=dict(showline=True,
+                                 ticks='outside',
+                                 # range=[0.000001, 0.030],
+                                 # tickvals=[0.000001, 0.00001, 0.0001, 0.001, 0.01],
+                                 side='top',
+                                 type='log'
+                                 ))
     return fig
