@@ -9,10 +9,8 @@
     ``pip3 install -r requirements.txt ``
 - Move to repository directory
     ``cd path/to/fluss-db``
-- Make migrations
+- Make migrations (optional)
     ``python3 manage.py migrate``
 Obs.: Migrations are in principle python commands passed from the django framework to the sql database as sql commands.
 - Run the server locally
     ``python3 manage.py runserver``
-- Create superuser to be able to access the full capabilities of the app
-    ``python3 manage.py createsuperuser --username=joe --email=joe@example.com``
