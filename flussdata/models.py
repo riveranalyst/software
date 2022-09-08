@@ -47,11 +47,12 @@ class SedSamplTechnique(models.Model):
 
 
 class MeasStation(models.Model):
-    name = models.CharField(max_length=100, default='to fill', unique=True)
+    name = models.CharField(max_length=100, unique=True, help_text="Please use unique station names.")
     river = models.ForeignKey(River, on_delete=models.SET_NULL, null=True)
     campaign = models.ForeignKey(Campaign, on_delete=models.SET_NULL, null=True)
     collected_data = models.ManyToManyField(CollectedData)
-    date = models.DateField('Date of measurement', null=True, blank=True)
+    date = models.DateField('Date of measurement', null=True, blank=True,
+                            help_text='Please use the following format: <em>YYYY-MM-DD</em>.')
     description = models.CharField(max_length=400, null=True, blank=True)
     x = models.FloatField(null=True, blank=True)
     y = models.FloatField(null=True, blank=True)
@@ -59,9 +60,11 @@ class MeasStation(models.Model):
     y_epsg4326 = models.FloatField(null=True, blank=True)
     bed_elevation_wgs84 = models.FloatField(null=True, blank=True)
     bed_elevation_dhhn = models.FloatField(null=True, blank=True)
-    coord_system = models.CharField(max_length=15)
+    coord_system = models.CharField(max_length=15, help_text='The coordinate system is mandatory, please enter it as '
+                                                             'epsg number (eg., epsg:<epsg-code>).')
     pos_rel_WB = models.FloatField(null=True, blank=True,
-                                   verbose_name='Distance from wetted boundary (+ for wetted locations) [m]')
+                                   verbose_name='Dist from wetted boundary [m]',
+                                   help_text='use "+" for wetted and "-" for dry locations')
     discharge = models.FloatField(null=True, blank=True,
                                   verbose_name='Discharge at recording time [m³/s]')
     wl_m = models.FloatField(null=True, blank=True, verbose_name='Water level measured in-situ at recording time [m]')
@@ -85,11 +88,22 @@ class MeasStation(models.Model):
 
 
 class SubsurfaceSed(models.Model):
-    meas_station = models.ForeignKey(MeasStation, verbose_name='Measurement station', on_delete=models.SET_NULL,
-                                     null=True)
-    sample_id = models.CharField(max_length=200)
-    sampling_method = models.ForeignKey(SedSamplTechnique, on_delete=models.SET_NULL, null=True)
-    operator_name = models.CharField(null=True, blank=True, max_length=100)
+    # many-to-one relationship (many SubsurfaceSeds to one MeasStation)
+    meas_station = models.ForeignKey(MeasStation,
+                                     verbose_name='Measurement station',
+                                     on_delete=models.SET_NULL,
+                                     null=True,
+                                     help_text='This field will be used to link the parametrical data tables'
+                                               'to a given measurement point.')
+    sample_id = models.CharField(max_length=200,
+                                 help_text='This field is used to differentiate between duplicate '
+                                           'measurements performed in the same station.')
+    sampling_method = models.ForeignKey(SedSamplTechnique,
+                                        on_delete=models.SET_NULL,
+                                        null=True)
+    operator_name = models.CharField(null=True,
+                                     blank=True,
+                                     max_length=100)
 
     # Actual variables
     dm = models.FloatField(null=True, blank=True, verbose_name='Dm (Mean grain size) [mm]')
@@ -139,9 +153,12 @@ class SubsurfaceSed(models.Model):
 
 class SurfaceSed(models.Model):
     # Sample class definition as SubsurfaceSeb but without the attribute of porosity from Structure from Motion
-
-    meas_station = models.ForeignKey(MeasStation, verbose_name='Measurement station', on_delete=models.SET_NULL,
-                                     null=True)
+    # many-to-one relationship (many SurfaceSeds to one MeasStation)
+    meas_station = models.ForeignKey(MeasStation, verbose_name='Measurement station',
+                                     on_delete=models.SET_NULL,
+                                     null=True,
+                                     help_text='This field will be used to link the parametrical data tables'
+                                               'to a given measurement point.')
     sample_id = models.CharField(max_length=200)
     sampling_method = models.ForeignKey(SedSamplTechnique, on_delete=models.SET_NULL, null=True)
     operator_name = models.CharField(null=True, blank=True, max_length=100)
@@ -193,11 +210,20 @@ class SurfaceSed(models.Model):
 
 
 class IDO(models.Model):
-    meas_station = models.ForeignKey(MeasStation, verbose_name='Measurement station', on_delete=models.SET_NULL, null=True)
-    sample_id = models.CharField(max_length=200)
-    dp_position = models.IntegerField(null=True, blank=True, verbose_name='DP Position [-]')
+    meas_station = models.ForeignKey(MeasStation, verbose_name='Measurement station', on_delete=models.SET_NULL,
+                                     null=True,
+                                     help_text='This field will be used to link the parametrical data tables'
+                                               'to a given measurement point.')
+    sample_id = models.CharField(max_length=200, help_text='This field is used to differentiate between duplicate '
+                                                           'measurements performed in the same station. Thus, use the'
+                                                           'same sample_id when it is intended to link'
+                                                           'both IDO and kf profiles to one specific measurement'
+                                                           'repetition.')
+    dp_position = models.IntegerField(verbose_name='DP Position [-]',
+                                      help_text='Double Packer Position. Mandatory field. Use intengers only.',
+                                      null=True)
     sediment_depth_m = models.FloatField(null=True, verbose_name='Riverbed Depth [m]')
-    idoc_mgl = models.FloatField(null=True, blank=True, verbose_name='IDOC [mg/l]',)
+    idoc_mgl = models.FloatField(null=True, blank=True, verbose_name='IDOC [mg/l]', )
     temp_c = models.FloatField(null=True, blank=True, verbose_name='Temperature [°C]')
     idoc_sat = models.FloatField(null=True, blank=True, verbose_name='IDOS [%]')
     H_m = models.FloatField(null=True, blank=True, verbose_name='Height of filter pipe (Slurping) above bed [m]')
@@ -209,9 +235,20 @@ class IDO(models.Model):
 
 
 class Kf(models.Model):
-    meas_station = models.ForeignKey(MeasStation, on_delete=models.SET_NULL, null=True)
-    sample_id = models.CharField(max_length=200)
-    dp_position = models.IntegerField(null=True, blank=True, verbose_name='DP Position [-]')
+    # many-to-one relationship (many Kfs to one MeasStation)
+    meas_station = models.ForeignKey(MeasStation, on_delete=models.SET_NULL, null=True,
+                                     help_text='This field will be used to link the parametrical data tables'
+                                               'to a given measurement point.'
+                                     )
+    sample_id = models.CharField(max_length=200, help_text='This field is used to differentiate between duplicate '
+                                                           'measurements performed in the same station. Thus, use the'
+                                                           'same sample_id when it is intended to link'
+                                                           'both IDO and kf profiles to one specific measurement'
+                                                           'repetition.')
+    dp_position = models.IntegerField(verbose_name='DP Position [-]',
+                                      help_text='Double Packer Position. Mandatory field. Use intengers only.',
+                                      default=int,
+                                      null=True)
     sediment_depth_m = models.FloatField(null=True, verbose_name='Riverbed depth [m]')
     kf_ms = models.FloatField(null=True, blank=True, verbose_name='kf [m/s]')
     slurp_rate_avg_mls = models.FloatField(null=True, blank=True, verbose_name='Slurping rate [mg/L]')
@@ -229,6 +266,7 @@ class Hydraulics(models.Model):
         ('NO', 'No'),
         ('BLANK', 'Blank'),
     )
+    # many-to-one relationship (many Hydraulics to one MeasStation)
     meas_station = models.ForeignKey(MeasStation, on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
     v_x_ms = models.FloatField(null=True, blank=True, verbose_name='v_x [m/s]')
