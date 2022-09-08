@@ -40,10 +40,10 @@
                     <a class="nav-link {% if navbar == 'home' %} active {% endif %}" href="{% url 'home' %}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if navbar == 'activequery' %} active {% endif %}" href="{% url 'flussdata:query' %}">Query</a>
+                    <a class="nav-link {% if navbar == 'activedash' %} active {% endif %}" href="{% url 'flussdata:dashboard' %}">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if navbar == 'activedash' %} active {% endif %}" href="{% url 'flussdata:dashboard' %}">Dashboard</a>
+                    <a class="nav-link {% if navbar == 'activequery' %} active {% endif %}" href="{% url 'flussdata:query' %}">Query</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if navbar == 'activemodify' %} active {% endif %}" href="{% url 'flussdata:modify' %}">Upload</a>

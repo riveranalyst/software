@@ -111,7 +111,7 @@ class SurfaceTable(tables.Table):
 class IDOCTable(tables.Table):
     sediment_depth_m = NumberColumn()
     idoc_mgl = NumberColumn()
-    kf_ms = NumberColumn()
+    idoc_sat = NumberColumn()
 
     class Meta:
         model = IDO
@@ -120,8 +120,7 @@ class IDOCTable(tables.Table):
 class KfTable(tables.Table):
     sediment_depth_m = NumberColumn()
     slurp_rate_avg_mls = NumberColumn()
-    temp_c = NumberColumn()
-    idoc_sat = NumberColumn()
+    kf_ms = ExponentColumn()
 
     class Meta:
         model = Kf
