@@ -228,3 +228,10 @@ def dashboard(request):
                'navbar': 'activedash',  # make the tab 'query' highlighted
                }
     return render(request, 'flussdata/dashboard.html', context)
+
+
+def helpers(request):
+    context = {'title': 'Flussdata: Helpers',  # pagetitle
+               'navbar': 'activehelpers',  # make the tab 'query' highlighted
+               }
+    return render(request, 'flussdata/helpers.html', context)

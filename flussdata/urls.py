@@ -11,6 +11,7 @@ urlpatterns = [
     path('query/station<int:station_id>', views.station_data, name='station_data'),
     path('modify/upload/', views.upload_file, name='modify/upload'),
     path('modify/upload/success_upload/', views.success_upload, name='success_upload'),
+    path('helpers/', views.helpers, name='helpers'),
     path('accounts/', include("django.contrib.auth.urls")),  # new
 ]
 
