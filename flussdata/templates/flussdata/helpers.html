@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load django_tables2 %}
 
 {% block head %}
@@ -10,6 +11,38 @@
 {% endblock%}
 
 {% block content %}
+<div class="card card-body">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="row text-center">
+                <div class="col">
+                    <a href="https://sedimentanalyst.herokuapp.com/"><img src="{% static 'images/sed-analyst.jpg' %}"
+                                                                          alt="Sedimentanalyst" width="220"></a>
+			    </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div>
+                <p>
+                    The analysis of sieving tests and dataset wrangling is a pre-requisite for feeding the database with
+                    surface and subsurface sedimentological data.
+
+                </p>
+                <p>
+                    Sediment Analyst is an open-source web app that helps
+                    dealing with sieving datasets and formatting them in the typical way (feature columns and
+                    observations, a.k.a. sample rows) for data science and database management.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <pre><code class="git">
+        git clone https://github.com/beatriznegreiros/sediment-analyst.git
+            </code></pre>
+        </div>
+    </div>
+</div>
+<br>
 <div class="card card-body">
     <div class="row">
         <div class="col-md-4">
@@ -28,30 +61,28 @@
         </div>
         <div class="col-md-8">
             <pre><code class="python">
-                import pandas as pd
+        import pandas as pd
+        # reading csvs
+        kf_df = pd.read_csv('path/to/kf/csv/')
+        idoc_df = pd.read_csv('path/to/idoc/csv')
+        st_df = pd.read_csv('path/to/stations/csv')
 
-                # reading csvs
-                kf_df = pd.read_csv('path/to/kf/csv/')
-                idoc_df = pd.read('path/to/idoc/csv')
-                st_df = pd.read('path/to/stations/csv')
+        # use how=outer is to ensure the union instead of intersection of the two dfs
+        # step 1: merge kf and idoc tables by linking the rows both through sample_id
+        # and dp_position
+        kf_idoc = ido_df.merge(kf_df, on=['sample_id', 'dp_position'], how='outer')
+        kf_idoc = kf_idoc.drop_duplicates(subset=['sample_id', 'dp_position'])
 
-                # use how=outer is to ensure the union instead of intersection of the two dfs
-                # step 1: merge kf and idoc tables by linking the rows both through sample_id
-                # and dp_position
-                kf_idoc = ido_df.merge(kf_df, on=['sample_id', 'dp_position'], how='outer')
-                kf_idoc = kf_idoc.drop_duplicates(subset=['sample_id', 'dp_position'])
+        # step 2: merge kf_idoc table to the stations information by linking the rows
+        # through the measurement station
+        kf_idoc_st = st_df.merge(ido_df, left_on='name', right_on='meas_station')
 
-                # step 2: merge kf_idoc table to the stations information by linking the rows
-                # through the measurement station
-                kf_idoc_st = st_df.merge(ido_df, left_on='name', right_on='meas_station')
+        # save merged table
+        kf_idoc_st.to_csv('merge-kf-idoc-st.csv')
 
-                # save merged table
-                kf_idoc_st.to_csv('merge-kf-idoc-st.csv')
-
-                </code></pre>
-            </div>
-
-</div>
+            </code></pre>
+        </div>
+    </div>
 </div>
 
 
