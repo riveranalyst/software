@@ -21,7 +21,11 @@ class CollectedData(models.Model):
         ('kf', 'Hydraulic Conductivity'),
         ('SurfSed', 'Surface Sediment Sampling'),
         ('SubsurfSed', 'Subsurface Sediment Sampling'),
-        ('Hydraulics', 'FlowTracker')
+        ('Hydraulics', 'FlowTracker'),
+        #TODO cretae model for vegetation mapping
+        # ('Abiotic', 'Abiotic elements'),
+        # ('Biotic', 'Biotic Elements'),
+        # ('WaterQual', 'Water Quality')
     )
     collected_data = models.CharField(max_length=200, null=True,
                                       choices=DATACOLLECTION,
@@ -34,8 +38,8 @@ class CollectedData(models.Model):
 class SedSamplTechnique(models.Model):
     TECHNIQUES = (
         ('FC', 'Freeze Core'),
-        ('OS', 'Overlayer Sample'),
-        ('US', 'Underlayer Sample'),
+        ('OS', 'Surface Sample other'),
+        ('US', 'Subsurface Sample other'),
         ('FP', 'Freeze Panel'),
         ('LS', 'Line Sampling'),
     )
