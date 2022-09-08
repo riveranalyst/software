@@ -3,7 +3,6 @@ import flussdata.tables as flutb
 from .filters import *
 from .forms import *
 from plotly.offline import plot
-import plotly.express as px
 from django_pandas.io import read_frame
 from django_tables2.config import RequestConfig
 from django_tables2.export.export import TableExport
@@ -213,7 +212,6 @@ def upload_file(request):
             except Exception as e:
                 # TODO
                 # send message to user to make him selecte a collected data
-                # return render(request, 'flussdata/modify.html', {'message': 'Incorrect data'})
                 MESSAGE = 'Fail: File could not be parsed and appended ' \
                           'to the database. Error messages: \n' + str(e)
     return JsonResponse({'post': 'false'})
