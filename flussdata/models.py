@@ -38,8 +38,8 @@ class CollectedData(models.Model):
 class SedSamplTechnique(models.Model):
     TECHNIQUES = (
         ('FC', 'Freeze Core'),
-        ('OS', 'Surface Sample other'),
-        ('US', 'Subsurface Sample other'),
+        ('OS', 'Surface Sample other (a.k.a. Overlayer Sediment sample)'),
+        ('US', 'Subsurface Sample other (a.k.a. Underlayer Sediment sample)'),
         ('FP', 'Freeze Panel'),
         ('LS', 'Line Sampling'),
     )
