@@ -64,7 +64,10 @@ class MeasStation(models.Model):
     y_epsg4326 = models.FloatField(null=True, blank=True)
     bed_elevation_wgs84 = models.FloatField(null=True, blank=True)
     bed_elevation_dhhn = models.FloatField(null=True, blank=True)
-    coord_system = models.CharField(max_length=15, help_text='The coordinate system is mandatory, please enter it as '
+    coord_system = models.CharField(max_length=15,
+                                    null=True,
+                                    blank=True,
+                                    help_text='The coordinate system is mandatory, please enter it as '
                                                              'epsg number (eg., epsg:<epsg-code>).')
     pos_rel_WB = models.FloatField(null=True, blank=True,
                                    verbose_name='Dist from wetted boundary [m]',
@@ -134,7 +137,7 @@ class SubsurfaceSed(models.Model):
     d84 = models.FloatField(null=True, blank=True, verbose_name='D84 [mm]')
     d90 = models.FloatField(null=True, blank=True, verbose_name='D90 [mm]')
     so = models.FloatField(null=True, blank=True, verbose_name='Sorting coefficient (Bunte & Abt, 2001) [-]')
-    comment = models.CharField(max_length=1000)
+    comment = models.CharField(max_length=1000, null=True, blank=True)
     percent_finer_250mm = models.FloatField(null=True, blank=True, verbose_name='<250 mm [%]')
     percent_finer_125mm = models.FloatField(null=True, blank=True, verbose_name='<125 mm [%]')
     percent_finer_63mm = models.FloatField(null=True, blank=True, verbose_name='<63 mm [%]')
@@ -192,7 +195,7 @@ class SurfaceSed(models.Model):
     d84 = models.FloatField(null=True, blank=True, verbose_name='D84 [mm]')
     d90 = models.FloatField(null=True, blank=True, verbose_name='D90 [mm]')
     so = models.FloatField(null=True, blank=True, verbose_name='Sorting coefficient (Bunte & Abt, 2001) [-]')
-    comment = models.CharField(max_length=1000)
+    comment = models.CharField(max_length=1000, null=True, blank=True)
     percent_finer_250mm = models.FloatField(null=True, blank=True, verbose_name='<250 mm [%]')
     percent_finer_125mm = models.FloatField(null=True, blank=True, verbose_name='<125 mm [%]')
     percent_finer_63mm = models.FloatField(null=True, blank=True, verbose_name='<63 mm [%]')

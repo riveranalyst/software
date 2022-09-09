@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('flussdata', '0007_alter_measstation_coord_system_and_more'),
+        ('riveranalyst', '0007_alter_measstation_coord_system_and_more'),
     ]
 
     operations = [
@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='ido',
             name='meas_station',
-            field=models.ForeignKey(help_text='This field will be used to link the parametrical data tablesto a given measurement point.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='flussdata.measstation', verbose_name='Measurement station'),
+            field=models.ForeignKey(help_text='This field will be used to link the parametrical data tablesto a given measurement point.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='riveranalyst.measstation', verbose_name='Measurement station'),
         ),
         migrations.AlterField(
             model_name='ido',
@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='kf',
             name='meas_station',
-            field=models.ForeignKey(help_text='This field will be used to link the parametrical data tablesto a given measurement point.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='flussdata.measstation'),
+            field=models.ForeignKey(help_text='This field will be used to link the parametrical data tablesto a given measurement point.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='riveranalyst.measstation'),
         ),
         migrations.AlterField(
             model_name='kf',
@@ -49,7 +49,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='subsurfacesed',
             name='meas_station',
-            field=models.ForeignKey(help_text='This field will be used to link the parametrical data tablesto a given measurement point.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='flussdata.measstation', verbose_name='Measurement station'),
+            field=models.ForeignKey(help_text='This field will be used to link the parametrical data tablesto a given measurement point.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='riveranalyst.measstation', verbose_name='Measurement station'),
         ),
         migrations.AlterField(
             model_name='subsurfacesed',
@@ -59,6 +59,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='surfacesed',
             name='meas_station',
-            field=models.ForeignKey(help_text='This field will be used to link the parametrical data tablesto a given measurement point.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='flussdata.measstation', verbose_name='Measurement station'),
+            field=models.ForeignKey(help_text='This field will be used to link the parametrical data tablesto a given measurement point.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='riveranalyst.measstation', verbose_name='Measurement station'),
         ),
     ]

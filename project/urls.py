@@ -18,13 +18,13 @@ from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
 
-# added flussdata views:
-from flussdata import views
+# added riveranalyst views:
+from riveranalyst import views
 
 urlpatterns = [
     path('', views.home, name='home'),
     path('admin/', admin.site.urls),
-    path('flussdata/', include('flussdata.urls')),
+    path('riveranalyst/', include('riveranalyst.urls')),
     path('accounts/login/', auth_views.LoginView.as_view()),
 ]
 

@@ -1,5 +1,5 @@
 import django_tables2 as tables
-from flussdata.models import *
+from riveranalyst.models import *
 from django.utils.html import format_html
 from django.urls import reverse
 
@@ -60,7 +60,7 @@ class SubsurfaceTable(tables.Table):
 
     # def render_sample_id(self, record):
     #     return format_html('<a href="{}"><button class="btn btn-primary" type="submit">{'
-    #                        '}</button></a>', reverse('flussdata:view_sample', kwargs={'id': record.id}),
+    #                        '}</button></a>', reverse('riveranalyst:view_sample', kwargs={'id': record.id}),
     #                        record.sample_id)
 
 
@@ -140,4 +140,4 @@ class StationTable(tables.Table):
     def render_data(self, record):
         return format_html('<a href="{}"><button class="btn btn-primary" type="submit">View'
                            '</button></a>',
-                           reverse('flussdata:station_data', kwargs={'station_id': record.id}))
+                           reverse('riveranalyst:station_data', kwargs={'station_id': record.id}))

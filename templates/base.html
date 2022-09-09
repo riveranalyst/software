@@ -23,7 +23,7 @@
         <title>{{title}}</title>
     {% else %}
     <!-- USE DEFAULT TITLE TEXT IF NO VARIABLE "title" IS PASSED BY THE VIEW -->
-        <title>Flussdata</title>
+        <title>River Analyst</title>
     {% endif %}
 
   </head>
@@ -40,19 +40,19 @@
                     <a class="nav-link {% if navbar == 'home' %} active {% endif %}" href="{% url 'home' %}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if navbar == 'activedash' %} active {% endif %}" href="{% url 'flussdata:dashboard' %}">Dashboard</a>
+                    <a class="nav-link {% if navbar == 'activedash' %} active {% endif %}" href="{% url 'riveranalyst:dashboard' %}">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if navbar == 'activequery' %} active {% endif %}" href="{% url 'flussdata:query' %}">Query</a>
+                    <a class="nav-link {% if navbar == 'activequery' %} active {% endif %}" href="{% url 'riveranalyst:query' %}">Query</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if navbar == 'activemodify' %} active {% endif %}" href="{% url 'flussdata:modify' %}">Upload</a>
+                    <a class="nav-link {% if navbar == 'activemodify' %} active {% endif %}" href="{% url 'riveranalyst:modify' %}">Upload</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if navbar == 'activehelpers' %} active {% endif %}" href="{% url 'flussdata:helpers' %}">Helpers</a>
+                    <a class="nav-link {% if navbar == 'activehelpers' %} active {% endif %}" href="{% url 'riveranalyst:helpers' %}">Helpers</a>
                 </li>
 
             </ul>

@@ -5,7 +5,7 @@ import numpy as np
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 django.setup()
 import pandas as pd
-import flussdata.models as models
+import riveranalyst.models as models
 from pyproj import transform, CRS, Proj, exceptions
 import numpy as np
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,10 +32,11 @@ def fill_st_model(df):
             else:
                 x_epsg4326, y_epsg4326 = transform(
                     CRS.from_string(row.coord_system), proj_4326, row.x, row.y)
-        except exceptions.CRSError:
+        except (exceptions.CRSError, TypeError) as e:
+            print(e)
             y_epsg4326 = np.nan
             x_epsg4326 = np.nan
-
+            pass
         # coll_data, created = models.CollectedData.objects.get_or_create(collected_data=row.collected_data)
         print(row.meas_station)
         st = models.MeasStation.objects.create(
@@ -60,6 +61,7 @@ def fill_st_model(df):
             bed_slope=row.bed_slope,
         )
         st.save()
+
 
 
 if __name__ == '__main__':

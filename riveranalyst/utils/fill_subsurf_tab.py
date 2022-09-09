@@ -5,16 +5,16 @@ from pathlib import Path
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 django.setup()
 import pandas as pd
-import flussdata.models as models
+import riveranalyst.models as models
 import numpy as np
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # fill database with the table just read preivously
-def fill_surf_model(df):
+def fill_subsurf_model(df):
     df = df.replace({np.nan: None})
     for index, row in df.iterrows():
+        print(row.meas_station)
         # get each station object from Station Class
         st = models.MeasStation.objects.get(
             name=row.meas_station.strip(),
@@ -27,13 +27,13 @@ def fill_surf_model(df):
 
         # get or create the data class and add it to the stations information
         data_station = models.CollectedData.objects
-        data_type, created = data_station.get_or_create(collected_data='SurfSed')
+        data_type, created = data_station.get_or_create(collected_data='SubsurfSed')
 
         # Add information to the station that data is avaialble for subsurface sediments
         st.collected_data.add(data_type)
 
         # Create new sediment sample observation (row) from the input table
-        new_sample, created = models.SurfaceSed.objects.get_or_create(
+        new_freezecore, created = models.SubsurfaceSed.objects.get_or_create(
             meas_station=st,
             sample_id = row.sample_id,
             sampling_method = samp_method,
@@ -53,6 +53,7 @@ def fill_surf_model(df):
             n_wu_wang = row.n_wu_wang,
             n_wooster = row.n_wooster,
             n_frings = row.n_frings,
+            n_user=row.n_user,
             d10 = row.d10,
             d16 = row.d16,
             d25 = row.d25,
@@ -78,12 +79,12 @@ def fill_surf_model(df):
             percent_finer_0_125mm = row.percent_finer_0_125mm,
             percent_finer_0_063mm = row.percent_finer_0_063mm,
             percent_finer_0_031mm = row.percent_finer_0_031mm,)
-        new_sample.save()
+        new_freezecore.save()
 
 
 if __name__ == '__main__':
-    models.SurfaceSed.objects.all().delete()
+    models.SubsurfaceSed.objects.all().delete()
 
     # filling initial data
-    subsurf_df = pd.read_excel(BASE_DIR / 'media/db-baseline-Surf.xlsx', engine='openpyxl')
-    fill_surf_model(subsurf_df)
+    freezecore_df = pd.read_excel(BASE_DIR / 'media/db-baseline-subsurf.xlsx', engine='openpyxl')
+    fill_subsurf_model(freezecore_df)

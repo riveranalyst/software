@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('flussdata', '0004_alter_kf_comment'),
+        ('riveranalyst', '0004_alter_kf_comment'),
     ]
 
     operations = [

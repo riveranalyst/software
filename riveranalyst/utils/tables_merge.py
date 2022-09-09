@@ -5,7 +5,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 django.setup()
 # necessary to find file within the project dir
 BASE_DIR = Path(__file__).resolve().parent.parent
-import flussdata.models as models
+import riveranalyst.models as models
 from django_pandas.io import read_frame
 
 

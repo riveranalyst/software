@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'bootstrap3',
 
     # newly added app:
-    'flussdata.apps.FlussdataConfig'
+    'riveranalyst.apps.FlussdataConfig'
 ]
 
 MIDDLEWARE = [

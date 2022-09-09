@@ -47,8 +47,8 @@ class Migration(migrations.Migration):
                 ('algae_cover', models.CharField(blank=True, choices=[('YES', 'Yes'), ('NO', 'No'), ('BLANK', 'Blank')], max_length=100, null=True)),
                 ('imbrication', models.CharField(blank=True, choices=[('YES', 'Yes'), ('NO', 'No'), ('BLANK', 'Blank')], max_length=100, null=True)),
                 ('bed_slope', models.FloatField(blank=True, null=True)),
-                ('campaign', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='flussdata.campaign')),
-                ('collected_data', models.ManyToManyField(to='flussdata.collecteddata')),
+                ('campaign', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='riveranalyst.campaign')),
+                ('collected_data', models.ManyToManyField(to='riveranalyst.collecteddata')),
             ],
         ),
         migrations.CreateModel(
@@ -109,8 +109,8 @@ class Migration(migrations.Migration):
                 ('percent_finer_0_125mm', models.FloatField(blank=True, null=True, verbose_name='<0.125 mm [%]')),
                 ('percent_finer_0_063mm', models.FloatField(blank=True, null=True, verbose_name='<0.063 mm [%]')),
                 ('percent_finer_0_031mm', models.FloatField(blank=True, null=True, verbose_name='<0.031 mm [%]')),
-                ('meas_station', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='flussdata.measstation', verbose_name='Measurement station')),
-                ('sampling_method', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='flussdata.sedsampltechnique')),
+                ('meas_station', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='riveranalyst.measstation', verbose_name='Measurement station')),
+                ('sampling_method', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='riveranalyst.sedsampltechnique')),
             ],
         ),
         migrations.CreateModel(
@@ -159,14 +159,14 @@ class Migration(migrations.Migration):
                 ('percent_finer_0_125mm', models.FloatField(blank=True, null=True, verbose_name='<0.125 mm [%]')),
                 ('percent_finer_0_063mm', models.FloatField(blank=True, null=True, verbose_name='<0.063 mm [%]')),
                 ('percent_finer_0_031mm', models.FloatField(blank=True, null=True, verbose_name='<0.031 mm [%]')),
-                ('meas_station', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='flussdata.measstation', verbose_name='Measurement station')),
-                ('sampling_method', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='flussdata.sedsampltechnique')),
+                ('meas_station', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='riveranalyst.measstation', verbose_name='Measurement station')),
+                ('sampling_method', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='riveranalyst.sedsampltechnique')),
             ],
         ),
         migrations.AddField(
             model_name='measstation',
             name='river',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='flussdata.river'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='riveranalyst.river'),
         ),
         migrations.CreateModel(
             name='Kf',
@@ -180,7 +180,7 @@ class Migration(migrations.Migration):
                 ('H_m', models.FloatField(blank=True, null=True, verbose_name='Height of filter pipe (Slurping) above bed [m]')),
                 ('operator_name', models.CharField(blank=True, max_length=100, null=True)),
                 ('comment', models.CharField(max_length=1000)),
-                ('meas_station', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='flussdata.measstation')),
+                ('meas_station', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='riveranalyst.measstation')),
             ],
         ),
         migrations.CreateModel(
@@ -196,7 +196,7 @@ class Migration(migrations.Migration):
                 ('H_m', models.FloatField(blank=True, null=True, verbose_name='Height of filter pipe (Slurping) above bed [m]')),
                 ('operator_name', models.CharField(blank=True, max_length=100, null=True)),
                 ('comment', models.CharField(max_length=1000)),
-                ('meas_station', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='flussdata.measstation', verbose_name='Measurement station')),
+                ('meas_station', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='riveranalyst.measstation', verbose_name='Measurement station')),
             ],
         ),
         migrations.CreateModel(
@@ -214,7 +214,7 @@ class Migration(migrations.Migration):
                 ('turbidity_ntu', models.FloatField(blank=True, null=True, verbose_name='Turbidity [NTU]')),
                 ('operator_name', models.CharField(blank=True, max_length=100, null=True)),
                 ('ship_influence', models.CharField(blank=True, choices=[('YES', 'Yes'), ('NO', 'No'), ('BLANK', 'Blank')], max_length=100, null=True)),
-                ('meas_station', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='flussdata.measstation')),
+                ('meas_station', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='riveranalyst.measstation')),
             ],
         ),
     ]

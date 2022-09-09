@@ -1,5 +1,5 @@
 from django.shortcuts import render
-import flussdata.tables as flutb
+import riveranalyst.tables as flutb
 from .filters import *
 from .forms import *
 from plotly.offline import plot
@@ -7,8 +7,8 @@ from django_pandas.io import read_frame
 from django_tables2.config import RequestConfig
 from django_tables2.export.export import TableExport
 from django.http import JsonResponse
-from flussdata.utils.tables_append import append_db
-from flussdata.utils.plotter import plot_gsd, plot_ido, plot_map, plot_kf
+from riveranalyst.utils.tables_append import append_db
+from riveranalyst.utils.plotter import plot_gsd, plot_ido, plot_map, plot_kf
 from django.contrib.auth.decorators import login_required, permission_required
 import pandas as pd
 
@@ -30,7 +30,7 @@ def home(request):
 
 
 @login_required
-@permission_required('flussdata.view_collecteddata', raise_exception=True)
+@permission_required('riveranalyst.view_collecteddata', raise_exception=True)
 def query(request):
     #  Get all measurement data from the table
     subsurf_objects = SubsurfaceSed.objects.all()
@@ -57,7 +57,7 @@ def query(request):
     # creates df from filtered table
     df_stations = read_frame(station_objects)
 
-    # Shows the table from the flussdata tables, hosted on tables.py
+    # Shows the table from the riveranalyst tables, hosted on tables.py
     subsurf_tb_show = flutb.SubsurfaceTable(subsurf_objects).paginate(per_page=10)
     surf_tb_show = flutb.SurfaceTable(surf_objects).paginate(per_page=10)
     idoc_show = flutb.IDOCTable(idoc_objects).paginate(per_page=10)
@@ -117,7 +117,7 @@ def query(request):
         return exporter.response("kf.{}".format(export_format_kf))
 
     #  return this to the context
-    context = {'title': 'Flussdata: Query',  # pagetitle
+    context = {'title': 'River Analyst: Query',  # pagetitle
                'navbar': 'activequery',  # make the tab 'query' highlighted
 
                # number of measurements for the selected query
@@ -142,11 +142,11 @@ def query(request):
                # mapbox
                'mapboxfig': mapboxdiv}
 
-    return render(request, 'flussdata/query.html', context)
+    return render(request, 'riveranalyst/query.html', context)
 
 
 @login_required
-@permission_required('flussdata.view_collected_data', raise_exception=True)
+@permission_required('riveranalyst.view_collected_data', raise_exception=True)
 def station_data(request, station_id):
     #  Get all measurement data from the table
     gsds = []
@@ -182,20 +182,20 @@ def station_data(request, station_id):
     else:
         kf_div = None
     context = {'gsds': gsds, 'idoc_div': idoc_div, 'kf_div': kf_div, 'station_name': station.name}
-    return render(request, 'flussdata/station_data.html', context)
+    return render(request, 'riveranalyst/station_data.html', context)
 
 
 @login_required
-@permission_required('flussdata.add_collected_data', raise_exception=True)
+@permission_required('riveranalyst.add_collected_data', raise_exception=True)
 def modify(request):
-    context = {'title': 'Flussdata: Modify',
+    context = {'title': 'River Analyst: Upload',
                'form': FileForm,
                'navbar': 'activemodify'}
-    return render(request, 'flussdata/modify.html', context)
+    return render(request, 'riveranalyst/modify.html', context)
 
 
 @login_required
-@permission_required('flussdata.add_collected_data', raise_exception=True)
+@permission_required('riveranalyst.add_collected_data', raise_exception=True)
 def upload_file(request):
     global MESSAGE
     MESSAGE = 'Fail: Please select the collected data.'
@@ -218,20 +218,20 @@ def upload_file(request):
 
 
 @login_required
-@permission_required('flussdata.add_collected_data', raise_exception=True)
+@permission_required('riveranalyst.add_collected_data', raise_exception=True)
 def success_upload(request):
-    return render(request, 'flussdata/success_upload.html', {'message': MESSAGE})
+    return render(request, 'riveranalyst/success_upload.html', {'message': MESSAGE})
 
 
 def dashboard(request):
-    context = {'title': 'Flussdata: Dashboard',  # pagetitle
+    context = {'title': 'River Analyst: Dashboard',  # pagetitle
                'navbar': 'activedash',  # make the tab 'query' highlighted
                }
-    return render(request, 'flussdata/dashboard.html', context)
+    return render(request, 'riveranalyst/dashboard.html', context)
 
 
 def helpers(request):
-    context = {'title': 'Flussdata: Helpers',  # pagetitle
+    context = {'title': 'River Analyst: Helpers',  # pagetitle
                'navbar': 'activehelpers',  # make the tab 'query' highlighted
                }
-    return render(request, 'flussdata/helpers.html', context)
+    return render(request, 'riveranalyst/helpers.html', context)
