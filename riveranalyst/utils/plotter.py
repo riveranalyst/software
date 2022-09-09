@@ -83,7 +83,7 @@ def plot_map(df_stations):
                             # size='d50',
                             )
     fig.update_layout(
-        mapbox_style="open-street-map",
+        mapbox_style="https://api.maptiler.com/maps/hybrid/style.json?key=0Z4EjONT5cOhLOIpZlRQ",
         legend_title_text='Stations'
     )
     fig.update_layout(margin={"r": 10, "t": 10, "l": 10, "b": 10})
