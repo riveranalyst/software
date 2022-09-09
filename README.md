@@ -15,3 +15,5 @@
 Obs.: Migrations are in principle python commands passed from the django framework to the sql database as sql commands.
 - Run the server locally
     ``python3 manage.py runserver``
+- Create superuser for havign full admin rights over the app:
+    ``python3 manage.py createsuperuser``
