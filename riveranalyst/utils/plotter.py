@@ -77,7 +77,7 @@ def plot_map(df_stations):
                             lat='y_epsg4326',
                             lon='x_epsg4326',
                             hover_name='name',
-                            hover_data=df_stations.columns[2::],
+                            hover_data=df_stations.columns[2:5],
                             color='name',
                             zoom=10,
                             # size='d50',
