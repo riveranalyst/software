@@ -6,6 +6,7 @@
 - Make sure to have pip3 installed by:
     ``sudo apt update``
     ``sudo apt install python3-pip``
+- Install dependencies:
     ``pip3 install -r requirements.txt ``
 - Move to repository directory
     ``cd path/to/fluss-db``
