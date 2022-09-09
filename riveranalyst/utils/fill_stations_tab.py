@@ -26,7 +26,8 @@ def fill_st_model(df):
                 y_epsg4326 = row.y
                 x_epsg4326 = row.x
             # for gauss kruger, the easting and northing are inversed, see eg.: https://epsg.io/31468
-            if (row.coord_system == 'epsg:31468') or (row.coord_system == 'epsg:5684'):
+            gk_projs = ['epsg:31468', 'epsg:5684', 'epsg:32632', 'epsg:3857']
+            if row.coord_system in gk_projs:
                 y_epsg4326, x_epsg4326 = transform(
                     CRS.from_string(row.coord_system), proj_4326, row.x, row.y)
             else:
