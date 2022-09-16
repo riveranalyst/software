@@ -11,14 +11,14 @@ class River(models.Model):
         return self.river
 
 
-class Campaign(models.Model):
+class Survey(models.Model):
     """
     Stores field survey names
     """
-    campaign = models.CharField(max_length=200)
+    survey = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.campaign
+        return self.survey
 
 
 class CollectedData(models.Model):
@@ -69,7 +69,7 @@ class MeasStation(models.Model):
     """
     name = models.CharField(max_length=100, unique=True, help_text="Please use unique station names.")
     river = models.ForeignKey(River, on_delete=models.SET_NULL, null=True)
-    campaign = models.ForeignKey(Campaign, on_delete=models.SET_NULL, null=True)
+    survey = models.ForeignKey(Survey, on_delete=models.SET_NULL, null=True)
     collected_data = models.ManyToManyField(CollectedData)
     date = models.DateField('Date of measurement', null=True, blank=True,
                             help_text='Please use the following format: <em>YYYY-MM-DD</em>.')

@@ -4,7 +4,7 @@ from .models import *
 
 # informational tables
 admin.site.register(River)
-admin.site.register(Campaign)
+admin.site.register(Survey)
 admin.site.register(MeasStation)
 
 

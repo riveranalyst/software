@@ -23,7 +23,7 @@ class IDOCFilter(SubSurfFilter):
                     # 'site_name': ['contains'],
                     'meas_station': ['exact'],
                     'meas_station__river': ['exact'],
-                    'meas_station__campaign': ['exact'],
+                    'meas_station__survey': ['exact'],
         }
 
 
@@ -32,6 +32,6 @@ class StationFilter(django_filters.FilterSet):
         model = MeasStation
         fields = {'name': ['contains'],
                   'river': ['exact'],
-                  'campaign': ['exact'],
+                  'survey': ['exact'],
                   # 'collected_data': ['exact'],
                   'discharge': ['gte']}
