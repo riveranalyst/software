@@ -31,7 +31,7 @@ class CollectedData(models.Model):
         ('SurfSed', 'Surface Sediment Sampling'),
         ('SubsurfSed', 'Subsurface Sediment Sampling'),
         ('Hydraulics', 'FlowTracker'),
-        #TODO cretae model for vegetation mapping
+        # TODO cretae model for vegetation mapping
         # ('Abiotic', 'Abiotic elements'),
         # ('Biotic', 'Biotic Elements'),
         # ('WaterQual', 'Water Quality')
@@ -84,7 +84,7 @@ class MeasStation(models.Model):
                                     null=True,
                                     blank=True,
                                     help_text='The coordinate system is mandatory, please enter it as '
-                                                             'epsg number (eg., epsg:<epsg-code>).')
+                                              'epsg number (eg., epsg:<epsg-code>).')
     pos_rel_WB = models.FloatField(null=True, blank=True,
                                    verbose_name='Dist from wetted boundary [m]',
                                    help_text='use "+" for wetted and "-" for dry locations')
@@ -138,13 +138,13 @@ class SubsurfaceSed(models.Model):
     dg = models.FloatField(null=True, blank=True, verbose_name='Dg (Geom. Mean Grain size) [mm]')
     fi = models.FloatField(null=True, blank=True, verbose_name='Fredle Index [-]')
     std_grain = models.FloatField(null=True, blank=True, verbose_name='Grain size std')
-    geom_std_grain = models.FloatField(null=True, blank=True, verbose_name='Dg (Geom. Std of grains)')
+    geom_std_grain = models.FloatField(null=True, blank=True, verbose_name='Geom. Std of grains')
     skewness = models.FloatField(null=True, blank=True)
     kurtosis = models.FloatField(null=True, blank=True)
     cu = models.FloatField(null=True, blank=True, verbose_name='Coefficient of uniformity [-]')
     cc = models.FloatField(null=True, blank=True, verbose_name='Curvature coefficient [-]')
     n_carling = models.FloatField(null=True, blank=True, verbose_name='Porosity (Carling & Reader, 1982) [-]')
-    n_wu_wang = models.FloatField(null=True, blank=True, verbose_name='Porosity (Wu & Wang, 206) [-]')
+    n_wu_wang = models.FloatField(null=True, blank=True, verbose_name='Porosity (Wu & Wang, 2006) [-]')
     n_wooster = models.FloatField(null=True, blank=True, verbose_name='Porosity (Wooster et al., 2008) [-]')
     n_frings = models.FloatField(null=True, blank=True, verbose_name='Porosity (Frings et al., 2011) [-]')
     n_user = models.FloatField(null=True, blank=True, verbose_name='Porosity (Seitz et al., 2018) [-]')
@@ -202,13 +202,13 @@ class SurfaceSed(models.Model):
     dg = models.FloatField(null=True, blank=True, verbose_name='Dg (Geom. Mean Grain size) [mm]')
     fi = models.FloatField(null=True, blank=True, verbose_name='Fredle Index [-]')
     std_grain = models.FloatField(null=True, blank=True, verbose_name='Grain size std')
-    geom_std_grain = models.FloatField(null=True, blank=True, verbose_name='Dg (Geom. Std of grains)')
+    geom_std_grain = models.FloatField(null=True, blank=True, verbose_name='Geom. std of grains')
     skewness = models.FloatField(null=True, blank=True)
     kurtosis = models.FloatField(null=True, blank=True)
     cu = models.FloatField(null=True, blank=True, verbose_name='Coefficient of uniformity [-]')
     cc = models.FloatField(null=True, blank=True, verbose_name='Curvature coefficient [-]')
     n_carling = models.FloatField(null=True, blank=True, verbose_name='Porosity (Carling & Reader, 1982) [-]')
-    n_wu_wang = models.FloatField(null=True, blank=True, verbose_name='Porosity (Wu & Wang, 206) [-]')
+    n_wu_wang = models.FloatField(null=True, blank=True, verbose_name='Porosity (Wu & Wang, 2006) [-]')
     n_wooster = models.FloatField(null=True, blank=True, verbose_name='Porosity (Wooster et al., 2008) [-]')
     n_frings = models.FloatField(null=True, blank=True, verbose_name='Porosity (Frings et al., 2011) [-]')
     n_user = models.FloatField(null=True, blank=True, verbose_name='Porosity (Seitz et al., 2018) [-]')
@@ -293,7 +293,7 @@ class Kf(models.Model):
                                       null=True)
     sediment_depth_m = models.FloatField(null=True, verbose_name='Riverbed depth [m]')
     kf_ms = models.FloatField(null=True, blank=True, verbose_name='kf [m/s]')
-    slurp_rate_avg_mls = models.FloatField(null=True, blank=True, verbose_name='Slurping rate [mg/L]')
+    slurp_rate_avg_mls = models.FloatField(null=True, blank=True, verbose_name='Slurping rate [mg/l]')
     H_m = models.FloatField(null=True, blank=True, verbose_name='Height of filter pipe (Slurping) above bed [m]')
     operator_name = models.CharField(null=True, blank=True, max_length=100)
     comment = models.CharField(max_length=1000, null=True, blank=True)
@@ -322,6 +322,94 @@ class Hydraulics(models.Model):
     kt_2d = models.FloatField(null=True, blank=True, verbose_name='kt 2d/U² [-]')
     v_bulk = models.FloatField(null=True, blank=True, verbose_name='U bulk [m/s]')
     water_temperature = models.FloatField(null=True, blank=True, verbose_name='Water temperature [°C]')
-    turbidity_ntu = models.FloatField(null=True, blank=True, verbose_name='Turbidity [NTU]')
     operator_name = models.CharField(null=True, blank=True, max_length=100)
+    comment = models.CharField(max_length=1000, null=True, blank=True)
     ship_influence = models.CharField(null=True, max_length=100, choices=SHIP, blank=True)
+
+
+class WaterQual(models.Model):
+    """
+    Stores data on water quality parameters linked with a measurement station
+    (:model:`riveranalyst.MeasStation`).
+    """
+    # many-to-one relationship (many Hydraulics to one MeasStation)
+    meas_station = models.ForeignKey(MeasStation, unique=True, on_delete=models.SET_NULL, null=True)
+    sample_id = models.CharField(max_length=200)
+    ph = models.FloatField(null=True, blank=True, verbose_name='pH [-]')
+    cod = models.FloatField(null=True, blank=True, verbose_name='COD [mg/l]')
+    bod = models.FloatField(null=True, blank=True, verbose_name='BOD [mg/l]')
+    turbidity_ntu = models.FloatField(null=True, blank=True, verbose_name='Turbidity [NTU]')
+    temp_c = models.FloatField(null=True, blank=True, verbose_name='Temperature [°C]')
+    do_mgl = models.FloatField(null=True, blank=True, verbose_name='Dissolved oxygen concentration [mg/l]')
+    do_sat = models.FloatField(null=True, blank=True, verbose_name='Dissolved oxygen saturation [%]')
+    no_3 = models.FloatField(null=True, blank=True, verbose_name='NO-3 [mg/l]')
+
+
+class Biota(models.Model):
+    """
+    Stores data on biotic features linked with a measurement station
+    (:model:`riveranalyst.MeasStation`).
+    """
+    # many-to-one relationship (many Hydraulics to one MeasStation)
+    meas_station = models.ForeignKey(MeasStation, unique=True, on_delete=models.SET_NULL, null=True)
+    sample_id = models.CharField(max_length=200)
+    count_macrozoobenthos = models.IntegerField(null=True, blank=True, verbose_name='Macrozoobenthos count')
+    planting_species = models.CharField(max_length=200, blank=True, null=True)
+
+
+class MorphFeatures(models.Model):
+    """
+    Stores types of morphological features linked with the morphological characteristics
+    (:model:`riveranalyst.Morphology`) of a
+    measurement station (:model:`riveranalyst.MeasStation`).
+    """
+    feature = models.CharField(max_length=200, unique=True)
+
+    def __str__(self):
+        return self.feature
+
+
+class MorphUnits(models.Model):
+    """
+    Stores types of morphological units linked with the morphological characteristics
+    (:model:`riveranalyst.Morphology`) of a
+    measurement station (:model:`riveranalyst.MeasStation`).
+    """
+    # Examples of morphological units found in the Lower Yuba River (California, USA) according
+    # to Pasternack & Wrick (2014)
+    # UNITS = (
+    #     ('Pool', ''),
+    #     ('Riffle', ''),
+    #     ('Run', ''),
+    #     ('Chute', ''),
+    #     ('Fast glide', ''),
+    #     ('Slow glide', ''),
+    #     ('Slackwater', ''),
+    #     ('Riffle transition', ''),
+    # )
+
+    unit = models.CharField(max_length=200, unique=True,
+                            # choices=UNITS
+                            )
+
+    def __str__(self):
+        return self.unit
+
+
+class Morphology(models.Model):
+    """
+    Stores data on morphological characteristics linked with a measurement station
+    (:model:`riveranalyst.MeasStation`).
+    """
+
+    # one-to-one relationship (one Morphology to one MeasStation)
+    meas_station = models.ForeignKey(MeasStation, unique=True, on_delete=models.SET_NULL, null=True)
+    sample_id = models.CharField(max_length=200)
+    morphological_features = models.ForeignKey(MorphFeatures,
+                                               on_delete=models.SET_NULL,
+                                               null=True)
+    morphological_unit = models.ForeignKey(MorphUnits,
+                                           on_delete=models.SET_NULL,
+                                           null=True)
+
+
