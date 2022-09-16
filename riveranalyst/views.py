@@ -14,6 +14,13 @@ import pandas as pd
 
 
 def home(request):
+    """
+    Displays the welcome/home page with generic information and model counts.
+
+    **Template:**
+
+    :template:`home.html`
+    """
     total_subsurf = SubsurfaceSed.objects.count()
     total_surf = SurfaceSed.objects.count()
     total_idoc = IDO.objects.values_list('sample_id').distinct().count()
@@ -32,6 +39,27 @@ def home(request):
 @login_required
 @permission_required('riveranalyst.view_collecteddata', raise_exception=True)
 def query(request):
+    """
+        Displays the page to query and export data models
+
+        **Context**
+
+        ``SubsurfaceSed``
+            An instance of :model:`riveranalyst.SubsurfaceSed`
+
+        ``SurfaceSed``
+            An instance of :model:`riveranalyst.SurfaceSed`
+
+        ``IDO``
+            An instance of :model:`riveranalyst.IDOC`
+
+        ``Kf``
+            An instance of :model:`riveranalyst.Kf`
+
+        ``Hydraulics``
+            An instance of :model:`riveranalyst.Hydraulics`
+
+        """
     #  Get all measurement data from the table
     subsurf_objects = SubsurfaceSed.objects.all()
     surf_objects = SurfaceSed.objects.all()
@@ -148,6 +176,28 @@ def query(request):
 @login_required
 @permission_required('riveranalyst.view_collected_data', raise_exception=True)
 def station_data(request, station_id):
+    """
+        Displays plots of the data available for the measurement station ID selected.
+
+        **Context**
+
+        ``SubsurfaceSed plot``
+            Plot of :model:`riveranalyst.SubsurfaceSed` for the selected
+            :model:`riveranalyst.MeasStation`
+
+        ``SurfaceSed plot``
+            Plot of :model:`riveranalyst.SurfaceSed` for the selected
+                :model:`riveranalyst.MeasStation`
+
+        ``IDO plot`
+            Plot of :model:`riveranalyst.IDO` for the selected
+                :model:`riveranalyst.MeasStation`
+
+        ``Kf plot``
+            Plot of :model:`riveranalyst.Kf` for the selected
+                :model:`riveranalyst.MeasStation`
+
+        """
     #  Get all measurement data from the table
     gsds = []
     station = MeasStation.objects.get(id=station_id)
@@ -188,6 +238,10 @@ def station_data(request, station_id):
 @login_required
 @permission_required('riveranalyst.add_collected_data', raise_exception=True)
 def modify(request):
+    """
+    Displays page for uploading tables that are parsed and appeded to the Django models.
+
+    """
     context = {'title': 'River Analyst: Upload',
                'form': FileForm,
                'navbar': 'activemodify'}
@@ -197,6 +251,9 @@ def modify(request):
 @login_required
 @permission_required('riveranalyst.add_collected_data', raise_exception=True)
 def upload_file(request):
+    """
+    Controls that happens with dropzone when file is uploaded.
+    """
     global MESSAGE
     MESSAGE = 'Fail: Please select the collected data.'
     if request.method == 'POST':
@@ -220,10 +277,16 @@ def upload_file(request):
 @login_required
 @permission_required('riveranalyst.add_collected_data', raise_exception=True)
 def success_upload(request):
+    """
+    Displays view for successful or unsuccessful database add-ons.
+    """
     return render(request, 'riveranalyst/success_upload.html', {'message': MESSAGE})
 
 
 def dashboard(request):
+    """
+    Displays dashboard for data analysis.
+    """
     context = {'title': 'River Analyst: Dashboard',  # pagetitle
                'navbar': 'activedash',  # make the tab 'query' highlighted
                }
@@ -231,6 +294,9 @@ def dashboard(request):
 
 
 def helpers(request):
+    """
+    Displays useful information for pre and post-handling of data tables.
+    """
     context = {'title': 'River Analyst: Helpers',  # pagetitle
                'navbar': 'activehelpers',  # make the tab 'query' highlighted
                }
