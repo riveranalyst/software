@@ -2,6 +2,9 @@ from django.db import models
 
 
 class River(models.Model):
+    """
+    Stores surveyed river's names
+    """
     river = models.CharField(max_length=200, unique=True)
 
     def __str__(self):
@@ -9,6 +12,9 @@ class River(models.Model):
 
 
 class Campaign(models.Model):
+    """
+    Stores field survey names
+    """
     campaign = models.CharField(max_length=200)
 
     def __str__(self):
@@ -16,6 +22,9 @@ class Campaign(models.Model):
 
 
 class CollectedData(models.Model):
+    """
+    Stores the kind of data collected
+    """
     DATACOLLECTION = (
         ('IDO', 'Intragravel Dissolved Oxygen'),
         ('kf', 'Hydraulic Conductivity'),
@@ -36,6 +45,9 @@ class CollectedData(models.Model):
 
 
 class SedSamplTechnique(models.Model):
+    """
+    Stores the types of sediment sampling techniques
+    """
     TECHNIQUES = (
         ('FC', 'Freeze Core'),
         ('OS', 'Surface Sample other (a.k.a. Overlayer Sediment sample)'),
@@ -51,6 +63,10 @@ class SedSamplTechnique(models.Model):
 
 
 class MeasStation(models.Model):
+    """
+    Stores the surveyed measurement stations. This Django model links with
+    :model:`riveranalyst.River`, :model:`riveranalyst.Survey`, and :model:`riveranalyst.CollectedData`.
+    """
     name = models.CharField(max_length=100, unique=True, help_text="Please use unique station names.")
     river = models.ForeignKey(River, on_delete=models.SET_NULL, null=True)
     campaign = models.ForeignKey(Campaign, on_delete=models.SET_NULL, null=True)
@@ -95,6 +111,11 @@ class MeasStation(models.Model):
 
 
 class SubsurfaceSed(models.Model):
+    """
+    Stores sedimentological data from the subsurface linked with a measurement station
+    (:model:`riveranalyst.MeasStation`). It uses :model:`riveranalyst.SedSamplTechnique` to inform the technique used
+    for the sediment sampling.
+    """
     # many-to-one relationship (many SubsurfaceSeds to one MeasStation)
     meas_station = models.ForeignKey(MeasStation,
                                      verbose_name='Measurement station',
@@ -159,6 +180,12 @@ class SubsurfaceSed(models.Model):
 
 
 class SurfaceSed(models.Model):
+    """
+    Stores sedimentological data from the surface linked with a measurement station
+    (:model:`riveranalyst.MeasStation`). It uses :model:`riveranalyst.SedSamplTechnique` to inform the technique used
+    for the sediment sampling.
+    """
+
     # Sample class definition as SubsurfaceSeb but without the attribute of porosity from Structure from Motion
     # many-to-one relationship (many SurfaceSeds to one MeasStation)
     meas_station = models.ForeignKey(MeasStation, verbose_name='Measurement station',
@@ -217,6 +244,10 @@ class SurfaceSed(models.Model):
 
 
 class IDO(models.Model):
+    """
+    Stores data on riverbed insterstitial dissolved oxygen linked with a measurement station
+    (:model:`riveranalyst.MeasStation`).
+    """
     meas_station = models.ForeignKey(MeasStation, verbose_name='Measurement station', on_delete=models.SET_NULL,
                                      null=True,
                                      help_text='This field will be used to link the parametrical data tables'
@@ -242,6 +273,10 @@ class IDO(models.Model):
 
 
 class Kf(models.Model):
+    """
+    Stores data on riverbed hydraulic conductivity linked with a measurement station
+    (:model:`riveranalyst.MeasStation`).
+    """
     # many-to-one relationship (many Kfs to one MeasStation)
     meas_station = models.ForeignKey(MeasStation, on_delete=models.SET_NULL, null=True,
                                      help_text='This field will be used to link the parametrical data tables'
@@ -268,6 +303,10 @@ class Kf(models.Model):
 
 
 class Hydraulics(models.Model):
+    """
+    Stores data on hydraulics linked with a measurement station
+    (:model:`riveranalyst.MeasStation`).
+    """
     SHIP = (
         ('YES', 'Yes'),
         ('NO', 'No'),

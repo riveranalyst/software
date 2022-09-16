@@ -23,6 +23,7 @@ from riveranalyst import views
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('admin/doc/', include('django.contrib.admindocs.urls')),  # MUST come before path(admin)
     path('admin/', admin.site.urls),
     path('riveranalyst/', include('riveranalyst.urls')),
     path('accounts/login/', auth_views.LoginView.as_view()),

@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'django.contrib.admindocs',  # added functionality
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
