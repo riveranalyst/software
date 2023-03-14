@@ -6,6 +6,13 @@
 {% endblock%}
 
 {% block content %}
-<h1><p>Coming soon</p></h1>
+<div class="card card-body">
+    <h3>Correlation Matrix</h3>
+    <div class="col-md-7">
+    {% autoescape off %}
+    {{ corr }}
+    {% endautoescape %}
+    </div>
+</div>
 {% endblock %}
 

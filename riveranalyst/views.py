@@ -9,6 +9,7 @@ from django_tables2.export.export import TableExport
 from django.http import JsonResponse
 from riveranalyst.utils.tables_append import append_db
 from riveranalyst.utils.plotter import plot_gsd, plot_ido, plot_map, plot_kf
+from riveranalyst.utils.dashboard_assist import get_corr_fig
 from django.contrib.auth.decorators import login_required, permission_required
 import pandas as pd
 
@@ -287,8 +288,11 @@ def dashboard(request):
     """
     Displays dashboard for data analysis.
     """
+    corr = get_corr_fig()
+    corr_div = plot(corr, output_type='div')
     context = {'title': 'River Analyst: Dashboard',  # pagetitle
                'navbar': 'activedash',  # make the tab 'query' highlighted
+               'corr': corr_div,
                }
     return render(request, 'riveranalyst/dashboard.html', context)
 
