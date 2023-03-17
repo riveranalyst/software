@@ -60,7 +60,7 @@ def get_PCA(df):
     df4pca_final = df4pca_prescaling.apply(lambda x: (x - x.mean()) / x.std(), axis=0)
 
     # Build PCA
-    pca = PCA()
+    pca = PCA(n_components=4)
     components = pca.fit_transform(df4pca_final)
 
     # Get labels for explaind variance respective tot he PC
@@ -68,13 +68,16 @@ def get_PCA(df):
         str(i): f"PC {i + 1} ({var:.1f}%)"
         for i, var in enumerate(pca.explained_variance_ratio_ * 100)
     }
+    total_var2d = pca.explained_variance_ratio_.sum() * 100
 
     # Plot data 2-dimensionaly in the new coordinate system of PCs
     fig2d = px.scatter_matrix(
         components,
         labels=labels,
-        dimensions=range(3),
-        color=df4pca["river"]
+        dimensions=range(4),
+        color=df4pca["river"],
+        title=f'Total Explained Variance: {total_var2d:.2f}%',
+        width=1000, height=600,
     )
     fig2d.update_traces(diagonal_visible=False)
 
@@ -90,7 +93,8 @@ def get_PCA(df):
 
     # Visualizing loadings of each components
     loadings = pca3d.components_.T * np.sqrt(pca3d.explained_variance_)
-    fig_load = px.scatter(components3d, x=0, y=1, color=df4pca['river'], width=1000, height=600)
+    fig_load = px.scatter(components3d, x=0, y=1, color=df4pca['river'], width=1000, height=600,
+                          labels={'0': 'PC 1', '1': 'PC 2'})
     for i, feature in enumerate(df4pca_final.columns):
         fig_load.add_annotation(
             ax=0, ay=0,
