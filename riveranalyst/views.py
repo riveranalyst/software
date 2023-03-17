@@ -9,7 +9,7 @@ from django_tables2.export.export import TableExport
 from django.http import JsonResponse
 from riveranalyst.utils.tables_append import append_db
 from riveranalyst.utils.plotter import plot_gsd, plot_ido, plot_map, plot_kf
-from riveranalyst.utils.dashboard_assist import get_corr_fig
+from riveranalyst.utils.dashboard_assist import get_corr_fig, get_PCA
 from django.contrib.auth.decorators import login_required, permission_required
 import pandas as pd
 
@@ -288,11 +288,18 @@ def dashboard(request):
     """
     Displays dashboard for data analysis.
     """
-    corr = get_corr_fig()
+    corr, global_df_dash = get_corr_fig()
     corr_div = plot(corr, output_type='div')
+    pca_fig2d, pca_fig3d, pca_loadings = get_PCA(global_df_dash)
+    pca_div2d = plot(pca_fig2d, output_type='div')
+    pca_div3d = plot(pca_fig3d, output_type='div')
+    pca_loadings_div = plot(pca_loadings, output_type='div')
     context = {'title': 'River Analyst: Dashboard',  # pagetitle
                'navbar': 'activedash',  # make the tab 'query' highlighted
                'corr': corr_div,
+               'pca2d': pca_div2d,
+               'pca3d': pca_div3d,
+               'loadings': pca_loadings_div
                }
     return render(request, 'riveranalyst/dashboard.html', context)
 
