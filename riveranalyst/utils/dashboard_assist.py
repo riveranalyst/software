@@ -50,7 +50,7 @@ def get_corr_fig():
 
 def get_PCA(df):
     # Preparing df for dimensinality reduction
-    features = ['idoc_mgl', 'wl_m', 'kf_ms', 'temp_c', 'H_m_x', 'river',
+    features = ['idoc_mgl', 'wl_m', 'kf_ms', 'temp_c', 'river',
                 'n_wooster', 'd10', 'd50', 'd90', 'so', 'dm', 'dg',
                 'percent_finer_2mm', 'percent_finer_1mm', 'percent_finer_0_5mm']
     df4pca = df[features].dropna()
