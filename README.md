@@ -1,7 +1,8 @@
 # River Analyst
 
-
-# Usage
+## Introduction
+    River Analyst is a database application framework to leverage fast river ecosyste analysis built with the Django web application framework (Python). 
+## Usage
 - Clone this repository: `` git clone https://github.com/beatriznegreiros/sediment-analyst.git``
 - Make sure to have pip3 installed by:
     ``sudo apt update``
