@@ -18,7 +18,7 @@ def fill_st_model(df):
     proj_4326 = CRS.from_string(outproj_str)
     for index, row in df.iterrows():
         ri, created = models.River.objects.get_or_create(river=row.river.strip())
-        ca, created = models.Survey.objects.get_or_create(campaign=row.survey)
+        ca, created = models.Survey.objects.get_or_create(survey=row.survey)
 
         try:
             # check for coord system and if necessary reproject coords to epsg4326
@@ -43,7 +43,7 @@ def fill_st_model(df):
         st = models.MeasStation.objects.create(
             name=row.meas_station.strip(),
             river=ri,
-            campaign=ca,
+            survey=ca,
             date=row.date,  # 'date of measureemnt' is the verbose name (optional arg)
             description=row.description,
             x=row.x,

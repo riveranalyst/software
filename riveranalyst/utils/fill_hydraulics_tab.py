@@ -37,7 +37,6 @@ def fill_hydraulics_model(df):
             kt_2d = row.kt_2d,
             v_bulk=row.v_bulk,
             water_temperature = row.water_temperature,
-            turbidity_ntu = row.turbidity_ntu,
             operator_name = row.operator_name,
             ship_influence = row.ship_influence,
         )
@@ -45,5 +44,5 @@ def fill_hydraulics_model(df):
 
 
 if __name__ == '__main__':
-    hyd_df = pd.read_excel(BASE_DIR / 'media/db-baseline-hyd.xlsx', engine='openpyxl')
+    hyd_df = pd.read_excel(BASE_DIR / 'media/db-baseline-hydraulics.xlsx', engine='openpyxl')
     fill_hydraulics_model(hyd_df)
