@@ -47,7 +47,10 @@ River Analyst is a database application framework built with the [Django](https:
 
     
 # Usage
+## Database architecture
 
+
+## Running the app
 - Go to repository directory
     ``cd path/to/river-analyst``
 - Make migrations (optional)
@@ -59,6 +62,7 @@ Obs.: Migrations are in principle python commands wrapped around SQL passed from
     ``python3 manage.py createsuperuser``
   
 # Initializing a new database with template CSVs
+- Add data to the csv templates under the path ``riveranalyst/river-analyst/media/``
 - ``cd`` to the ``riveranalyst/utils`` directory
     ``cd riveranalyst/utils``
 - Execute scripts to initialize targeted data models
