@@ -62,13 +62,13 @@ Obs.: Migrations are in principle python commands wrapped around SQL passed from
 - ``cd`` to the ``riveranalyst/utils`` directory
     ``cd riveranalyst/utils``
 - Execute scripts to initialize targeted data models
-    - It is important to begin with populating the MeasStation model, which is where all data models connect:
+    - It is important to begin with populating the **MeasStation** model, which is where all data models connect:
     ``python fill_stations_tab.py``
     - Then, any data model can be populated afterwards, for instance:
-    ``python fill_surf_tab.py`` for filling the SurfaceSed data model
-    ``python fill_subsurf_tab.py`` for the SubSurfaceSed data model
-    ``python fill_kf_tab.py`` for the Kf (Riverbed Hydraulic Conductivity) data model
-    ``python fill_do_tab.py`` for the **IDO** (Interstitial Dissolved Oxygen) data model
-    ``python fill_hydraulics_tab.py`` for the **Hydraulics** data model
+        - ``python fill_surf_tab.py`` for filling the **SurfaceSed** data model
+        - ``python fill_subsurf_tab.py`` for the **SubSurfaceSed** data model
+        - ``python fill_kf_tab.py`` for the **Kf** (Riverbed Hydraulic Conductivity) data model
+        - ``python fill_do_tab.py`` for the **IDO** (Interstitial Dissolved Oxygen) data model
+        - ``python fill_hydraulics_tab.py`` for the **Hydraulics** data model
 
     
