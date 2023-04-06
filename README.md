@@ -4,20 +4,29 @@
 River Analyst is a database application framework built with the [Django](https://www.djangoproject.com/) web application framework (Python) to leverage fast river ecosystem analyses. 
 
 ## Installation
+### Linux
+- Clone this repository: `` git clone https://github.com/beatriznegreiros/river-analyst.git``
+- Make sure to have pip3 and virtualenv installed by: 
+   ``sudo apt update``
+   ``sudo apt install python3-pip``
+   ``pip3 install virtualenv`` 
+- Create new virtual environment:
+   ``python3.9 -m venv /path/to/new/virtual/environment``
+- Activate new virtual environment:
+   ``source /path/to/new/virtual/environment/bin/activate``
+- Install dependencies:
+   ``pip3 install -r requirements.txt``
+  
+### Windows
+- Clone this repository: `` git clone https://github.com/beatriznegreiros/river-analyst.git``
+- Make sure to have [Anaconda](https://docs.anaconda.com/anaconda/install/index.html) installed.
+- Create conda environment:
+   ``conda create --name [env_name] python=3.9``
+- Activate conda environment:
+   ``conda activate [env_name]``
+- Install dependencies:
+    ``pip3 install -r requirements.txt ``
 
-| Linux                                                                                           | Windows                                       |
-|-------------------------------------------------------------------------------------------------|-----------------------------------------------|
-| Clone this   repository: `` git clone   https://github.com/beatriznegreiros/river-analyst.git`` |                                               |
-| Make sure to have pip3 and virtualenv   installed by:                                           |      Make sure to have Anaconda installed     |
-|       ``sudo apt update``                                                                       |                                               |
-|       ``sudo apt install python3-pip``                                                          |                                               |
-|       ``pip3 install virtualenv``                                                               |                                               |
-| Create virtual environment:                                                                     |           Create conda environment:           |
-|       ``python3.9 -m venv /path/to/new/virtual/environment``                                    | ``conda create --name [env_name] python=3.9`` |
-| Activate virtualenv:                                                                            |          Activate conda environment:          |
-|       ``source /path/to/new/virtual/environment/bin/activate``                                  |         ``conda activate [env_name]``         |
-|                                     Install   dependencies:                                     |                                               |
-|                                ``pip3 install -r requirements.txt ``                            |                                               |
     
 ## Usage
 
