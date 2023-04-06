@@ -21,36 +21,62 @@ def get_corr_fig():
 
     df_global = dfs[-3].merge(dfs[-2], on=['meas_station', 'sample_id', 'dp_position'], how='outer')
     df_global = df_global.drop_duplicates(subset=['sample_id', 'dp_position'])
+    df_avg_ido_kf = df_global.groupby('meas_station', as_index=False).mean()
+    df_avg_ido_kf.to_csv('df_avg_ido_kf.csv')
 
     df_global = dfs[-1].merge(df_global, left_on='name', right_on='meas_station')
-    df_global.to_csv('save_intermed.csv')
+    df_global_avg = dfs[-1].merge(df_avg_ido_kf, left_on='name', right_on='meas_station')
+
     for i, df in enumerate(dfs[0:-3]):
         # df2include = df[[c for c in list(df.columns) if c != 'meas_station']]
         # df2include = df2include.add_suffix('_{}'.format(suffixes[models[i+1]]))
         df_global = df_global.merge(df, on='meas_station',
                                     how='outer',
                                     suffixes=('', '_{}'.format(suffixes[models[i]])))
-
-    df_global.to_csv('save_finalmaybe.csv')
+        df_global_avg = df_global_avg.merge(df, on='meas_station',
+                                    how='outer',
+                                    suffixes=('', '_{}'.format(suffixes[models[i]])))
 
     # correlation
-    takeoff_cols = ['id_surf', 'id_subsurf', 'id_x', 'id_y', 'id', 'x', 'y', 'x_epsg', 'y_epsg', 'x_epsg4326', 'y_epsg4326']
+    takeoff_cols = ['id_surf', 'id_subsurf', 'id_x', 'id_y', 'id', 'x', 'y', 'x_epsg', 'y_epsg',
+                    'x_epsg4326', 'y_epsg4326', 'sediment_depth_m_x', 'comment_x', 'comment_y']
     df_final = df_global.loc[:, ~df_global.columns.isin(takeoff_cols)]
-    df_corr = df_final.corr().round(1)
+    df_corr = df_final.corr(method='spearman').round(1)
 
-    # mask to matrix
-    mask = np.zeros_like(df_corr, dtype=bool)
-    mask[np.triu_indices_from(mask)] = True
+    # # Get number of samples per correlation value
+    # df_get_ns = pd.DataFrame(index=df_corr.index, columns=df_corr.columns)
+    #
+    # for index_1 in df_get_ns.index:
+    #     for index_2 in df_get_ns.index:
+    #         df_get_dropped = df_final[[index_1, index_2]].dropna()
+    #         count_n = df_get_dropped[index_1].dropna().count()
+    #         df_get_ns.at[index_1, index_2] = count_n
+    # print(df_get_ns)
 
+    depth_explicit_feats = ['kf_ms', 'slurp_rate_avg_mls', 'dp_position', 'sediment_depth_m_y',
+                            'idoc_mgl', 'idoc_sat', 'temp_c']
+
+
+    # Correlation matrix just between bulk parameters
+    # df_final_seds = df_final.loc[:, ~df_final.columns.isin(depth_explicit_feats)]
+    # df_final_seds = df_final_seds.drop_duplicates()
+    # df_final_seds.to_csv('drop_duplicates_for_corr_seds.csv')
+    # df_corr_seds = df_final_seds.corr(method='spearman').round(1)
+    # # mask to matrix
+    # mask = np.zeros_like(df_corr_seds, dtype=bool)
+    # mask[np.triu_indices_from(mask)] = True
     # viz
-    df_corr_viz = df_corr.mask(mask).dropna(how='all').dropna('columns', how='all')
-    fig = px.imshow(df_corr_viz, text_auto=True, width=1000, height=1000)
-    return fig, df_final
+    # df_corr_seds_viz = df_corr_seds.mask(mask).dropna(how='all').dropna('columns', how='all')
+
+    fig = px.imshow(df_corr.loc[depth_explicit_feats, :], text_auto=True, aspect='auto')
+    # fig2 = px.imshow(df_corr_seds_viz, text_auto=True, aspect='auto')
+    df_global_avg.to_csv('df_global_avg.csv')
+    return fig, df_global_avg
 
 
 def get_PCA(df):
     # Preparing df for dimensinality reduction
-    features = ['idoc_mgl', 'wl_m', 'kf_ms', 'temp_c', 'river',
+    features = ['idoc_mgl', 'wl_m', 'kf_ms', 'river',
                 'n_wooster', 'd10', 'd50', 'd90', 'so', 'dm', 'dg',
                 'percent_finer_2mm', 'percent_finer_1mm', 'percent_finer_0_5mm']
     df4pca = df[features].dropna()
@@ -92,9 +118,16 @@ def get_PCA(df):
     )
 
     # Visualizing loadings of each components
-    loadings = pca3d.components_.T * np.sqrt(pca3d.explained_variance_)
-    fig_load = px.scatter(components3d, x=0, y=1, color=df4pca['river'], width=1000, height=600,
+    pca2d = PCA(n_components=2)
+    components2d = pca2d.fit_transform(df4pca_final)
+    total_var2d = pca2d.explained_variance_ratio_.sum() * 100
+    loadings = pca2d.components_.T * np.sqrt(pca2d.explained_variance_)
+    fig_load = px.scatter(components2d, x=0, y=1, color=df4pca['river'], width=1000, height=600,
                           labels={'0': 'PC 1', '1': 'PC 2'})
+    feat_annotation = ['IDOC', 'Water level', 'kf', 'T',
+                'Porosity (Wooster)', 'd10', 'd50', 'd90', 'so', 'dm', 'dg',
+                'FSF < 2 mm', 'FSF < 1 mm', 'FSF < 0.5 mm']
+    annotate_dict = {features[i]: feat_annotation[i] for i in range(len(feat_annotation))}
     for i, feature in enumerate(df4pca_final.columns):
         fig_load.add_annotation(
             ax=0, ay=0,
@@ -113,7 +146,8 @@ def get_PCA(df):
             ax=0, ay=0,
             xanchor="center",
             yanchor="bottom",
-            text=feature,
+            text=annotate_dict[feature],
             yshift=5,
         )
+
     return fig2d, fig3d, fig_load
