@@ -20,7 +20,7 @@ River Analyst is a database application framework built with the [Django](https:
 ### Windows
 - Clone this repository: `` git clone https://github.com/beatriznegreiros/river-analyst.git``
 - Make sure to have [Anaconda](https://docs.anaconda.com/anaconda/install/index.html) installed.
-- Create conda environment:
+- Create conda environment: <br>
    ``conda create --name [env_name] python=3.9``
 - Activate conda environment:
    ``conda activate [env_name]``
