@@ -1,9 +1,7 @@
-# River Analyst
-
-## Introduction
+# Intro
 River Analyst is a database application framework built with the [Django](https://www.djangoproject.com/) web application framework (Python) to leverage fast river ecosystem analyses. 
 
-## Installation
+# Installation
 ### Linux
 - Clone this repository: 
     ```console 
@@ -48,7 +46,7 @@ River Analyst is a database application framework built with the [Django](https:
     ```
 
     
-## Usage
+# Usage
 
 - Go to repository directory
     ``cd path/to/river-analyst``
@@ -60,7 +58,7 @@ Obs.: Migrations are in principle python commands wrapped around SQL passed from
 - Create superuser for having full admin rights over the app:
     ``python3 manage.py createsuperuser``
   
-## Initializing a new database with template csvs
+# Initializing a new database with template csvs
 - ``cd`` to the ``riveranalyst/utils`` directory
     ``cd riveranalyst/utils``
 - Execute scripts to initialize targeted data models, beginning with the MeasStation model:
