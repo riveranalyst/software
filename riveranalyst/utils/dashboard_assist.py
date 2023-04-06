@@ -22,7 +22,7 @@ def get_corr_fig():
     df_global = dfs[-3].merge(dfs[-2], on=['meas_station', 'sample_id', 'dp_position'], how='outer')
     df_global = df_global.drop_duplicates(subset=['sample_id', 'dp_position'])
     df_avg_ido_kf = df_global.groupby('meas_station', as_index=False).mean()
-    df_avg_ido_kf.to_csv('df_avg_ido_kf.csv')
+    # df_avg_ido_kf.to_csv('df_avg_ido_kf.csv')
 
     df_global = dfs[-1].merge(df_global, left_on='name', right_on='meas_station')
     df_global_avg = dfs[-1].merge(df_avg_ido_kf, left_on='name', right_on='meas_station')
@@ -70,7 +70,7 @@ def get_corr_fig():
 
     fig = px.imshow(df_corr.loc[depth_explicit_feats, :], text_auto=True, aspect='auto')
     # fig2 = px.imshow(df_corr_seds_viz, text_auto=True, aspect='auto')
-    df_global_avg.to_csv('df_global_avg.csv')
+    # df_global_avg.to_csv('df_global_avg.csv')
     return fig, df_global_avg
 
 
