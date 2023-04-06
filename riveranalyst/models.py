@@ -333,7 +333,7 @@ class WaterQual(models.Model):
     (:model:`riveranalyst.MeasStation`).
     """
     # many-to-one relationship (many Hydraulics to one MeasStation)
-    meas_station = models.ForeignKey(MeasStation, unique=True, on_delete=models.SET_NULL, null=True)
+    meas_station = models.OneToOneField(MeasStation, on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
     ph = models.FloatField(null=True, blank=True, verbose_name='pH [-]')
     cod = models.FloatField(null=True, blank=True, verbose_name='COD [mg/l]')
@@ -351,10 +351,11 @@ class Biota(models.Model):
     (:model:`riveranalyst.MeasStation`).
     """
     # many-to-one relationship (many Hydraulics to one MeasStation)
-    meas_station = models.ForeignKey(MeasStation, unique=True, on_delete=models.SET_NULL, null=True)
+    meas_station = models.OneToOneField(MeasStation, on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
     count_macrozoobenthos = models.IntegerField(null=True, blank=True, verbose_name='Macrozoobenthos count')
     planting_species = models.CharField(max_length=200, blank=True, null=True)
+    count_fish_redds = models.IntegerField(null=True, blank=True, verbose_name='Fish redds count')
 
 
 class MorphFeatures(models.Model):
@@ -403,7 +404,7 @@ class Morphology(models.Model):
     """
 
     # one-to-one relationship (one Morphology to one MeasStation)
-    meas_station = models.ForeignKey(MeasStation, unique=True, on_delete=models.SET_NULL, null=True)
+    meas_station = models.OneToOneField(MeasStation, on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
     morphological_features = models.ForeignKey(MorphFeatures,
                                                on_delete=models.SET_NULL,
