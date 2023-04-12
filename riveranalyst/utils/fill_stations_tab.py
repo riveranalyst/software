@@ -1,13 +1,14 @@
 import os
 import django
 from pathlib import Path
-import numpy as np
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 django.setup()
 import pandas as pd
 import riveranalyst.models as models
 from pyproj import transform, CRS, Proj, exceptions
 import numpy as np
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -48,11 +49,11 @@ def fill_st_model(df):
             description=row.description,
             x=row.x,
             y=row.y,
-            y_epsg4326 = y_epsg4326,
-            x_epsg4326 = x_epsg4326,
-            coord_system = row.coord_system,
-            bed_elevation_wgs84 = row.bed_elevation_wgs84,
-            bed_elevation_dhhn = row.bed_elevation_dhhn,
+            y_epsg4326=y_epsg4326,
+            x_epsg4326=x_epsg4326,
+            coord_system=row.coord_system,
+            bed_elevation_wgs84=row.bed_elevation_wgs84,
+            bed_elevation_dhhn=row.bed_elevation_dhhn,
             pos_rel_WB=row.pos_rel_WB_m,
             discharge=row.dis_cumec,
             wl_m=row.wl_m,
@@ -62,7 +63,6 @@ def fill_st_model(df):
             bed_slope=row.bed_slope,
         )
         st.save()
-
 
 
 if __name__ == '__main__':

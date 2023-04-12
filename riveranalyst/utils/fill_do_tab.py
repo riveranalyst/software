@@ -1,11 +1,13 @@
 import os
 import django
 from pathlib import Path
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 django.setup()
 import pandas as pd
 import riveranalyst.models as models
 import numpy as np
+
 # necessary to find file within the project dir
 BASE_DIR = Path(__file__).resolve().parent.parent
 
