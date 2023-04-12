@@ -47,6 +47,8 @@ def fill_kf_model(df):
 
 
 if __name__ == '__main__':
+    # Reset the data model Kf
     models.Kf.objects.all().delete()
+
     kf_df = pd.read_excel(BASE_DIR / 'media/db-baseline-kf.xlsx', engine='openpyxl')
     fill_kf_model(kf_df)

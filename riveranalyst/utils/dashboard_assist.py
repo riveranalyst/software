@@ -9,8 +9,8 @@ from riveranalyst.models import *
 
 def get_corr_fig():
     # get object from data models
-    models = [Hydraulics, SubsurfaceSed, SurfaceSed, IDO, Kf, MeasStation]
-    suffixes = {SubsurfaceSed: 'subsurf', SurfaceSed: 'surf', Hydraulics: 'hyd'}
+    models = [Hydraulics, SubsurfaceSed, IDO, Kf, MeasStation]
+    suffixes = {SubsurfaceSed: 'subsurf', Hydraulics: 'hyd'}
     objects_list = []
     for m in models:
         objects_list.append(m.objects.all())
@@ -39,7 +39,8 @@ def get_corr_fig():
 
     # correlation
     takeoff_cols = ['id_surf', 'id_subsurf', 'id_x', 'id_y', 'id', 'x', 'y', 'x_epsg', 'y_epsg',
-                    'x_epsg4326', 'y_epsg4326', 'sediment_depth_m_x', 'comment_x', 'comment_y']
+                    'x_epsg4326', 'y_epsg4326', 'sediment_depth_m_x', 'comment_x', 'comment_y',
+                    'dp_position', 'sediment_depth_m_y',]
     df_final = df_global.loc[:, ~df_global.columns.isin(takeoff_cols)]
     df_corr = df_final.corr(method='spearman').round(1)
 
@@ -53,7 +54,7 @@ def get_corr_fig():
     #         df_get_ns.at[index_1, index_2] = count_n
     # print(df_get_ns)
 
-    depth_explicit_feats = ['kf_ms', 'slurp_rate_avg_mls', 'dp_position', 'sediment_depth_m_y',
+    depth_explicit_feats = ['kf_ms', 'slurp_rate_avg_mls',
                             'idoc_mgl', 'idoc_sat', 'temp_c']
 
 
@@ -78,7 +79,7 @@ def get_PCA(df):
     # Preparing df for dimensinality reduction
     features = ['idoc_mgl', 'wl_m', 'kf_ms', 'river',
                 'n_wooster', 'd10', 'd50', 'd90', 'so', 'dm', 'dg',
-                'percent_finer_2mm', 'percent_finer_1mm', 'percent_finer_0_5mm']
+                'percent_finer_1mm']
     df4pca = df[features].dropna()
     df4pca_prescaling = df4pca.drop(['river'], axis=1)
 
@@ -86,7 +87,7 @@ def get_PCA(df):
     df4pca_final = df4pca_prescaling.apply(lambda x: (x - x.mean()) / x.std(), axis=0)
 
     # Build PCA
-    pca = PCA(n_components=4)
+    pca = PCA(n_components=5)
     components = pca.fit_transform(df4pca_final)
 
     # Get labels for explaind variance respective tot he PC
@@ -100,8 +101,9 @@ def get_PCA(df):
     fig2d = px.scatter_matrix(
         components,
         labels=labels,
-        dimensions=range(4),
+        dimensions=range(5),
         color=df4pca["river"],
+        symbol=df4pca['river'],
         title=f'Total Explained Variance: {total_var2d:.2f}%',
         width=1000, height=600,
     )
@@ -122,11 +124,13 @@ def get_PCA(df):
     components2d = pca2d.fit_transform(df4pca_final)
     total_var2d = pca2d.explained_variance_ratio_.sum() * 100
     loadings = pca2d.components_.T * np.sqrt(pca2d.explained_variance_)
-    fig_load = px.scatter(components2d, x=0, y=1, color=df4pca['river'], width=1000, height=600,
+    fig_load = px.scatter(components2d, x=0, y=1, color=df4pca['river'], symbol=df4pca['river'],
+                          range_color=[-1000, 1000],
+                          width=1000, height=600,
                           labels={'0': 'PC 1', '1': 'PC 2'})
     feat_annotation = ['IDOC', 'Water level', 'kf', 'T',
-                'Porosity (Wooster)', 'd10', 'd50', 'd90', 'so', 'dm', 'dg',
-                'FSF < 2 mm', 'FSF < 1 mm', 'FSF < 0.5 mm']
+                'Porosity (Wooster)', 'd10', 'd50', 'd90', "S0", 'dm', 'dg',
+                'FSF < 1 mm']
     annotate_dict = {features[i]: feat_annotation[i] for i in range(len(feat_annotation))}
     for i, feature in enumerate(df4pca_final.columns):
         fig_load.add_annotation(

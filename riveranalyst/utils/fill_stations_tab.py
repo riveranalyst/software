@@ -69,6 +69,8 @@ if __name__ == '__main__':
     # filling initial data
     # column_dtypes = {'imbrication': "boolean",
     #                  'algae_cover': "boolean"}
+
+    # Reset the data model MeasStations
     models.MeasStation.objects.all().delete()
     st_df = pd.read_excel(BASE_DIR / 'media/db-baseline-stations.xlsx',
                           engine='openpyxl')

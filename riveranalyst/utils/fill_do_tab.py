@@ -47,6 +47,8 @@ def fill_do_model(df):
 
 
 if __name__ == '__main__':
+    # Reset the data model IDO
     models.IDO.objects.all().delete()
+
     idoc_df = pd.read_excel(BASE_DIR / 'media/db-baseline-idoc.xlsx', engine='openpyxl')
     fill_do_model(idoc_df)

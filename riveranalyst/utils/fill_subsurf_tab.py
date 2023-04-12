@@ -83,6 +83,7 @@ def fill_subsurf_model(df):
 
 
 if __name__ == '__main__':
+    # Reset the data model SubsurfaceSed
     models.SubsurfaceSed.objects.all().delete()
 
     # filling initial data

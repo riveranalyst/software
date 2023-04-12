@@ -15,6 +15,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 def fill_surf_model(df):
     df = df.replace({np.nan: None})
     for index, row in df.iterrows():
+        print(row.meas_station)
         # get each station object from Station Class
         st = models.MeasStation.objects.get(
             name=row.meas_station.strip(),
@@ -82,6 +83,7 @@ def fill_surf_model(df):
 
 
 if __name__ == '__main__':
+    # Reset the data model SurfaceSed
     models.SurfaceSed.objects.all().delete()
 
     # filling initial data
