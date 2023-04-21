@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_filters',
     'django_extensions',
     'bootstrap3',
+    'debug_toolbar',
 
     # newly added app:
     'riveranalyst.apps.FlussdataConfig'
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -78,6 +80,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases

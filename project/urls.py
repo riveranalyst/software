@@ -27,5 +27,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('riveranalyst/', include('riveranalyst.urls')),
     path('accounts/login/', auth_views.LoginView.as_view()),
+    path('__debug__/', include('debug_toolbar.urls')),
 ]
 
