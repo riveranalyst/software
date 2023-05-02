@@ -34,7 +34,7 @@ def home(request):
                'total_idoc': total_idoc,
                'total_kf': total_kf,
                'total_v': total_v}
-    return render(request, 'app.html', context)
+    return render(request, 'home.html', context)
 
 
 @login_required

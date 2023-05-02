@@ -129,32 +129,30 @@ USE_I18N = True
 
 USE_TZ = True
 
-# ASGI_APPLICATION = 'project.routing.application'
-#
-# CHANNEL_LAYERS = {
-#     'default': {
-#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-#         'CONFIG': {
-#             'hosts': [('127.0.0.1', 6379),],
-#         }
-#     }
-# }
-#
-# STATICFILES_FINDERS = [
-#     'django.contrib.staticfiles.finders.FileSystemFinder',
-#     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#     'django_plotly_dash.finders.DashAssetFinder',
-#     'django_plotly_dash.finders.DashComponentFinder'
-# ]
-#
-# PLOTLY_COMPONENTS = [
-#
-#     'dash_core_components',
-#     'dash_html_components',
-#     'dash_renderer',
-#
-#     'dpd_components'
-# ]
+ASGI_APPLICATION = 'project.routing.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379),],
+        }
+    }
+}
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django_plotly_dash.finders.DashAssetFinder',
+    'django_plotly_dash.finders.DashComponentFinder'
+]
+
+PLOTLY_COMPONENTS = [
+    'dash.dcc',
+    'dash.html',
+    'dash_renderer',
+    'dpd_components'
+]
 
 
 # Static files (CSS, JavaScript, Images)

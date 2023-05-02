@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
-
 {% block content %}
+{% load plotly_dash %}
 
-<div class="row">
-    <h1>Welcome </h1>
+<div class="{% plotly_class name='SedimentAnalyst' %} card" style="height: 100%; width: 100%">
+    {% plotly_app name='SedimentAnalyst' ratio=0.65 %}
 </div>
+
 {% endblock %}
