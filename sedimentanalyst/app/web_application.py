@@ -6,7 +6,8 @@ from sedimentanalyst.app.appconfig import *
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 # Instantiates object app of the class Dash
-app = DjangoDash('SedimentAnalyst', external_stylesheets=external_stylesheets,
+app = DjangoDash('SedimentAnalyst',
+                 external_stylesheets=external_stylesheets,
                 suppress_callback_exceptions=True)
 # server = app.server  # method to serve the app, allows heroku to recognize the server
 
@@ -155,7 +156,8 @@ def parse_and_analyse(list_of_contents, click_run,
             list_analyzers.append(from_parsing)
 
     elif click_run_example > 0:
-        file_list = glob.glob(str(Path(os.path.abspath(os.getcwd()) + "/examples")) + "/*.xlsx")
+        file_list = glob.glob("static/examples/*.xlsx")
+        # app.get_asset_url('myimage.png')
         for file_name_example in file_list:
             from_parsing = acc.parse_contents(input_dict_app=input_dict_in_layout, file_name_example=file_name_example)
             list_analyzers.append(from_parsing)

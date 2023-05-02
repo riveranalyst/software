@@ -165,8 +165,8 @@ DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap.html"
 
 STATICFILES_LOCATION = 'static'
 STATIC_URL = '/static/'
-STATIC_ROOT = 'static' # setting that specifies the root directory where collected static files will be stored.
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+# STATIC_ROOT = 'static' # setting that specifies the root directory where collected static files will be stored.
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 
 # Media files (workbooks etc)

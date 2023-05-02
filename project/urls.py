@@ -16,11 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-
+from django.conf.urls.static import static
+from django.views.static import serve
+from django.conf import settings
 
 # added app views:
 from riveranalyst import views as river_views
-from sedimentanalyst import views as sed_views
 
 urlpatterns = [
     path('', river_views.home, name='home'),
@@ -31,5 +32,8 @@ urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view()),
     path('__debug__/', include('debug_toolbar.urls')),
     path('django_plotly_dash/', include('django_plotly_dash.urls')),
-]
+    *static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0]),
+    # Serve static files from the app's static directory
+    path('static/examples', serve, {'document_root': 'static'}),
+    ]
 
