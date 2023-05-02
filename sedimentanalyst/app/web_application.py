@@ -21,7 +21,6 @@ acc = Accessories()
 # App layout
 app.layout = html.Div(
     children=[  # this code section taken from Dash docs https://dash.plotly.com/dash-core-components/upload
-        html.H1("Sediment Analyst", style={'text-align': 'center'}),  # header
         # html.Img(src='https://raw.githubusercontent.com/federicascolari8/PythonProject_Other/main/sedimentanalyst/app'
         #              '/assets/Ering_Germany.jpg',
         #          style=acc.img_style),  # Image
@@ -161,8 +160,6 @@ def parse_and_analyse(list_of_contents, click_run,
         for file_name_example in file_list:
             from_parsing = acc.parse_contents(input_dict_app=input_dict_in_layout, file_name_example=file_name_example)
             list_analyzers.append(from_parsing)
-
-        print(file_list, click_run_example, str(Path(os.path.abspath(os.getcwd()) + "/examples")))
 
     # append all information from the list of analyzers into a global df
     for inter_analyzer in list_analyzers:

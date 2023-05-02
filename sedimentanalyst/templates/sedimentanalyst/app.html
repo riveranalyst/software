@@ -2,7 +2,7 @@
 {% block content %}
 {% load plotly_dash %}
 
-<div class="{% plotly_class name='SedimentAnalyst' %} card" style="height: 100%; width: 100%">
+<div class="{% plotly_class name='SedimentAnalyst' %}" style="min-height: 100%; min-width: 100%">
     {% plotly_app name='SedimentAnalyst' ratio=1 %}
 </div>
 
