@@ -20,7 +20,7 @@ def home(request):
 
     **Template:**
 
-    :template:`home.html`
+    :template:`app.html`
     """
     total_subsurf = SubsurfaceSed.objects.count()
     total_surf = SurfaceSed.objects.count()
@@ -34,7 +34,7 @@ def home(request):
                'total_idoc': total_idoc,
                'total_kf': total_kf,
                'total_v': total_v}
-    return render(request, 'home.html', context)
+    return render(request, 'app.html', context)
 
 
 @login_required
@@ -289,6 +289,7 @@ def dashboard(request):
     Displays dashboard for data analysis.
     """
     corr, global_df_dash = get_corr_fig()
+    global_df_dash.to_csv('global_df_dash.csv')
     corr_div = plot(corr, output_type='div')
     pca_fig2d, pca_fig3d, pca_loadings = get_PCA(global_df_dash)
     pca_div2d = plot(pca_fig2d, output_type='div')

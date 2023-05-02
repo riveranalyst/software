@@ -5,6 +5,7 @@ from sklearn.decomposition import PCA
 from riveranalyst.models import *
 import plotly.io as pio
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 
 def get_corr_fig():
@@ -77,38 +78,43 @@ def get_corr_fig():
 def get_PCA(df):
     # Preparing df for dimensinality reduction
     features = ['idoc_mgl', 'wl_m', 'kf_ms', 'river',
-                'n_wooster', 'd10', 'd50', 'd90', 'so', 'dm', 'dg',
-                'percent_finer_1mm']
+                'n_wooster', 'd90', 'so', 'dm',
+                'percent_finer_2mm',
+                # 'percent_finer_0_063mm'
+                'name'
+                ]
+
     df4pca = df[features].dropna()
     # df4pca.to_csv('pca-table.csv')
-    df4pca_prescaling = df4pca.drop(['river'], axis=1)
+    df4pca_prescaling = df4pca.drop(['river', 'name'], axis=1)
 
     # Scaling with s-score apporach
     df4pca_final = df4pca_prescaling.apply(lambda x: (x - x.mean()) / x.std(), axis=0)
 
     # Build PCA
-    pca = PCA(n_components=5)
+    pca = PCA(n_components=3)
     components = pca.fit_transform(df4pca_final)
+    variance = pca.explained_variance_ratio_
+    cumulative_variance = np.cumsum(variance)
+    total_var2d = variance.sum() * 100
 
     # Get labels for explaind variance respective tot he PC
     labels = {
         str(i): f"PC {i + 1} ({var:.1f}%)"
         for i, var in enumerate(pca.explained_variance_ratio_ * 100)
     }
-    total_var2d = pca.explained_variance_ratio_.sum() * 100
-
-    np.savetxt('loadings.csv', pca.components_, delimiter=',')
 
     # Plot data 2-dimensionaly in the new coordinate system of PCs
     fig2d = px.scatter_matrix(
         components,
         labels=labels,
-        dimensions=range(5),
+        dimensions=range(3),
         color=df4pca["river"],
         symbol=df4pca['river'],
         title=f'Total Explained Variance: {total_var2d:.2f}%',
         color_discrete_sequence=px.colors.qualitative.Bold,
         width=1000, height=700,
+        hover_name=df4pca['name'],
     )
     fig2d.update_traces(diagonal_visible=False)
     pio.write_image(fig2d, 'pca_matrix.png', scale=4)
@@ -129,14 +135,18 @@ def get_PCA(df):
     components2d = pca.fit_transform(df4pca_final)
     total_var2d = pca.explained_variance_ratio_.sum() * 100
     loadings = pca.components_.T * np.sqrt(pca.explained_variance_)
+    np.savetxt('loadings.csv', loadings, delimiter=',')
+
     fig_load = px.scatter(components2d, x=0, y=1, color=df4pca['river'], symbol=df4pca['river'],
                           range_color=[-1000, 1000],
                           width=1000, height=600,
                           labels={'0': 'PC 1', '1': 'PC 2'},
                           color_discrete_sequence=px.colors.qualitative.Bold, )
-    feat_annotation = ['IDOC', 'Water level', 'kf', 'T',
-                       'Porosity (Wooster)', 'd10', 'd50', 'd90', "S0", 'dm', 'dg',
-                       'FSF < 1 mm']
+    feat_annotation = ['IDOC', 'Water level', 'kf', 'River',
+                        'n', 'd90', 'S0', 'dm',
+                        'FSF < 2 mm',
+                       # 'FSF < 0.063 mm'
+                       ]
     annotate_dict = {features[i]: feat_annotation[i] for i in range(len(feat_annotation))}
     for i, feature in enumerate(df4pca_final.columns):
         fig_load.add_annotation(

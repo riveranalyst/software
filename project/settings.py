@@ -44,9 +44,13 @@ INSTALLED_APPS = [
     'django_extensions',
     'bootstrap3',
     'debug_toolbar',
+    'django_plotly_dash.apps.DjangoPlotlyDashConfig',
 
     # newly added app:
-    'riveranalyst.apps.FlussdataConfig'
+    'riveranalyst.apps.FlussdataConfig',
+    'sedimentanalyst.apps.SedimentanalystConfig',
+    'channels',
+    'channels_redis'
 ]
 
 MIDDLEWARE = [
@@ -125,6 +129,33 @@ USE_I18N = True
 
 USE_TZ = True
 
+# ASGI_APPLICATION = 'project.routing.application'
+#
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             'hosts': [('127.0.0.1', 6379),],
+#         }
+#     }
+# }
+#
+# STATICFILES_FINDERS = [
+#     'django.contrib.staticfiles.finders.FileSystemFinder',
+#     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#     'django_plotly_dash.finders.DashAssetFinder',
+#     'django_plotly_dash.finders.DashComponentFinder'
+# ]
+#
+# PLOTLY_COMPONENTS = [
+#
+#     'dash_core_components',
+#     'dash_html_components',
+#     'dash_renderer',
+#
+#     'dpd_components'
+# ]
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -132,8 +163,11 @@ USE_TZ = True
 FILE_UPLOAD_HANDLERS = ['django.core.files.uploadhandler.TemporaryFileUploadHandler',]
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap.html"
 
+STATICFILES_LOCATION = 'static'
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR, 'static']
+STATIC_ROOT = 'static' # setting that specifies the root directory where collected static files will be stored.
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
 
 # Media files (workbooks etc)
 MEDIA_URL = '/media/'

@@ -18,15 +18,18 @@ from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
 
-# added riveranalyst views:
-from riveranalyst import views
+# added app views:
+from riveranalyst import views as river_views
+from sedimentanalyst import views as sed_views
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('', river_views.home, name='home'),
     path('admin/doc/', include('django.contrib.admindocs.urls')),  # MUST come before path(admin)
     path('admin/', admin.site.urls),
     path('riveranalyst/', include('riveranalyst.urls')),
+    path('sedimentanalyst/', include('sedimentanalyst.urls')),
     path('accounts/login/', auth_views.LoginView.as_view()),
     path('__debug__/', include('debug_toolbar.urls')),
+    path('django_plotly_dash/', include('django_plotly_dash.urls')),
 ]
 
