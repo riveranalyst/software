@@ -131,6 +131,8 @@ USE_TZ = True
 
 ASGI_APPLICATION = 'project.routing.application'
 
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',

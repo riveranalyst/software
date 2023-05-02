@@ -7,8 +7,7 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 # Instantiates object app of the class Dash
 app = DjangoDash('SedimentAnalyst', external_stylesheets=external_stylesheets,
-                # suppress_callback_exceptions=True
-                 )
+                suppress_callback_exceptions=True)
 # server = app.server  # method to serve the app, allows heroku to recognize the server
 
 # Instantiates to get accessories of the app from the class Accessories (accessories.py)
@@ -88,7 +87,6 @@ app.layout = html.Div(
         # barchart
         html.Div(id='div-barchart'),
 
-        acc.contributors
     ])
 
 
@@ -138,10 +136,11 @@ def save_inputs(header, gs_clm, cw_clm, n_rows, porosity,
               State('upload-data', 'filename'),
               State('upload-data', 'last_modified'),
               State('store_manual_inputs', 'data'),
+
               prevent_initial_call=True,
               )
-def parse_and_analyse(list_of_contents, list_of_names, list_of_dates, input_dict_in_layout, click_run,
-                      click_run_example,
+def parse_and_analyse(list_of_contents, click_run,
+                      click_run_example, list_of_names, list_of_dates, input_dict_in_layout,
                       ):
     df_global = pd.DataFrame()
     children = []
@@ -186,9 +185,10 @@ def parse_and_analyse(list_of_contents, list_of_names, list_of_dates, input_dict
     Output('download-dataframe-csv', 'data'),
     Input('btn_download', 'n_clicks'),
     State('stored-data', 'data'),
+
     prevent_initial_call=True,
 )
-def download_summary_stats(data, n_clicks):
+def download_summary_stats(n_clicks, data):
     dataframe_global = pd.DataFrame(data=data['data'], columns=data['columns'])
     return dcc.send_data_frame(dataframe_global.to_csv, 'overall_statistics.csv')
 
@@ -220,9 +220,10 @@ def update_sample_id(n_clicks, data):  # n_clicks is mandatory even if not used
     Input('sample_id', 'value'),
     State('stored-data', 'data'),
     State('store_manual_inputs', 'data'),
+
     prevent_initial_call=True
 )
-def update_map(data, dict_to_get_proj, samples):
+def update_map(samples, data, dict_to_get_proj):
     df = pd.DataFrame(data=data['data'], columns=data['columns'])
     df = df.sort_values(['sample name'])
     int_plot = interac_plotter.InteractivePlotter(df)
@@ -258,9 +259,10 @@ def update_stat_drop(n_clicks, data):
     Input('statistics_id', 'value'),
     Input('sample_id', 'value'),
     State('stored-data', 'data'),
+
     prevent_initial_call=True
 )
-def update_barchart(data, stat_value, samples):
+def update_barchart(stat_value, samples, data):
     # save into dataframe
     df = pd.DataFrame(data=data['data'], columns=data['columns'])
 
@@ -283,9 +285,10 @@ def update_barchart(data, stat_value, samples):
     Output('div-gsd', 'children'),
     Input('sample_id', 'value'),
     State('stored-data', 'data'),
+
     prevent_initial_call=True
 )
-def update_gsd(data, samples):
+def update_gsd(samples, data):
     # save into dataframe
     df = pd.DataFrame(data=data['data'], columns=data['columns'])
 
@@ -308,7 +311,7 @@ def update_gsd(data, samples):
     State('stored-data', 'data'),
     prevent_initial_call=True
 )
-def update_diameters(data, samples):
+def update_diameters(samples, data):
     # save into dataframe
     df = pd.DataFrame(data=data['data'], columns=data['columns'])
 
@@ -322,3 +325,15 @@ def update_diameters(data, samples):
                      figure=fig,
                      style=acc.style_graph
                      )
+
+# way to fire a button with other
+# @app.callback(Output('btn_run','n_clicks'),
+#               Input('stored-data', 'data'),
+#               [State('btn_run_example', 'n_clicks')])
+# def callback_func(button_clicks,data):
+#     if button_clicks:
+#         return button_clicks
+#     raise dash.exceptions.PreventUpdate
+#
+# if __name__ == '__main__':
+#     app.run_server(debug=False)
