@@ -28,7 +28,7 @@ class Accessories:
         """
         # Variables for style args
         self.style_upload = {
-            'width': '100%',
+            'width': '90%',
             'height': '60px',
             'lineHeight': '60px',
             'borderWidth': '1px',

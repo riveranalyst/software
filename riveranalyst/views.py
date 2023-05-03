@@ -284,7 +284,7 @@ def success_upload(request):
     return render(request, 'riveranalyst/success_upload.html', {'message': MESSAGE})
 
 
-def dashboard(request):
+def analysis(request):
     """
     Displays dashboard for data analysis.
     """
@@ -302,7 +302,7 @@ def dashboard(request):
                'pca3d': pca_div3d,
                'loadings': pca_loadings_div
                }
-    return render(request, 'riveranalyst/dashboard.html', context)
+    return render(request, 'riveranalyst/analysis.html', context)
 
 
 def helpers(request):

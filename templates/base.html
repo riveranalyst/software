@@ -44,7 +44,7 @@
                     <a class="nav-link {% if navbar == 'home' %} active {% endif %}" href="{% url 'home' %}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if navbar == 'activedash' %} active {% endif %}" href="{% url 'riveranalyst:dashboard' %}">Dashboard</a>
+                    <a class="nav-link {% if navbar == 'activedash' %} active {% endif %}" href="{% url 'riveranalyst:analysis' %}">Analysis</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if navbar == 'activequery' %} active {% endif %}" href="{% url 'riveranalyst:query' %}">Query</a>
@@ -57,6 +57,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if navbar == 'activehelpers' %} active {% endif %}" href="{% url 'riveranalyst:helpers' %}">Helpers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if navbar == 'activesed' %} active {% endif %}" href="{% url 'sedimentanalyst:app' %}">Sediment<br>Analyst</a>
                 </li>
 
             </ul>
@@ -82,7 +85,7 @@
         <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
 
 <!--          <ul class="list-inline mt-4">-->
-            <h1><a href="https://github.com/Ecohydraulics"><i class="icon ion-social-github"></i></a></h1>
+            <h1><a href="https://github.com/riveranalyst"><i class="icon ion-social-github"></i></a></h1>
             <p class="text-muted">River Analyst Team</p>
             <!--            <li class="list-inline-item"><a href="#" target="_blank" title="pinterest"><i class="fa fa-pinterest"></i></a></li>-->
 <!--            <li class="list-inline-item"><a href="#" target="_blank" title="vimeo"><i class="fa fa-vimeo"></i></a></li>-->
