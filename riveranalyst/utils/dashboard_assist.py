@@ -4,11 +4,13 @@ from django_pandas.io import read_frame
 from sklearn.decomposition import PCA
 from riveranalyst.models import *
 import plotly.io as pio
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 
 
 def get_corr_fig():
+    """
+    Function to collect database objects and perform spearman correlation analysis.
+    :return: Plotly Figure, Dataframe
+    """
     # get object from data models
     models = [Hydraulics, SubsurfaceSed, IDO, Kf, MeasStation]
     suffixes = {SubsurfaceSed: 'subsurf', Hydraulics: 'hyd'}
@@ -20,12 +22,18 @@ def get_corr_fig():
     vectorized_readdfs = np.vectorize(lambda x: read_frame(x))
     dfs = vectorized_readdfs(objects_list)
 
+    # merge IDO table with Kf table
     df_global = dfs[-3].merge(dfs[-2], on=['meas_station', 'sample_id', 'dp_position'], how='outer')
     df_global = df_global.drop_duplicates(subset=['sample_id', 'dp_position'])
+
+    # Average along the depth the IDO and Kf depth-profile value
     df_avg_ido_kf = df_global.groupby('meas_station', as_index=False).mean()
     # df_avg_ido_kf.to_csv('df_avg_ido_kf.csv')
 
+    # merge the depth-explicit dataframe with the stations table
     df_global = dfs[-1].merge(df_global, left_on='name', right_on='meas_station')
+
+    # merge the average dataframe with the stations table
     df_global_avg = dfs[-1].merge(df_avg_ido_kf, left_on='name', right_on='meas_station')
 
     for i, df in enumerate(dfs[0:-3]):
@@ -44,16 +52,6 @@ def get_corr_fig():
                     'dp_position', 'sediment_depth_m_y', ]
     df_final = df_global.loc[:, ~df_global.columns.isin(takeoff_cols)]
     df_corr = df_final.corr(method='spearman').round(1)
-
-    # # Get number of samples per correlation value
-    # df_get_ns = pd.DataFrame(index=df_corr.index, columns=df_corr.columns)
-    #
-    # for index_1 in df_get_ns.index:
-    #     for index_2 in df_get_ns.index:
-    #         df_get_dropped = df_final[[index_1, index_2]].dropna()
-    #         count_n = df_get_dropped[index_1].dropna().count()
-    #         df_get_ns.at[index_1, index_2] = count_n
-    # print(df_get_ns)
 
     depth_explicit_feats = ['kf_ms', 'slurp_rate_avg_mls',
                             'idoc_mgl', 'idoc_sat', 'temp_c']
@@ -120,12 +118,9 @@ def get_PCA(df):
     pio.write_image(fig2d, 'pca_matrix.png', scale=4)
 
     # Plot data 3-dimensionaly in the new coordinate system of PCs
-    pca3d = PCA(n_components=3)
-    components3d = pca3d.fit_transform(df4pca_final)
-    total_var = pca3d.explained_variance_ratio_.sum() * 100
+    total_var = pca.explained_variance_ratio_.sum() * 100
     fig3d = px.scatter_3d(
-        components3d, x=0, y=1, z=2, color=df4pca['river'],
-        title=f'Total Explained Variance: {total_var:.2f}%',
+        components, x=0, y=1, z=2, color=df4pca['river'],
         labels={'0': 'PC 1', '1': 'PC 2', '2': 'PC 3'},
         color_discrete_sequence=px.colors.qualitative.Bold,
     )
@@ -133,7 +128,6 @@ def get_PCA(df):
     # Visualizing loadings of each components
     # pca2d = PCA(n_components=2)
     components2d = pca.fit_transform(df4pca_final)
-    total_var2d = pca.explained_variance_ratio_.sum() * 100
     loadings = pca.components_.T * np.sqrt(pca.explained_variance_)
     np.savetxt('loadings.csv', loadings, delimiter=',')
 
@@ -141,6 +135,7 @@ def get_PCA(df):
                           range_color=[-1000, 1000],
                           width=1000, height=600,
                           labels={'0': 'PC 1', '1': 'PC 2'},
+                          title='Loadings',
                           color_discrete_sequence=px.colors.qualitative.Bold, )
     feat_annotation = ['IDOC', 'Water level', 'kf', 'River',
                         'n', 'd90', 'S0', 'dm',

@@ -9,12 +9,11 @@
 
 <!--&lt;!&ndash; then add this badge component &ndash;&gt;-->
 <script src="https://cdn.jsdelivr.net/npm/highlightjs-badgejs@0.0.5/highlightjs-badgejs.min.js"></script>
-
 {% endblock%}
 
 {% block content %}
 <div class="card card-body">
-    <h3>Spearman Correlation Matrix (depth-explicit vs. bulk parameters)</h3>
+    <h2>Spearman Correlation Matrix </h2>
     <div class="col-md-7">
     {% autoescape off %}
     {{ corr }}
@@ -23,7 +22,8 @@
 </div>
 <br>
 <div class="card card-body">
-    <h3>Principal Component Analysis (PCA)</h3>
+    <h2>Principal Component Analysis (PCA)</h2>
+    <br>
     <div class="row">
         <div class="col-md-7">
             {% autoescape off %}
@@ -31,10 +31,7 @@
             {% endautoescape %}
         </div>
     </div>
-</div>
 <br>
-<div class="card card-body">
-    <h3>3 Main Principal Components</h3>
     <div class="row">
         <div class="col-md-7">
             {% autoescape off %}
@@ -42,10 +39,7 @@
             {% endautoescape %}
         </div>
     </div>
-</div>
 <br>
-<div class="card card-body">
-    <h3>PCA Loadings</h3>
     <div class="row">
         <div class="col-md-7">
             {% autoescape off %}
@@ -56,17 +50,21 @@
 </div>
 <br>
 <div class="card card-body">
+    <h2>Code snippets</h2>
+    <br>
     <div class="row">
         <div class="col-md-4">
             <div>
-                <h2>Merging tables</h2>
+                <br>
+<!--                Preprocessing and mergin data-->
+                <h4>Preprocessing data</h4>
                 <p>
-                    Merging tables is an essential database task. Tables can be easily merged with
+                    Merging tables is an essential preprocessing step for data analysis. Tables can be easily merged with
                     SQL or SQL-like python functions. The <a href="https://pandas.pydata.org/">
                     pandas</a> library offers multiple SQL-like and data table management functions.
                 </p>
                 <p>
-                    The code snippet at the right shows how to merge IDO and kf tables, which are available
+                    The code snippet at the right shows how to merge database tables available
                     for download in the <a href="{% url 'riveranalyst:query' %}">Query</a> tab.
                 </p>
             </div>
@@ -74,29 +72,159 @@
         <div class="col-md-8">
             <pre>
                 <code class="python">
-        import pandas as pd
+    import pandas as pd
+    import numpy as np
 
-        # reading csvs
-        kf_df = pd.read_csv('path/to/kf/csv/')
-        idoc_df = pd.read_csv('path/to/idoc/csv')
-        st_df = pd.read_csv('path/to/stations/csv')
+    csv_list = [    'path/to/hydraulics/csv/',
+                    'path/to/subsurfacesed/csv/',
+                    'path/to/ido/csv/',
+                    'path/to/kf/csv/',
+                    'path/to/kf/stations/'
+    ]
 
-        # use how=outer is to ensure the union instead of intersection of the two dfs
-        # step 1: merge kf and idoc tables by linking the rows both through sample_id
-        # and dp_position
-        kf_idoc = ido_df.merge(kf_df, on=['sample_id', 'dp_position'], how='outer')
-        kf_idoc = kf_idoc.drop_duplicates(subset=['sample_id', 'dp_position'])
+    vectorized_readdfs = np.vectorize(lambda x: pd.read_csv(x))
+    dfs = vectorized_readdfs(csv_list)
 
-        # step 2: merge kf_idoc table to the stations information by linking the rows
-        # through the measurement station
-        kf_idoc_st = st_df.merge(ido_df, left_on='name', right_on='meas_station')
+    # merge IDO table with Kf table
+    df_global = dfs[-3].merge(dfs[-2], on=['meas_station', 'sample_id', 'dp_position'], how='outer')
+    df_global = df_global.drop_duplicates(subset=['sample_id', 'dp_position'])
 
-        # save merged table
-        kf_idoc_st.to_csv('merge-kf-idoc-st.csv')
+    # Average along the depth the IDO and Kf depth-profile value
+    df_avg_ido_kf = df_global.groupby('meas_station', as_index=False).mean()
+
+    # Merge the depth-explicit dataframe with the stations table
+    df_global = dfs[-1].merge(df_global, left_on='name', right_on='meas_station')
+
+    # Merge the average dataframe with the stations table
+    df_global_avg = dfs[-1].merge(df_avg_ido_kf, left_on='name', right_on='meas_station')
+
+
+    models = [      'Hydraulics',
+                    'SubsurfaceSed',
+                    'IDO',
+                    'Kf',
+                    'MeasStation']
+
+    suffixes = {'SubsurfaceSed': 'subsurf', 'Hydraulics': 'hyd'}
+
+    # Merge hydraulics and subsurface sediment data
+    for i, df in enumerate(dfs[0:-3]):
+        df_global = df_global.merge(df, on='meas_station',
+                                    how='outer',
+                                    suffixes=('', '_{}'.format(suffixes[models[i]])))
+        df_global_avg = df_global_avg.merge(df, on='meas_station',
+                                            how='outer',
+                                            suffixes=('', '_{}'.format(suffixes[models[i]])))
+    # Save the dataframes
+    df_global.to_csv('path/to/save/depth-explicit/global/table')
+    df_global_avg.to_csv('path/to/save/depth-explicit/global/table')
             </code>
             </pre>
         </div>
     </div>
+    <!--END PREPROCESSING AND MERGING DATA-->
+    <!--    BEGIN CORRELATION SNIPPETS-->
+    <div class="row">
+        <div class="col-md-3">
+            <div>
+                <br>
+                <h4>Spearman correlation analysis</h4>
+                <p>
+                The code snippet on the right produces the correlation plots shown on the top. To avoid biasing the analysis, the <code class="python">df_global_avg</code> is used, where the
+                    depth-explicit parameters (hydraulic conductivity kf and interstitial dissolved oxygen IDO) were depth-averaged to produce one average value for each
+                    measurement station.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <pre>
+                <code class="python">
+    import plotly.express as px
+
+    # Columns to remove from global table
+    takeoff_cols = ['id_surf', 'id_subsurf', 'id_x', 'id_y', 'id', 'x', 'y', 'x_epsg', 'y_epsg',
+                    'x_epsg4326', 'y_epsg4326', 'sediment_depth_m_x', 'comment_x', 'comment_y',
+                    'dp_position', 'sediment_depth_m_y', ]
+
+    # Remove unnecessary columns
+    df_final = df_global.loc[:, ~df_global.columns.isin(takeoff_cols)]
+
+    # Compute spearman correlation matrix with
+    df_corr = df_final.corr(method='spearman').round(1)
+
+    depth_explicit_feats = ['kf_ms', 'slurp_rate_avg_mls',
+                            'idoc_mgl', 'idoc_sat', 'temp_c']
+
+    # Correlation matrix with averaged IDO and kf parameters
+    fig = px.imshow(df_corr.loc[depth_explicit_feats, :], text_auto=True, aspect='auto')
+            </code>
+            </pre>
+        </div>
+    </div>
+<!--    END CORRELATION SNIPPETS-->
+<!--    BEGIN PCA SNIPPETS-->
+    <div class="row">
+        <div class="col-md-4">
+            <div>
+                <br>
+                <h4>Principal Component analysis</h4>
+                <p>
+                The code snipped on the right describes the method for performing PCA using <code class="python">sklearn</code>, whose results are shown above.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <pre>
+                <code class="python">
+    from sklearn.decomposition import PCA
+
+    # Preparing df for dimensionality reduction
+    features = ['idoc_mgl', 'wl_m', 'kf_ms', 'river',
+                'n_wooster', 'd90', 'so', 'dm',
+                'percent_finer_2mm',
+                # 'percent_finer_0_063mm'
+                'name'
+                ]
+
+    df4pca = df_global_avg[features].dropna()
+    df4pca_prescaling = df4pca.drop(['river', 'name'], axis=1)
+
+    # Scaling with s-score approach
+    df4pca_final = df4pca_prescaling.apply(lambda x: (x - x.mean()) / x.std(), axis=0)
+
+    # Build PCA
+    pca = PCA(n_components=3)
+    components = pca.fit_transform(df4pca_final)
+    variance = pca.explained_variance_ratio_
+    cumulative_variance = np.cumsum(variance)
+    total_var2d = variance.sum() * 100
+
+    # Get labels for explained variance respective to the PC
+    labels = {
+        str(i): f"PC {i + 1} ({var:.1f}%)"
+        for i, var in enumerate(pca.explained_variance_ratio_ * 100)
+    }
+
+    # Plot loadings in 2 PCs
+    fig2d = px.scatter_matrix(
+        components,
+        labels=labels,
+        dimensions=range(3),
+        color=df4pca["river"],
+        symbol=df4pca['river'],
+        title=f'Total Explained Variance: {total_var2d:.2f}%',
+        color_discrete_sequence=px.colors.qualitative.Bold,
+        width=1000, height=700,
+        hover_name=df4pca['name'],
+    )
+    fig2d.update_traces(diagonal_visible=False)
+            </code>
+            </pre>
+        </div>
+    </div>
+
+<!--END PCA SNIPPETS-->
+
 </div>
 {% endblock %}
 
