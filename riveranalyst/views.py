@@ -37,8 +37,6 @@ def home(request):
     return render(request, 'home.html', context)
 
 
-@login_required
-@permission_required('riveranalyst.view_collecteddata', raise_exception=True)
 def query(request):
     """
         Displays the page to query and export data models
@@ -174,8 +172,6 @@ def query(request):
     return render(request, 'riveranalyst/query.html', context)
 
 
-@login_required
-@permission_required('riveranalyst.view_collected_data', raise_exception=True)
 def station_data(request, station_id):
     """
         Displays plots of the data available for the measurement station ID selected.
