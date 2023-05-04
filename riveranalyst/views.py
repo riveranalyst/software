@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from riveranalyst.utils.tables_append import append_db
 from riveranalyst.utils.plotter import plot_gsd, plot_ido, plot_map, plot_kf
 from riveranalyst.utils.dashboard_assist import get_corr_fig, get_PCA
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 import pandas as pd
 
 
@@ -232,8 +232,11 @@ def station_data(request, station_id):
     return render(request, 'riveranalyst/station_data.html', context)
 
 
+def is_in_upload_group(user):
+    return user.groups.filter(name='upload').exists()
+
 @login_required
-@permission_required('riveranalyst.add_collected_data', raise_exception=True)
+@user_passes_test(is_in_upload_group)
 def modify(request):
     """
     Displays page for uploading tables that are parsed and appeded to the Django models.
@@ -246,7 +249,7 @@ def modify(request):
 
 
 @login_required
-@permission_required('riveranalyst.add_collected_data', raise_exception=True)
+@user_passes_test(is_in_upload_group)
 def upload_file(request):
     """
     Controls that happens with dropzone when file is uploaded.
