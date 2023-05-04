@@ -303,12 +303,3 @@ def analysis(request):
                }
     return render(request, 'riveranalyst/analysis.html', context)
 
-
-def helpers(request):
-    """
-    Displays useful information for pre and post-handling of data tables.
-    """
-    context = {'title': 'River Analyst: Helpers',  # pagetitle
-               'navbar': 'activehelpers',  # make the tab 'query' highlighted
-               }
-    return render(request, 'riveranalyst/helpers.html', context)

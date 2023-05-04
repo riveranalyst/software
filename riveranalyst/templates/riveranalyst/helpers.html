@@ -3,92 +3,11 @@
 {% load django_tables2 %}
 
 {% block head %}
-<link rel="stylesheet"
-      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
-<!--&lt;!&ndash; then add this badge component &ndash;&gt;-->
-<script src="https://cdn.jsdelivr.net/npm/highlightjs-badgejs@0.0.5/highlightjs-badgejs.min.js"></script>
 
 {% endblock%}
-
 {% block content %}
-<div class="card card-body">
-    <div class="row">
-        <div class="col-md-2">
-            <div class="row text-center">
-                <div class="col">
-                    <a href="/sedimentanalyst"><img src="{% static 'images/sed-analyst.jpg' %}"
-                                                                          alt="Sedimentanalyst" width="200"></a>
-			    </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div>
-                <p>
 
 
-                </p>
-                <p>
-                    Sediment Analyst is an open-source web app that helps
-                    dealing with sieving datasets and formatting them in the typical way (feature columns and
-                    observations, a.k.a. sample rows) for data science and database management.
-                </p>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <p>Code repository for River and Sediment Analyst. </p>
-            <pre><code class="git">
-        git clone https://github.com/beatriznegreiros/sediment-analyst.git
-            </code></pre>
-        </div>
-    </div>
-</div>
-<br>
-<div class="card card-body">
-    <div class="row">
-        <div class="col-md-4">
-            <div>
-                <h2>Merging tables</h2>
-                <p>
-                    Merging tables is an essential database task. Tables can be easily merged with
-                    SQL or SQL-like python functions. The <a href="https://pandas.pydata.org/">
-                    pandas</a> library offers multiple SQL-like and data table management functions.
-                </p>
-                <p>
-                    The code snippet at the right shows how to merge IDO and kf tables, which are available
-                    for download in the <a href="{% url 'riveranalyst:query' %}">Query</a> tab.
-                </p>
-            </div>
-        </div>
-        <div class="col-md-8">
-            <pre>
-                <code class="python">
-        import pandas as pd
-
-        # reading csvs
-        kf_df = pd.read_csv('path/to/kf/csv/')
-        idoc_df = pd.read_csv('path/to/idoc/csv')
-        st_df = pd.read_csv('path/to/stations/csv')
-
-        # use how=outer is to ensure the union instead of intersection of the two dfs
-        # step 1: merge kf and idoc tables by linking the rows both through sample_id
-        # and dp_position
-        kf_idoc = ido_df.merge(kf_df, on=['sample_id', 'dp_position'], how='outer')
-        kf_idoc = kf_idoc.drop_duplicates(subset=['sample_id', 'dp_position'])
-
-        # step 2: merge kf_idoc table to the stations information by linking the rows
-        # through the measurement station
-        kf_idoc_st = st_df.merge(ido_df, left_on='name', right_on='meas_station')
-
-        # save merged table
-        kf_idoc_st.to_csv('merge-kf-idoc-st.csv')
-            </code>
-            </pre>
-        </div>
-    </div>
-</div>
 
 
 {% endblock %}
