@@ -19,6 +19,7 @@ from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.views.static import serve
 from django.conf import settings
+from django.views.defaults import permission_denied
 
 # added app views:
 from riveranalyst import views as river_views

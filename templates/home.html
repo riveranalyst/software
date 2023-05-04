@@ -9,11 +9,14 @@
 
             <h2>Welcome</h2>
             <p>River Analyst is a database management tool and repository for leveraging hydro-environmental analyses of
-				exponentially-growing river data.
+				exponentially-growing, dataype diverse river data. To-date investigations of our field team resulted in an unprecedented
+				open-source river database that can be queried and visualized for free (<a href="riveranalyst/query">Query</a> and <a href="riveranalyst/analysis">Analysis</a> tabs).
             </p>
             <p>
-            	Only authorized researchers are allowed to modify (Admin tab) the database.
-				Credentials can be granted by our team in the spirit of research collaboration.
+				Access to the data upload feature (<a href="riveranalyst/modify">Upload</a> tab) is restricted to authorized users only.
+				User credentials can be obtained through our team to enable research collaboration.
+				To request access, please contact us via the email addresses listed on the footer of
+				this page.
 			</p>
 
 <!--			<p><a href="mailto:beatriz.negreiros@iws.uni-stuttgart.de"><button class="btn btn-primary" type="submit">Get in touch</button></a></p>-->
@@ -68,20 +71,28 @@
 <div class="row">
     <div class="col-md">
         <div class="card card-body">
-            <h2>Examples of measuring methods</h2>
-				<p><h4>MultiPAC</h4></p>
-					<p>MultiPAC (<a href="https://onlinelibrary.wiley.com/doi/10.1002/rra.4145">Negreiros et al., 2023</a>; <a href="https://henry.baw.de/bitstream/20.500.11970/107414/1/276_Mitteilungen_UniStuttgart_Seitz.pdf">Seitz, 2020</a>) is a multi-parameter approach to assess riverbed clogging and vertical hyporheic connectivity, which consists of
-						measuring multiple riverbed physico-chemical parameters, namely riverbed:
-						<ul>
-							<li>grain size characteristics </li>
-							<li>porosity</li>
-							<li>interstitial dissolved oxygen (IDO)</li>
-							<li>hydraulic conductivity (kf) </li>
-						</ul>
-					The grain size and riverbed porosity are derived from freeze cores and represent bulk parameter
-			values for a given xy measurement point. The interstitial dissolved oxygen (IDO) and hydraulic conductivity
-			(kf) are measured as vertical profiles along the riverbed depth and thus enable to locate depths layers with
-			low hyporheic habitat quality.</p>
+            <h2>Description of measuring methods</h2>
+			<p><h4> Surface and subsurface sediment sampling</h4></p>
+				<p>Sediment sampling involve collecting sediments with the help of shovels, for instance, and bringing them to the lab for
+					drying (conventionally at 105 °C for 24 h) and subsequent dry sieving with sieves according to the <a href="https://www.journals.uchicago.edu/doi/epdf/10.1086/622910">Wentworth (1922)</a> scale.
+					Sieving analyses of surface and subsurface samples from the overlayer and underlayer, respectively,
+					enable to derive several sedimentological parameters that characterize the substrate. Another method for
+					subsurface sampling is the freeze core method <a href="https://www.sciencedirect.com/science/article/pii/0037073881900099">(Carling & Reader, 1981)</a>, which involves pulling out frozen sediment samples from the riverbed with a tripod.
+				</p>
+			<p><h4>MultiPAC for substrate assessment</h4></p>
+				<p>MultiPAC (<a href="https://onlinelibrary.wiley.com/doi/10.1002/rra.4145">Negreiros et al., 2023</a>; <a href="https://henry.baw.de/bitstream/20.500.11970/107414/1/276_Mitteilungen_UniStuttgart_Seitz.pdf">Seitz, 2020</a>) is a multi-parameter approach to assess riverbed clogging and vertical hyporheic connectivity, which consists of
+					measuring multiple riverbed physico-chemical parameters, namely riverbed:
+					<ul>
+						<li>grain size characteristics </li>
+						<li>porosity</li>
+						<li>interstitial dissolved oxygen (IDO)</li>
+						<li>hydraulic conductivity (kf) </li>
+					</ul>
+				The grain size and riverbed porosity are derived from freeze cores and represent bulk parameter
+		values for a given xy measurement point. The interstitial dissolved oxygen (IDO) and hydraulic conductivity
+		(kf) are measured as vertical profiles along the riverbed depth and thus enable to locate depths layers with
+		low hyporheic habitat quality.
+			</p>
 
 			<div class="row text-center">
 				<div class="col-md"><img src="{% static 'images/slurp-pic.jpg' %}" alt="Slurp" width="500"><p>Measuring setup for the hydraulic conductivity (kf)</p></div>
@@ -89,16 +100,22 @@
 				<div class="col-md"><img src="{% static 'images/fieldwork.jpg' %}" alt="Fieldwork" width="520"><p>Measuring setup for the hydraulic conductivity (left) freeze core method (right)</p></div>
 			</div>
 
-			<p><h4> FlowTracker2</h4></p>
+			<p><h4>In-situ flow velocity measurements</h4></p>
 
-				<p>The FlowTracker2 is an ADV (Acoustic Doppler Velocimeter) measurement device which enables to determine
-					multi-dimensional flow velocity vectors (x, y, and z). This data is crucial for the validation of hydrodynamic numerical models. Additional hydrodynamic data, such as turbulent kinetic
-					energy (TKE), can be derived from measured temporal velocity fluctuations to investigate morphological features for habitat enhancement.
-					</p>
+				<p>Acoustic Doppler Velocimeter (ADV) devices (e.g., Flowtracker2, SonTek) enables to determine
+					multi-dimensional flow velocity vectors (x, y, and z) of surface flow. This data is crucial for the
+					validation of hydrodynamic numerical models. Additional hydrodynamic data, such as turbulent kinetic
+					energy (TKE), can be derived from measured temporal velocity fluctuations to investigate morphological
+					features for habitat enhancement.
+				</p>
+				<p>The FlowTracker2 uses acoustic Doppler technology to measure velocity at multiple points in a water column.
+					The device consists of a handheld unit that houses the electronics and transducers, and a set of probes
+					that are inserted into the water to take velocity measurements. The device can measure velocity in both
+					shallow and deep water, and is suitable for a range of applications, in particular river or stream gauging.
 
-			<p><h4> Surface and subsurface sediment sampling</h4></p>
-				<p>Sieving analyses of surface and subsurface samples from the overlayer and underlayer, respectively,
-					enable toderive several sedimentological parameters that characterize the substrate.</p>
+				</p>
+
+
 
 
 <!--			<p><a href="mailto:beatriz.negreiros@iws.uni-stuttgart.de"><button class="btn btn-primary" type="submit">Get in touch</button></a></p>-->
@@ -113,7 +130,6 @@
 <div class="row">
     <div class="col-md">
         <div class="card card-body">
-
             <p><h2>Selected publications</h2></p>
             <p class="link"><a href="https://onlinelibrary.wiley.com/doi/10.1002/rra.4145"> Negreiros, B., Aybar Galdos, A., Seitz, L., Noack, M., Schwindt, S., Wieprecht, S., & Haun, S. (2023) A multi-parameter approach to quantify riverbed clogging and vertical hyporheic connectivity. River Research and Applications. doi: 10.1002/rra.4145 </a></p>
 			<p class="link"><a href="https://www.research-collection.ethz.ch/handle/20.500.11850/513098"> Kunz, M., Negreiros, B., Schwindt, S., Haun, S., Noack, M., and Wieprecht, S. (2021) Inn-ovative morphological restoration efforts. International Symposium on Bedload Management. doi: 10.3929/ethz-b-000513098 </a></p>
