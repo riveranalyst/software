@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load plotly_dash %}
-
-<div class="{% plotly_class name='SedimentAnalyst' %}" style="min-height: 100%; min-width: 95%">
-    {% plotly_app name='SedimentAnalyst' ratio=1 %}
+<h1>Grain size analysis</h1>
+<p>Surface and subsurface sedimentological data stemming from grain size analysis of sieved fractions are inputs for the
+    River Analyst database. Thus , River Analyst features a web app for grain size analysis, Sediment Analyst,
+    to produce quick, interactive, and visual sedimentological analyses, and to output summary statistics in form of
+    CSV tables, which can be used to populate the River Analyst database. </p>
+<div class="{% plotly_class name='SedimentAnalyst' %} card" style="min-height: 50%; min-width: 95%">
+    {% plotly_app name='SedimentAnalyst' ratio=0.9 %}
 </div>
 
 {% endblock %}

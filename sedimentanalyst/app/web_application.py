@@ -3,29 +3,25 @@ from sedimentanalyst.app.utils import *
 from sedimentanalyst.app.accessories import *
 from sedimentanalyst.app.appconfig import *
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = [
+    'https://codepen.io/chriddyp/pen/bWLwgP.css',
+                        'static/main.css'
+                        ]
 
 # Instantiates object app of the class Dash
 app = DjangoDash('SedimentAnalyst',
                  external_stylesheets=external_stylesheets,
                 suppress_callback_exceptions=True)
-# server = app.server  # method to serve the app, allows heroku to recognize the server
 
 # Instantiates to get accessories of the app from the class Accessories (accessories.py)
 acc = Accessories()
-
-# save two examples of the tutorial to run as example inside the app
-# df_example = pd.read_csv()
 
 
 # App layout
 app.layout = html.Div(
     children=[  # this code section taken from Dash docs https://dash.plotly.com/dash-core-components/upload
-        # html.Img(src='https://raw.githubusercontent.com/federicascolari8/PythonProject_Other/main/sedimentanalyst/app'
-        #              '/assets/Ering_Germany.jpg',
-        #          style=acc.img_style),  # Image
         acc.intro_text,
-        html.Button("load example", id="btn_run_example", style={"background-color": "#4CAF50"}),
+        html.Button("load example", id="btn_run_example", style={"background-color": "#1EAEDB"}),
         html.Br(),
         acc.inputs_text,
         html.Br(),
@@ -54,7 +50,7 @@ app.layout = html.Div(
         dcc.Store(id='store_manual_inputs'),
 
         # [fires up Callback 3...]
-        html.Button('Run analysis', id='btn_run', style={"background-color": "#4CAF50"}),
+        html.Button('Run analysis', id='btn_run', style={"background-color": "#1EAEDB"}),
         html.Br(),
 
         # store global dataframe
@@ -170,7 +166,7 @@ def parse_and_analyse(list_of_contents, click_run,
     # return summary statistics
     data2 = df_global.to_dict('split')
     children.append(html.Div([
-        html.Button('Download Summary Statistics', id='btn_download', style={"background-color": "#4CAF50"}),
+        html.Button('Download Summary Statistics', id='btn_download', style={"background-color": "#1EAEDB"}),
         dcc.Download(id='download-dataframe-csv'),
     ])
     )
