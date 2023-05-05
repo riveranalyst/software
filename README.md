@@ -1,4 +1,4 @@
-# Intro
+# River Analyst User Manual
 River Analyst is a database application framework built with the [Django](https://www.djangoproject.com/) web application framework (Python) to leverage fast river ecosystem analyses. 
 
 # Installation
