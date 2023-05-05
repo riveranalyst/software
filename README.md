@@ -49,7 +49,7 @@ River Analyst is a database application framework built with the [Django](https:
 # Usage
 ## Database architecture
 
-![Database architecture](https://github.com/beatriznegreiros/river-analyst/blob/master/static/images/river_analyst_DBMS%20ER%20diagram%20(UML%20notation).png)
+![Database architecture](\static\images\river_analyst_DBMS ER diagram (UML notation).png)
 
 
 ## Running the app
