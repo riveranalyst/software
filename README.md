@@ -4,10 +4,12 @@ River Analyst is a database application framework built with the [Django](https:
 # Installation
 ### Linux
 - Clone this repository: 
+
     ```console 
     git clone https://github.com/beatriznegreiros/river-analyst.git
     ```
-- Make sure to have pip3 and [virtualenv](https://pypi.org/project/virtualenv/) installed by: 
+- Make sure to have pip3 and [virtualenv](https://pypi.org/project/virtualenv/) installed by:
+
     ```console
     sudo apt update
     sudo apt install python3-pip
