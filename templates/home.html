@@ -1,6 +1,20 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
+<style>
+      .header-icon {
+        display: inline-flex; /* display icon and text inline */
+        align-items: center; /* center vertically */
+        gap: 10px; /* add some space between icon and text */
+      }
+</style>
+
+{% endblock%}
+
+
 {% block content %}
 
 <div class="row">
@@ -8,7 +22,7 @@
         <div class="card card-body">
 
             <h2>Welcome</h2>
-            <p>River Analyst is a database management tool and repository for leveraging hydro-environmental analyses of
+            <p>River Analyst is a web app featuring a novel database approach for leveraging hydro-environmental analyses of
 				exponentially-growing, dataype diverse river data. To-date investigations of our field team resulted in an unprecedented
 				open-source river database that can be queried and visualized for free (<a href="riveranalyst/query">Query</a> and <a href="riveranalyst/analysis">Analysis</a> tabs).
             </p>
@@ -68,6 +82,23 @@
 	</div>
 
 </div>
+<br>
+<div class="row">
+	<div class="col-md">
+		<div class="header-icon">
+			<i class="fas fa-thin fa-lightbulb fa-3x"></i><h4>Use River Analyst locally</h4>
+			<div>
+					<p>
+					River Analyst is also integrated into an open-source framework that caters to organizations seeking to maintain their databases locally. This framework offers greater flexibility and control over data management.
+					</p>
+					<p>
+					Visit <a href="https://riveranalyst.github.io/">https://riveranalyst.github.io/</a> for detailed instructions and get started.
+					</p>
+			</div>
+		</div>
+	</div>
+</div>
+<br>
 <div class="row">
     <div class="col-md">
         <div class="card card-body">
