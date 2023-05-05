@@ -1,7 +1,7 @@
 # River Analyst User Manual
 River Analyst is a database application framework built with the [Django](https://www.djangoproject.com/) web application framework (Python) to leverage fast river ecosystem analyses. 
 
-# Installation
+## Installation
 ### Linux
 - Clone this repository: 
 
@@ -16,56 +16,67 @@ River Analyst is a database application framework built with the [Django](https:
     pip3 install virtualenv
     ```
 - Create new virtual environment:
+
     ```console
     python3.9 -m venv /path/to/new/virtual/environment
     ```
 - Activate new virtual environment:
+
     ```console
     source /path/to/new/virtual/environment/bin/activate
     ```
 - Install dependencies:
+
     ```console
     pip3 install -r requirements.txt
     ```
   
 ### Windows
 - Clone this repository: 
+
     ```console
     git clone https://github.com/beatriznegreiros/river-analyst.git
     ```
 - Make sure to have [Anaconda](https://docs.anaconda.com/anaconda/install/index.html) installed.
 - Create conda environment: 
+
     ```console
     conda create --name [env_name] python=3.9
     ```
 - Activate conda environment:
+
     ```console
     conda activate [env_name]
     ```
 - Install dependencies:
+
     ```console
     pip3 install -r requirements.txt 
     ```
 
     
-# Usage
-## Database architecture
+## Usage
+### Database architecture
 
 ![Database architecture](static/images/db.png)
 
 
-## Running the app
+### Running the app
 - Go to repository directory
+
     ``cd path/to/river-analyst``
 - Make migrations (optional)
+
     ``python3 manage.py migrate``
 Obs.: Migrations are in principle python commands wrapped around SQL passed from the Django framework to the sql database.
 - Run the server locally
+
     ``python3 manage.py runserver``
 - Create superuser for having full admin rights over the app:
+
     ``python3 manage.py createsuperuser``
   
-# Initializing a new database with template CSVs
+## Initializing a new database with template CSVs
 - Add data to the csv templates under the path ``riveranalyst/river-analyst/media/``
 - ``cd`` to the ``riveranalyst/utils`` directory
     ``cd riveranalyst/utils``
@@ -81,8 +92,9 @@ Obs.: Migrations are in principle python commands wrapped around SQL passed from
             - ``python fill_do_tab.py`` for the **IDO** (Interstitial Dissolved Oxygen) data model
             - ``python fill_hydraulics_tab.py`` for the **Hydraulics** data model
 
-# Django cheat sheet (interacting with the Database via Python)
+## Django cheat sheet (interacting with the Database via Python)
 You can create a new Django object by:
+
 ```python
 obj = ModelName(field_name=value)
 obj.save()
@@ -91,8 +103,12 @@ obj.save()
 Querying the database is very simple:
 ```python
 ModelName.objects.all() # get all objects
-ModelName.objects.filter(field_name=value) # get objects with field_name = value
-ModelName.objects.get(field_name=value) # get a single object with field_name = value
+
+# get objects with field_name = value
+ModelName.objects.filter(field_name=value) 
+
+# get a single object with field_name = value
+ModelName.objects.get(field_name=value) 
 ```
 
 To create a new Django model, you need to define a class in one of your Django app's ``models.py`` file that inherits from Django's built-in models.Model class.
