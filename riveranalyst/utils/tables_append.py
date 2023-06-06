@@ -1,16 +1,12 @@
-from . import fill_subsurf_tab, \
-    fill_stations_tab, \
-    fill_do_tab, \
-    fill_surf_tab, \
-    fill_kf_tab, \
-    fill_hydraulics_tab
+from riveranalyst.utils.fill_funcs import *
 
-execute_fill_function = {'Stations': fill_stations_tab.fill_st_model,
-                         'SubsurfSed': fill_subsurf_tab.fill_subsurf_model,
-                         'SurfSed': fill_surf_tab.fill_surf_model,
-                         'IDO': fill_do_tab.fill_do_model,
-                         'kf': fill_kf_tab.fill_kf_model,
-                         'Hydraulics': fill_hydraulics_tab.fill_hydraulics_model,
+
+execute_fill_function = {'Stations': fill_st_model,
+                         'SubsurfSed': fill_subsurf_model,
+                         'SurfSed': fill_surf_model,
+                         'IDO': fill_do_model,
+                         'kf': fill_kf_model,
+                         'Hydraulics': fill_hydraulics_model,
                          }
 
 
