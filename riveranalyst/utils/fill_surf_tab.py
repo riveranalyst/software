@@ -8,8 +8,6 @@ import pandas as pd
 import riveranalyst.models as models
 import numpy as np
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # fill database with the table just read preivously
 def fill_surf_model(df):
@@ -86,6 +84,9 @@ if __name__ == '__main__':
     # Reset the data model SurfaceSed
     models.SurfaceSed.objects.all().delete()
 
+    # necessary to find file within the project dir
+    BASE_DIR = Path(__file__).resolve().parent.parent
+
     # filling initial data
-    subsurf_df = pd.read_excel(BASE_DIR / 'media/db-baseline-Surf.xlsx', engine='openpyxl')
-    fill_surf_model(subsurf_df)
+    surf_df = pd.read_excel(BASE_DIR / 'media/db-baseline-surf.xlsx', engine='openpyxl')
+    fill_surf_model(surf_df)

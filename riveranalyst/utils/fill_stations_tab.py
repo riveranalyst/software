@@ -9,8 +9,6 @@ import riveranalyst.models as models
 from pyproj import transform, CRS, Proj, exceptions
 import numpy as np
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # fill database with the table just read preivously
 def fill_st_model(df):
@@ -69,6 +67,8 @@ if __name__ == '__main__':
     # filling initial data
     # column_dtypes = {'imbrication': "boolean",
     #                  'algae_cover': "boolean"}
+    # necessary to find file within the project dir
+    BASE_DIR = Path(__file__).resolve().parent.parent
 
     # Reset the data model MeasStations
     models.MeasStation.objects.all().delete()

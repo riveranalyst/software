@@ -8,9 +8,6 @@ import pandas as pd
 import riveranalyst.models as models
 import numpy as np
 
-# necessary to find file within the project dir
-BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # fill database with the table template
 def fill_do_model(df):
@@ -51,6 +48,9 @@ def fill_do_model(df):
 if __name__ == '__main__':
     # Reset the data model IDO
     models.IDO.objects.all().delete()
+
+    # necessary to find file within the project dir
+    BASE_DIR = Path(__file__).resolve().parent.parent
 
     idoc_df = pd.read_excel(BASE_DIR / 'media/db-baseline-idoc.xlsx', engine='openpyxl')
     fill_do_model(idoc_df)

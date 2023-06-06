@@ -8,8 +8,6 @@ import pandas as pd
 import riveranalyst.models as models
 import numpy as np
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # fill database with the table just read preivously
 def fill_subsurf_model(df):
@@ -86,6 +84,9 @@ def fill_subsurf_model(df):
 if __name__ == '__main__':
     # Reset the data model SubsurfaceSed
     models.SubsurfaceSed.objects.all().delete()
+
+    # necessary to find file within the project dir
+    BASE_DIR = Path(__file__).resolve().parent.parent
 
     # filling initial data
     freezecore_df = pd.read_excel(BASE_DIR / 'media/db-baseline-subsurf.xlsx', engine='openpyxl')

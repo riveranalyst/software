@@ -75,10 +75,10 @@ def get_corr_fig():
 
 def get_PCA(df):
     # Preparing df for dimensinality reduction
-    features = ['idoc_mgl', 'wl_m', 'kf_ms', 'river',
-                'n_wooster', 'd90', 'so', 'dm',
+    features = ['idoc_mgl', 'wl_m', 'slurp_rate_avg_mls', 'river',
+                'd84', 'dm', 'geom_std_grain',
                 'percent_finer_2mm',
-                # 'percent_finer_0_063mm'
+                'percent_finer_0_5mm',
                 'name'
                 ]
 
@@ -137,11 +137,11 @@ def get_PCA(df):
                           labels={'0': 'PC 1', '1': 'PC 2'},
                           title='Loadings',
                           color_discrete_sequence=px.colors.qualitative.Bold, )
-    feat_annotation = ['IDOC', 'Water level', 'kf', 'River',
-                        'n', 'd90', 'S0', 'dm',
+    feat_annotation = ['IDOC', 'Water depth', 'Slurping rate', 'River',
+                        'd84', 'dm', 'sigma_g',
                         'FSF < 2 mm',
-                       # 'FSF < 0.063 mm'
-                       ]
+                        'FSF < 0.5 mm'
+                ]
     annotate_dict = {features[i]: feat_annotation[i] for i in range(len(feat_annotation))}
     for i, feature in enumerate(df4pca_final.columns):
         fig_load.add_annotation(
