@@ -26,6 +26,7 @@ func_list = [fill_st_model,
 
 start_time = time.time()
 
+
 for model_name, table_path, fill_func in zip(model_names, table_paths, func_list):
     print('Populating the {} table...'.format(model_name))
     model = apps.get_model(app_label='riveranalyst', model_name=model_name)  # Replace 'your_app_label' with the appropriate app label

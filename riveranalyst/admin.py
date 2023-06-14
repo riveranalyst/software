@@ -18,7 +18,5 @@ admin.site.register(Hydraulics)
 admin.site.register(CollectedData)
 admin.site.register(WaterQual)
 admin.site.register(Biota)
-admin.site.register(MorphFeatures)
-admin.site.register(MorphUnits)
 admin.site.register(Morphology)
 

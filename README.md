@@ -58,8 +58,21 @@ River Analyst is a database application framework built with the [Django](https:
 ## Usage
 ### Database architecture
 
-![Database architecture](static/images/db.png)
+RA database structure is composed of several tables (data models) such as IDO (Interstitial Dissolved Oxygen), which is linked to a MeasStation (measurement stations) via a foreign key. The figure below illustrates the database architecture through an Entity-Relationship diagram:
 
+![River Analyst database architecture][d-struc]
+
+[d-struc]: static/images/ra-db-er-diagram.jpg "River Analyst database architecture."
+
+Figure 2 and 3 provide detailed descriptions of the several attributes within each of RA data models described above.
+
+![Database attributes Part 1][att-1]
+
+[att-1]: static/images/db-att-1.jpg "Data model attributes - Part 1."
+
+![Database attributes Part 2][att-2]
+
+[att-2]: static/images/db-att-2.jpg "Data model attributes - Part 2."
 
 ### Running the app
 - Go to repository directory

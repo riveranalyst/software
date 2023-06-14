@@ -28,7 +28,6 @@ def get_corr_fig():
 
     # Average along the depth the IDO and Kf depth-profile value
     df_avg_ido_kf = df_global.groupby('meas_station', as_index=False).mean()
-    # df_avg_ido_kf.to_csv('df_avg_ido_kf.csv')
 
     # merge the depth-explicit dataframe with the stations table
     df_global = dfs[-1].merge(df_global, left_on='name', right_on='meas_station')
@@ -37,8 +36,6 @@ def get_corr_fig():
     df_global_avg = dfs[-1].merge(df_avg_ido_kf, left_on='name', right_on='meas_station')
 
     for i, df in enumerate(dfs[0:-3]):
-        # df2include = df[[c for c in list(df.columns) if c != 'meas_station']]
-        # df2include = df2include.add_suffix('_{}'.format(suffixes[models[i+1]]))
         df_global = df_global.merge(df, on='meas_station',
                                     how='outer',
                                     suffixes=('', '_{}'.format(suffixes[models[i]])))
@@ -57,19 +54,7 @@ def get_corr_fig():
                             'idoc_mgl', 'idoc_sat', 'temp_c']
 
     # Correlation matrix just between bulk parameters
-    # df_final_seds = df_final.loc[:, ~df_final.columns.isin(depth_explicit_feats)]
-    # df_final_seds = df_final_seds.drop_duplicates()
-    # df_final_seds.to_csv('drop_duplicates_for_corr_seds.csv')
-    # df_corr_seds = df_final_seds.corr(method='spearman').round(1)
-    # # mask to matrix
-    # mask = np.zeros_like(df_corr_seds, dtype=bool)
-    # mask[np.triu_indices_from(mask)] = True
-    # viz
-    # df_corr_seds_viz = df_corr_seds.mask(mask).dropna(how='all').dropna('columns', how='all')
-
     fig = px.imshow(df_corr.loc[depth_explicit_feats, :], text_auto=True, aspect='auto')
-    # fig2 = px.imshow(df_corr_seds_viz, text_auto=True, aspect='auto')
-    # df_global_avg.to_csv('df_global_avg.csv')
     return fig, df_global_avg
 
 
@@ -83,14 +68,14 @@ def get_PCA(df):
                 ]
 
     df4pca = df[features].dropna()
-    # df4pca.to_csv('pca-table.csv')
+
     df4pca_prescaling = df4pca.drop(['river', 'name'], axis=1)
 
     # Scaling with s-score apporach
     df4pca_final = df4pca_prescaling.apply(lambda x: (x - x.mean()) / x.std(), axis=0)
 
     # Build PCA
-    pca = PCA(n_components=3)
+    pca = PCA(n_components=4)
     components = pca.fit_transform(df4pca_final)
     variance = pca.explained_variance_ratio_
     cumulative_variance = np.cumsum(variance)
@@ -106,7 +91,7 @@ def get_PCA(df):
     fig2d = px.scatter_matrix(
         components,
         labels=labels,
-        dimensions=range(3),
+        dimensions=range(4),
         color=df4pca["river"],
         symbol=df4pca['river'],
         title=f'Total Explained Variance: {total_var2d:.2f}%',
@@ -115,6 +100,7 @@ def get_PCA(df):
         hover_name=df4pca['name'],
     )
     fig2d.update_traces(diagonal_visible=False)
+    # Set the desired width, height, and scale values
     pio.write_image(fig2d, 'pca_matrix.png', scale=4)
 
     # Plot data 3-dimensionaly in the new coordinate system of PCs

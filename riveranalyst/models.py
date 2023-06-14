@@ -353,48 +353,12 @@ class Biota(models.Model):
     # many-to-one relationship (many Hydraulics to one MeasStation)
     meas_station = models.OneToOneField(MeasStation, on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
-    count_macrozoobenthos = models.IntegerField(null=True, blank=True, verbose_name='Macrozoobenthos count')
+    macrozoobenthos_species = models.CharField(max_length=1000, blank=True, null=True)
+    macrozoobenthos_count = models.CharField(null=True, max_length=1000, blank=True, verbose_name='Macrozoobenthos count')
     planting_species = models.CharField(max_length=200, blank=True, null=True)
-    count_fish_redds = models.IntegerField(null=True, blank=True, verbose_name='Fish redds count')
-
-
-class MorphFeatures(models.Model):
-    """
-    Stores types of morphological features linked with the morphological characteristics
-    (:model:`riveranalyst.Morphology`) of a
-    measurement station (:model:`riveranalyst.MeasStation`).
-    """
-    feature = models.CharField(max_length=200, unique=True)
-
-    def __str__(self):
-        return self.feature
-
-
-class MorphUnits(models.Model):
-    """
-    Stores types of morphological units linked with the morphological characteristics
-    (:model:`riveranalyst.Morphology`) of a
-    measurement station (:model:`riveranalyst.MeasStation`).
-    """
-    # Examples of morphological units found in the Lower Yuba River (California, USA) according
-    # to Pasternack & Wrick (2014)
-    # UNITS = (
-    #     ('Pool', ''),
-    #     ('Riffle', ''),
-    #     ('Run', ''),
-    #     ('Chute', ''),
-    #     ('Fast glide', ''),
-    #     ('Slow glide', ''),
-    #     ('Slackwater', ''),
-    #     ('Riffle transition', ''),
-    # )
-
-    unit = models.CharField(max_length=200, unique=True,
-                            # choices=UNITS
-                            )
-
-    def __str__(self):
-        return self.unit
+    fish_species = models.CharField(max_length=200, blank=True, null=True)
+    fish_count = models.CharField(null=True, blank=True, max_length=1000, verbose_name='Fish count')
+    fish_redd_count = models.CharField(null=True, blank=True, max_length=1000, verbose_name='Fish redds count')
 
 
 class Morphology(models.Model):
@@ -406,11 +370,7 @@ class Morphology(models.Model):
     # one-to-one relationship (one Morphology to one MeasStation)
     meas_station = models.OneToOneField(MeasStation, on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
-    morphological_features = models.ForeignKey(MorphFeatures,
-                                               on_delete=models.SET_NULL,
-                                               null=True)
-    morphological_unit = models.ForeignKey(MorphUnits,
-                                           on_delete=models.SET_NULL,
-                                           null=True)
+    morph_features = models.CharField(max_length=200, blank=True, null=True)
+    morph_unit = models.CharField(max_length=200, blank=True, null=True)
 
 
