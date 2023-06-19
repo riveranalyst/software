@@ -69,11 +69,11 @@ def query(request):
 
     # Get filter if the user selected any from the listed in filters.py
     # subSurfFilter = SubSurfFilter(request.GET, queryset=subsurf_objects)
-    PositionFilter = PositionFilter(request.GET, queryset=position_objects)
+    posFilter = PositionFilter(request.GET, queryset=position_objects)
 
     # Apply filter, remaking the object
     # subsurf_objects = subSurfFilter.qs
-    position_objects = PositionFilter.qs
+    position_objects = posFilter.qs
     subsurf_objects = subsurf_objects.filter(meas_position__name__in=position_objects.values('name'))
 
     idoc_objects = idoc_objects.filter(meas_position__name__in=position_objects.values('name'))
@@ -156,7 +156,7 @@ def query(request):
 
                # filters
                # 'subSurfFilter': subSurfFilter,
-               'PositionFilter': PositionFilter,
+               'posFilter': posFilter,
                # 'idocFilter': idocFilter,
 
                # tables
