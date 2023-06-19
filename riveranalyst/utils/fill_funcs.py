@@ -11,7 +11,7 @@ import numpy as np
 
 
 # fill database with the table just read preivously
-def fill_st_model(df):
+def fill_measpositions_model(df):
     df = df.replace({np.nan: None})
     outproj_str = 'epsg:4326'
     proj_4326 = CRS.from_string(outproj_str)
@@ -33,15 +33,14 @@ def fill_st_model(df):
                 x_epsg4326, y_epsg4326 = transform(
                     CRS.from_string(row.coord_system), proj_4326, row.x, row.y)
         except (exceptions.CRSError, TypeError) as e:
-            print(row.meas_station)
+            print(row.meas_position)
             print(e)
             y_epsg4326 = np.nan
             x_epsg4326 = np.nan
             pass
         # coll_data, created = models.CollectedData.objects.get_or_create(collected_data=row.collected_data)
-        # print(row.meas_station)
-        st = models.MeasStation.objects.create(
-            name=row.meas_station.strip(),
+        st = models.MeasPosition.objects.create(
+            name=row.meas_position.strip(),
             river=ri,
             survey=ca,
             date=row.date,  # 'date of measureemnt' is the verbose name (optional arg)
@@ -69,15 +68,14 @@ def fill_do_model(df):
     df = df.replace({np.nan: None})
     for index, row in df.iterrows():
         # get each station object from Station Class
-        st = models.MeasStation.objects.get(
-            name=row.meas_station.strip(),
+        st = models.MeasPosition.objects.get(
+            name=row.meas_position.strip(),
         )
 
         # Fill information about water levels if it wasn't available before
         if st.wl_m is None:
             st.wl_m = row.wl_m
         st.save()
-        # print(row.meas_station)
         # get or create the data class and add it to the stations information
         data_station = models.CollectedData.objects
         data_type, created = data_station.get_or_create(collected_data='IDO')
@@ -87,7 +85,7 @@ def fill_do_model(df):
 
         # Create new idoc observation (row) from the input table
         idoc, created = models.IDO.objects.get_or_create(
-            meas_station=st,
+            meas_position=st,
             sample_id=row.sample_id,
             dp_position=row.dp_position,
             sediment_depth_m=row.sediment_depth_m,
@@ -105,8 +103,8 @@ def fill_kf_model(df):
     df = df.replace({np.nan: None})
     for index, row in df.iterrows():
         # get each station object from Station Class
-        st = models.MeasStation.objects.get(
-            name=row.meas_station.strip(),
+        st = models.MeasPosition.objects.get(
+            name=row.meas_position.strip(),
         )
 
         # Fill information about water levels if it wasn't available before
@@ -123,7 +121,7 @@ def fill_kf_model(df):
 
         # Create new idoc observation (row) from the input table
         kf, created = models.Kf.objects.get_or_create(
-            meas_station=st,
+            meas_position=st,
             sample_id=row.sample_id,
             dp_position=row.dp_position,
             sediment_depth_m=row.sediment_depth_m,
@@ -139,10 +137,9 @@ def fill_kf_model(df):
 def fill_subsurf_model(df):
     df = df.replace({np.nan: None})
     for index, row in df.iterrows():
-        # print(row.meas_station)
         # get each station object from Station Class
-        st = models.MeasStation.objects.get(
-            name=row.meas_station.strip(),
+        st = models.MeasPosition.objects.get(
+            name=row.meas_position.strip(),
         )
 
         # get the sampling technique from the Sampling Class
@@ -159,7 +156,7 @@ def fill_subsurf_model(df):
 
         # Create new sediment sample observation (row) from the input table
         new_freezecore, created = models.SubsurfaceSed.objects.get_or_create(
-            meas_station=st,
+            meas_position=st,
             sample_id=row.sample_id,
             sampling_method=samp_method,
             operator_name=row.operator_name,
@@ -211,10 +208,9 @@ def fill_subsurf_model(df):
 def fill_surf_model(df):
     df = df.replace({np.nan: None})
     for index, row in df.iterrows():
-        # print(row.meas_station)
         # get each station object from Station Class
-        st = models.MeasStation.objects.get(
-            name=row.meas_station.strip(),
+        st = models.MeasPosition.objects.get(
+            name=row.meas_position.strip(),
         )
 
         # get the sampling technique from the Sampling Class
@@ -231,7 +227,7 @@ def fill_surf_model(df):
 
         # Create new sediment sample observation (row) from the input table
         new_sample, created = models.SurfaceSed.objects.get_or_create(
-            meas_station=st,
+            meas_position=st,
             sample_id=row.sample_id,
             sampling_method=samp_method,
             operator_name=row.operator_name,
@@ -283,8 +279,8 @@ def fill_hydraulics_model(df):
     df = df.replace({np.nan: None})
     for index, row in df.iterrows():
         # get each station object from Station Class
-        st = models.MeasStation.objects.get(
-            name=row.meas_station.strip(),
+        st = models.MeasPosition.objects.get(
+            name=row.meas_position.strip(),
         )
 
         # get or create the data class and add it to the stations information
@@ -296,7 +292,7 @@ def fill_hydraulics_model(df):
 
         # Create new idoc observation (row) from the input table
         hydraulics, created = models.Hydraulics.objects.get_or_create(
-            meas_station=st,
+            meas_position=st,
             sample_id=row.sample_id,
             v_x_ms=row.v_x_ms,
             v_y_ms=row.v_y_ms,

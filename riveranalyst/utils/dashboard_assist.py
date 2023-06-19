@@ -12,7 +12,7 @@ def get_corr_fig():
     :return: Plotly Figure, Dataframe
     """
     # get object from data models
-    models = [Hydraulics, SubsurfaceSed, IDO, Kf, MeasStation]
+    models = [Hydraulics, SubsurfaceSed, IDO, Kf, MeasPosition]
     suffixes = {SubsurfaceSed: 'subsurf', Hydraulics: 'hyd'}
     objects_list = []
     for m in models:
@@ -23,23 +23,23 @@ def get_corr_fig():
     dfs = vectorized_readdfs(objects_list)
 
     # merge IDO table with Kf table
-    df_global = dfs[-3].merge(dfs[-2], on=['meas_station', 'sample_id', 'dp_position'], how='outer')
+    df_global = dfs[-3].merge(dfs[-2], on=['meas_position', 'sample_id', 'dp_position'], how='outer')
     df_global = df_global.drop_duplicates(subset=['sample_id', 'dp_position'])
 
     # Average along the depth the IDO and Kf depth-profile value
-    df_avg_ido_kf = df_global.groupby('meas_station', as_index=False).mean()
+    df_avg_ido_kf = df_global.groupby('meas_position', as_index=False).mean()
 
-    # merge the depth-explicit dataframe with the stations table
-    df_global = dfs[-1].merge(df_global, left_on='name', right_on='meas_station')
+    # merge the depth-explicit dataframe with the positions table
+    df_global = dfs[-1].merge(df_global, left_on='name', right_on='meas_position')
 
-    # merge the average dataframe with the stations table
-    df_global_avg = dfs[-1].merge(df_avg_ido_kf, left_on='name', right_on='meas_station')
+    # merge the average dataframe with the positions table
+    df_global_avg = dfs[-1].merge(df_avg_ido_kf, left_on='name', right_on='meas_position')
 
     for i, df in enumerate(dfs[0:-3]):
-        df_global = df_global.merge(df, on='meas_station',
+        df_global = df_global.merge(df, on='meas_position',
                                     how='outer',
                                     suffixes=('', '_{}'.format(suffixes[models[i]])))
-        df_global_avg = df_global_avg.merge(df, on='meas_station',
+        df_global_avg = df_global_avg.merge(df, on='meas_position',
                                             how='outer',
                                             suffixes=('', '_{}'.format(suffixes[models[i]])))
 

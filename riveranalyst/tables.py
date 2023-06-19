@@ -127,17 +127,17 @@ class KfTable(tables.Table):
         # template_name = "django_tables2/bootstrap-responsive.html"
 
 
-class StationTable(tables.Table):
+class PositionTable(tables.Table):
     wl_m = NumberColumn()
     H_m = NumberColumn()
     data = tables.Column(empty_values=())
 
     class Meta:
-        model = MeasStation
+        model = MeasPosition
         template_name = "django_tables2/bootstrap-responsive.html"
         sequence = ('id', 'name', 'data', '...')
 
     def render_data(self, record):
         return format_html('<a href="{}"><button class="btn btn-primary" type="submit">View'
                            '</button></a>',
-                           reverse('riveranalyst:station_data', kwargs={'station_id': record.id}))
+                           reverse('riveranalyst:position_data', kwargs={'position_id': record.id}))

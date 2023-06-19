@@ -9,7 +9,7 @@ import riveranalyst.models as models
 from django_pandas.io import read_frame
 
 
-st_objects = models.MeasStation.objects.all()
+st_objects = models.MeasPosition.objects.all()
 ido_objects = models.IDO.objects.all()
 kf_objects = models.Kf.objects.all()
 

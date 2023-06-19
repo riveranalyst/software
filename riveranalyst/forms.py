@@ -8,7 +8,7 @@ class SubsurfaceForm(forms.ModelForm):
         fields = '__all__'
 
 
-CHOICES = (('Stations', 'Stations Information'),
+CHOICES = (('Measurement positions', 'Measurement positions Information'),
            ('IDO', 'Intragravel Dissolved Oxygen'),
            ('kf', 'Hydraulic Conductivity'),
            ('SurfSed', 'Surface Sediment Sampling'),

@@ -10,7 +10,7 @@ urlpatterns = [
     path('query', views.query, name='query'),
     path('modify', views.modify, name='modify'),
     path('analysis', views.analysis, name='analysis'),
-    path('query/station<int:station_id>', views.station_data, name='station_data'),
+    path('query/position<int:position_id>', views.position_data, name='position_data'),
     path('modify/upload/', views.upload_file, name='modify/upload'),
     path('modify/upload/success_upload/', views.success_upload, name='success_upload'),
     path('accounts/', include("django.contrib.auth.urls")),  # new

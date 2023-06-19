@@ -6,8 +6,8 @@ import time
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-model_names = ['MeasStation', 'IDO', 'Kf', 'SubsurfaceSed', 'SurfaceSed', 'Hydraulics']
-table_paths = [BASE_DIR / 'media/db-baseline-stations.xlsx',
+model_names = ['MeasPosition', 'IDO', 'Kf', 'SubsurfaceSed', 'SurfaceSed', 'Hydraulics']
+table_paths = [BASE_DIR / 'media/db-baseline-positions.xlsx',
                BASE_DIR / 'media/db-baseline-idoc.xlsx',
                BASE_DIR / 'media/db-baseline-kf.xlsx',
                BASE_DIR / 'media/db-baseline-subsurf.xlsx',
@@ -17,7 +17,7 @@ table_paths = [BASE_DIR / 'media/db-baseline-stations.xlsx',
 
 dict = dict(zip(model_names, table_paths))
 
-func_list = [fill_st_model,
+func_list = [fill_measpositions_model,
              fill_do_model,
              fill_kf_model,
              fill_subsurf_model,

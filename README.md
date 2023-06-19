@@ -58,7 +58,7 @@ River Analyst is a database application framework built with the [Django](https:
 ## Usage
 ### Database architecture
 
-RA database structure is composed of several tables (data models) such as IDO (Interstitial Dissolved Oxygen), which is linked to a MeasStation (measurement stations) via a foreign key. The figure below illustrates the database architecture through an Entity-Relationship diagram:
+RA database structure is composed of several tables (data models) such as IDO (Interstitial Dissolved Oxygen), which is linked to a MeasPosition (measurement positions) via a foreign key. The figure below illustrates the database architecture through an Entity-Relationship diagram:
 
 ![River Analyst database architecture][d-struc]
 
@@ -94,11 +94,11 @@ Obs.: Migrations are in principle python commands wrapped around SQL passed from
 - ``cd`` to the ``riveranalyst/utils`` directory
     ``cd riveranalyst/utils``
 - Execute scripts to initialize targeted data models
-    - It is important to begin with populating the **MeasStation** model, which is where all data models connect:
-        - Here, it is crucial that the field ``meas_station`` is unique and contains no typos. This field will be used to generate foreign keys to link data models.
-    ``python fill_stations_tab.py``
+    - It is important to begin with populating the **MeasPosition** model, which is where all data models connect:
+        - Here, it is crucial that the field ``meas_position`` is unique and contains no typos. This field will be used to generate foreign keys to link data models.
+    ``python fill_measpositions_tab.py``
     - Then, any data model can be populated afterwards, for instance:
-        - the field ``meas_station`` needs to match the names given in the MeasStation data model.
+        - the field ``meas_position`` needs to match the names given in the MeasPosition data model.
             - ``python fill_surf_tab.py`` for filling the **SurfaceSed** data model
             - ``python fill_subsurf_tab.py`` for the **SubSurfaceSed** data model
             - ``python fill_kf_tab.py`` for the **Kf** (Riverbed Hydraulic Conductivity) data model

@@ -5,7 +5,7 @@ from .models import *
 # informational tables
 admin.site.register(River)
 admin.site.register(Survey)
-admin.site.register(MeasStation)
+admin.site.register(MeasPosition)
 
 
 # data valued tables

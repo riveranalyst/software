@@ -1,7 +1,7 @@
 from riveranalyst.utils.fill_funcs import *
 
 
-execute_fill_function = {'Stations': fill_st_model,
+execute_fill_function = {'Stations': fill_measpositions_model,
                          'SubsurfSed': fill_subsurf_model,
                          'SurfSed': fill_surf_model,
                          'IDO': fill_do_model,

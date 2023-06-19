@@ -72,19 +72,19 @@ def plot_ido(idocs):
     return fig_idoc
 
 
-def plot_map(df_stations):
-    fig = px.scatter_mapbox(df_stations,
+def plot_map(df_positions):
+    fig = px.scatter_mapbox(df_positions,
                             lat='y_epsg4326',
                             lon='x_epsg4326',
                             hover_name='name',
-                            hover_data=df_stations.columns[2:5],
+                            hover_data=df_positions.columns[2:5],
                             color='name',
                             zoom=10,
                             # size='d50',
                             )
     fig.update_layout(
         mapbox_style="https://api.maptiler.com/maps/hybrid/style.json?key=0Z4EjONT5cOhLOIpZlRQ",
-        legend_title_text='Stations'
+        legend_title_text='Positions'
     )
     fig.update_layout(margin={"r": 10, "t": 10, "l": 10, "b": 10})
     return fig

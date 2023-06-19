@@ -10,7 +10,7 @@ class SubSurfFilter(django_filters.FilterSet):
                     'sample_id': ['contains'],
                     # 'sample_name': ['contains'],
                     # 'site_name': ['contains'],
-                    'meas_station': ['exact'],
+                    'meas_position': ['exact'],
         }
 
 
@@ -21,15 +21,15 @@ class IDOCFilter(SubSurfFilter):
                     'sample_id': ['contains'],
                     # 'sample_name': ['contains'],
                     # 'site_name': ['contains'],
-                    'meas_station': ['exact'],
-                    'meas_station__river': ['exact'],
-                    'meas_station__survey': ['exact'],
+                    'meas_position': ['exact'],
+                    'meas_position__river': ['exact'],
+                    'meas_position__survey': ['exact'],
         }
 
 
-class StationFilter(django_filters.FilterSet):
+class PositionFilter(django_filters.FilterSet):
     class Meta:
-        model = MeasStation
+        model = MeasPosition
         fields = {'name': ['contains'],
                   'river': ['exact'],
                   'survey': ['exact'],
