@@ -79,40 +79,40 @@
                     'path/to/subsurfacesed/csv/',
                     'path/to/ido/csv/',
                     'path/to/kf/csv/',
-                    'path/to/kf/stations/'
+                    'path/to/kf/positions/csv'
     ]
 
     vectorized_readdfs = np.vectorize(lambda x: pd.read_csv(x))
     dfs = vectorized_readdfs(csv_list)
 
     # merge IDO table with Kf table
-    df_global = dfs[-3].merge(dfs[-2], on=['meas_station', 'sample_id', 'dp_position'], how='outer')
+    df_global = dfs[-3].merge(dfs[-2], on=['meas_position', 'sample_id', 'dp_position'], how='outer')
     df_global = df_global.drop_duplicates(subset=['sample_id', 'dp_position'])
 
     # Average along the depth the IDO and Kf depth-profile value
-    df_avg_ido_kf = df_global.groupby('meas_station', as_index=False).mean()
+    df_avg_ido_kf = df_global.groupby('meas_position', as_index=False).mean()
 
-    # Merge the depth-explicit dataframe with the stations table
-    df_global = dfs[-1].merge(df_global, left_on='name', right_on='meas_station')
+    # Merge the depth-explicit dataframe with the positions table
+    df_global = dfs[-1].merge(df_global, left_on='name', right_on='meas_position')
 
-    # Merge the average dataframe with the stations table
-    df_global_avg = dfs[-1].merge(df_avg_ido_kf, left_on='name', right_on='meas_station')
+    # Merge the average dataframe with the positions table
+    df_global_avg = dfs[-1].merge(df_avg_ido_kf, left_on='name', right_on='meas_position')
 
 
     models = [      'Hydraulics',
                     'SubsurfaceSed',
                     'IDO',
                     'Kf',
-                    'MeasStation']
+                    'MeasPosition']
 
     suffixes = {'SubsurfaceSed': 'subsurf', 'Hydraulics': 'hyd'}
 
     # Merge hydraulics and subsurface sediment data
     for i, df in enumerate(dfs[0:-3]):
-        df_global = df_global.merge(df, on='meas_station',
+        df_global = df_global.merge(df, on='meas_position',
                                     how='outer',
                                     suffixes=('', '_{}'.format(suffixes[models[i]])))
-        df_global_avg = df_global_avg.merge(df, on='meas_station',
+        df_global_avg = df_global_avg.merge(df, on='meas_position',
                                             how='outer',
                                             suffixes=('', '_{}'.format(suffixes[models[i]])))
     # Save the dataframes
@@ -132,7 +132,7 @@
                 <p>
                 The code snippet on the right produces the correlation plots shown on the top. To avoid biasing the analysis, the <code class="python">df_global_avg</code> is used, where the
                     depth-explicit parameters (hydraulic conductivity kf and interstitial dissolved oxygen IDO) were depth-averaged to produce one average value for each
-                    measurement station.
+                    measurement position.
                 </p>
             </div>
         </div>
@@ -179,10 +179,10 @@
     from sklearn.decomposition import PCA
 
     # Preparing df for dimensionality reduction
-    features = ['idoc_mgl', 'wl_m', 'kf_ms', 'river',
-                'n_wooster', 'd90', 'so', 'dm',
+    features = ['idoc_mgl', 'wl_m', 'slurp_rate_avg_mls', 'river',
+                'd84', 'dm', 'geom_std_grain',
                 'percent_finer_2mm',
-                # 'percent_finer_0_063mm'
+                'percent_finer_0_5mm',
                 'name'
                 ]
 

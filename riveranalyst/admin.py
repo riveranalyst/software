@@ -5,7 +5,7 @@ from .models import *
 # informational tables
 admin.site.register(River)
 admin.site.register(Survey)
-admin.site.register(MeasStation)
+admin.site.register(MeasPosition)
 
 
 # data valued tables
@@ -18,7 +18,5 @@ admin.site.register(Hydraulics)
 admin.site.register(CollectedData)
 admin.site.register(WaterQual)
 admin.site.register(Biota)
-admin.site.register(MorphFeatures)
-admin.site.register(MorphUnits)
 admin.site.register(Morphology)
 

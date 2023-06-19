@@ -62,7 +62,7 @@ class SedSamplTechnique(models.Model):
         return self.samp_techniques
 
 
-class MeasStation(models.Model):
+class MeasPosition(models.Model):
     """
     Stores the surveyed measurement stations. This Django model links with
     :model:`riveranalyst.River`, :model:`riveranalyst.Survey`, and :model:`riveranalyst.CollectedData`.
@@ -117,11 +117,11 @@ class SubsurfaceSed(models.Model):
     for the sediment sampling.
     """
     # many-to-one relationship (many SubsurfaceSeds to one MeasStation)
-    meas_station = models.ForeignKey(MeasStation,
-                                     verbose_name='Measurement station',
-                                     on_delete=models.SET_NULL,
-                                     null=True,
-                                     help_text='This field will be used to link the parametrical data tables'
+    meas_position = models.ForeignKey(MeasPosition,
+                                      verbose_name='Measurement station',
+                                      on_delete=models.SET_NULL,
+                                      null=True,
+                                      help_text='This field will be used to link the parametrical data tables'
                                                'to a given measurement point.')
     sample_id = models.CharField(max_length=200,
                                  help_text='This field is used to differentiate between duplicate '
@@ -188,10 +188,10 @@ class SurfaceSed(models.Model):
 
     # Sample class definition as SubsurfaceSeb but without the attribute of porosity from Structure from Motion
     # many-to-one relationship (many SurfaceSeds to one MeasStation)
-    meas_station = models.ForeignKey(MeasStation, verbose_name='Measurement station',
-                                     on_delete=models.SET_NULL,
-                                     null=True,
-                                     help_text='This field will be used to link the parametrical data tables'
+    meas_position = models.ForeignKey(MeasPosition, verbose_name='Measurement station',
+                                      on_delete=models.SET_NULL,
+                                      null=True,
+                                      help_text='This field will be used to link the parametrical data tables'
                                                'to a given measurement point.')
     sample_id = models.CharField(max_length=200)
     sampling_method = models.ForeignKey(SedSamplTechnique, on_delete=models.SET_NULL, null=True)
@@ -248,9 +248,9 @@ class IDO(models.Model):
     Stores data on riverbed insterstitial dissolved oxygen linked with a measurement station
     (:model:`riveranalyst.MeasStation`).
     """
-    meas_station = models.ForeignKey(MeasStation, verbose_name='Measurement station', on_delete=models.SET_NULL,
-                                     null=True,
-                                     help_text='This field will be used to link the parametrical data tables'
+    meas_position = models.ForeignKey(MeasPosition, verbose_name='Measurement station', on_delete=models.SET_NULL,
+                                      null=True,
+                                      help_text='This field will be used to link the parametrical data tables'
                                                'to a given measurement point.')
     sample_id = models.CharField(max_length=200, help_text='This field is used to differentiate between duplicate '
                                                            'measurements performed in the same station. Thus, use the'
@@ -278,10 +278,10 @@ class Kf(models.Model):
     (:model:`riveranalyst.MeasStation`).
     """
     # many-to-one relationship (many Kfs to one MeasStation)
-    meas_station = models.ForeignKey(MeasStation, on_delete=models.SET_NULL, null=True,
-                                     help_text='This field will be used to link the parametrical data tables'
+    meas_position = models.ForeignKey(MeasPosition, on_delete=models.SET_NULL, null=True,
+                                      help_text='This field will be used to link the parametrical data tables'
                                                'to a given measurement point.'
-                                     )
+                                      )
     sample_id = models.CharField(max_length=200, help_text='This field is used to differentiate between duplicate '
                                                            'measurements performed in the same station. Thus, use the'
                                                            'same sample_id when it is intended to link'
@@ -313,13 +313,13 @@ class Hydraulics(models.Model):
         ('BLANK', 'Blank'),
     )
     # many-to-one relationship (many Hydraulics to one MeasStation)
-    meas_station = models.ForeignKey(MeasStation, on_delete=models.SET_NULL, null=True)
+    meas_position = models.ForeignKey(MeasPosition, on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
     v_x_ms = models.FloatField(null=True, blank=True, verbose_name='v_x [m/s]')
     v_y_ms = models.FloatField(null=True, blank=True, verbose_name='v_y [m/s]')
     v_z_ms = models.FloatField(null=True, blank=True, verbose_name='v_z [m/s]')
-    kt = models.FloatField(null=True, blank=True, verbose_name='kt/U² [-]')
-    kt_2d = models.FloatField(null=True, blank=True, verbose_name='kt 2d/U² [-]')
+    kt = models.FloatField(null=True, blank=True, verbose_name='kt [m^2/s^2]')
+    kt_2d = models.FloatField(null=True, blank=True, verbose_name='kt 2d [m^2/s^2]')
     v_bulk = models.FloatField(null=True, blank=True, verbose_name='U bulk [m/s]')
     water_temperature = models.FloatField(null=True, blank=True, verbose_name='Water temperature [°C]')
     operator_name = models.CharField(null=True, blank=True, max_length=100)
@@ -333,7 +333,7 @@ class WaterQual(models.Model):
     (:model:`riveranalyst.MeasStation`).
     """
     # many-to-one relationship (many Hydraulics to one MeasStation)
-    meas_station = models.OneToOneField(MeasStation, on_delete=models.SET_NULL, null=True)
+    meas_position = models.OneToOneField(MeasPosition, on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
     ph = models.FloatField(null=True, blank=True, verbose_name='pH [-]')
     cod = models.FloatField(null=True, blank=True, verbose_name='COD [mg/l]')
@@ -351,50 +351,14 @@ class Biota(models.Model):
     (:model:`riveranalyst.MeasStation`).
     """
     # many-to-one relationship (many Hydraulics to one MeasStation)
-    meas_station = models.OneToOneField(MeasStation, on_delete=models.SET_NULL, null=True)
+    meas_position = models.OneToOneField(MeasPosition, on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
-    count_macrozoobenthos = models.IntegerField(null=True, blank=True, verbose_name='Macrozoobenthos count')
+    macrozoobenthos_species = models.CharField(max_length=1000, blank=True, null=True)
+    macrozoobenthos_count = models.CharField(null=True, max_length=1000, blank=True, verbose_name='Macrozoobenthos count')
     planting_species = models.CharField(max_length=200, blank=True, null=True)
-    count_fish_redds = models.IntegerField(null=True, blank=True, verbose_name='Fish redds count')
-
-
-class MorphFeatures(models.Model):
-    """
-    Stores types of morphological features linked with the morphological characteristics
-    (:model:`riveranalyst.Morphology`) of a
-    measurement station (:model:`riveranalyst.MeasStation`).
-    """
-    feature = models.CharField(max_length=200, unique=True)
-
-    def __str__(self):
-        return self.feature
-
-
-class MorphUnits(models.Model):
-    """
-    Stores types of morphological units linked with the morphological characteristics
-    (:model:`riveranalyst.Morphology`) of a
-    measurement station (:model:`riveranalyst.MeasStation`).
-    """
-    # Examples of morphological units found in the Lower Yuba River (California, USA) according
-    # to Pasternack & Wrick (2014)
-    # UNITS = (
-    #     ('Pool', ''),
-    #     ('Riffle', ''),
-    #     ('Run', ''),
-    #     ('Chute', ''),
-    #     ('Fast glide', ''),
-    #     ('Slow glide', ''),
-    #     ('Slackwater', ''),
-    #     ('Riffle transition', ''),
-    # )
-
-    unit = models.CharField(max_length=200, unique=True,
-                            # choices=UNITS
-                            )
-
-    def __str__(self):
-        return self.unit
+    fish_species = models.CharField(max_length=200, blank=True, null=True)
+    fish_count = models.CharField(null=True, blank=True, max_length=1000, verbose_name='Fish count')
+    fish_redd_count = models.CharField(null=True, blank=True, max_length=1000, verbose_name='Fish redds count')
 
 
 class Morphology(models.Model):
@@ -404,13 +368,9 @@ class Morphology(models.Model):
     """
 
     # one-to-one relationship (one Morphology to one MeasStation)
-    meas_station = models.OneToOneField(MeasStation, on_delete=models.SET_NULL, null=True)
+    meas_position = models.OneToOneField(MeasPosition, on_delete=models.SET_NULL, null=True)
     sample_id = models.CharField(max_length=200)
-    morphological_features = models.ForeignKey(MorphFeatures,
-                                               on_delete=models.SET_NULL,
-                                               null=True)
-    morphological_unit = models.ForeignKey(MorphUnits,
-                                           on_delete=models.SET_NULL,
-                                           null=True)
+    morph_features = models.CharField(max_length=200, blank=True, null=True)
+    morph_unit = models.CharField(max_length=200, blank=True, null=True)
 
 

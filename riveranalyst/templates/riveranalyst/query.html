@@ -10,9 +10,9 @@
         <div class="row">
             <div class="col-md">
                 <div class="card card-body">
-                <h3>Filter by stations</h3>
+                <h3>Filter by measurement positions</h3>
                     <form method="get">
-                        {{ stFilter.form.as_p }}
+                        {{ posFilter.form.as_p }}
                         <button class="btn btn-primary" type="submit">Search</button>
                     </form>
                 </div>
@@ -59,12 +59,12 @@
         <br>
         <div class="row">
             <div class="card card-body">
-                <h3>Measurement Stations</h3>
+                <h3>Measurement Positions</h3>
 
-                {% render_table station_table %}
+                {% render_table position_table %}
                 <div class="margin-right">
-                    <a href="{% querystring '_export_st'='csv' %}"><button class="btn btn-primary">Download CSV</button></a>
-                    <a href="{% querystring '_export_st'='xlsx' %}"><button class="btn btn-primary">Download XLSX</button></a>
+                    <a href="{% querystring '_export_pos'='csv' %}"><button class="btn btn-primary">Download CSV</button></a>
+                    <a href="{% querystring '_export_pos'='xlsx' %}"><button class="btn btn-primary">Download XLSX</button></a>
                 </div>
             </div>
         </div>

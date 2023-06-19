@@ -12,7 +12,7 @@ def get_corr_fig():
     :return: Plotly Figure, Dataframe
     """
     # get object from data models
-    models = [Hydraulics, SubsurfaceSed, IDO, Kf, MeasStation]
+    models = [Hydraulics, SubsurfaceSed, IDO, Kf, MeasPosition]
     suffixes = {SubsurfaceSed: 'subsurf', Hydraulics: 'hyd'}
     objects_list = []
     for m in models:
@@ -23,26 +23,23 @@ def get_corr_fig():
     dfs = vectorized_readdfs(objects_list)
 
     # merge IDO table with Kf table
-    df_global = dfs[-3].merge(dfs[-2], on=['meas_station', 'sample_id', 'dp_position'], how='outer')
+    df_global = dfs[-3].merge(dfs[-2], on=['meas_position', 'sample_id', 'dp_position'], how='outer')
     df_global = df_global.drop_duplicates(subset=['sample_id', 'dp_position'])
 
     # Average along the depth the IDO and Kf depth-profile value
-    df_avg_ido_kf = df_global.groupby('meas_station', as_index=False).mean()
-    # df_avg_ido_kf.to_csv('df_avg_ido_kf.csv')
+    df_avg_ido_kf = df_global.groupby('meas_position', as_index=False).mean()
 
-    # merge the depth-explicit dataframe with the stations table
-    df_global = dfs[-1].merge(df_global, left_on='name', right_on='meas_station')
+    # merge the depth-explicit dataframe with the positions table
+    df_global = dfs[-1].merge(df_global, left_on='name', right_on='meas_position')
 
-    # merge the average dataframe with the stations table
-    df_global_avg = dfs[-1].merge(df_avg_ido_kf, left_on='name', right_on='meas_station')
+    # merge the average dataframe with the positions table
+    df_global_avg = dfs[-1].merge(df_avg_ido_kf, left_on='name', right_on='meas_position')
 
     for i, df in enumerate(dfs[0:-3]):
-        # df2include = df[[c for c in list(df.columns) if c != 'meas_station']]
-        # df2include = df2include.add_suffix('_{}'.format(suffixes[models[i+1]]))
-        df_global = df_global.merge(df, on='meas_station',
+        df_global = df_global.merge(df, on='meas_position',
                                     how='outer',
                                     suffixes=('', '_{}'.format(suffixes[models[i]])))
-        df_global_avg = df_global_avg.merge(df, on='meas_station',
+        df_global_avg = df_global_avg.merge(df, on='meas_position',
                                             how='outer',
                                             suffixes=('', '_{}'.format(suffixes[models[i]])))
 
@@ -57,40 +54,28 @@ def get_corr_fig():
                             'idoc_mgl', 'idoc_sat', 'temp_c']
 
     # Correlation matrix just between bulk parameters
-    # df_final_seds = df_final.loc[:, ~df_final.columns.isin(depth_explicit_feats)]
-    # df_final_seds = df_final_seds.drop_duplicates()
-    # df_final_seds.to_csv('drop_duplicates_for_corr_seds.csv')
-    # df_corr_seds = df_final_seds.corr(method='spearman').round(1)
-    # # mask to matrix
-    # mask = np.zeros_like(df_corr_seds, dtype=bool)
-    # mask[np.triu_indices_from(mask)] = True
-    # viz
-    # df_corr_seds_viz = df_corr_seds.mask(mask).dropna(how='all').dropna('columns', how='all')
-
     fig = px.imshow(df_corr.loc[depth_explicit_feats, :], text_auto=True, aspect='auto')
-    # fig2 = px.imshow(df_corr_seds_viz, text_auto=True, aspect='auto')
-    # df_global_avg.to_csv('df_global_avg.csv')
     return fig, df_global_avg
 
 
 def get_PCA(df):
     # Preparing df for dimensinality reduction
-    features = ['idoc_mgl', 'wl_m', 'kf_ms', 'river',
-                'n_wooster', 'd90', 'so', 'dm',
+    features = ['idoc_mgl', 'wl_m', 'slurp_rate_avg_mls', 'river',
+                'd84', 'dm', 'geom_std_grain',
                 'percent_finer_2mm',
-                # 'percent_finer_0_063mm'
+                'percent_finer_0_5mm',
                 'name'
                 ]
 
     df4pca = df[features].dropna()
-    # df4pca.to_csv('pca-table.csv')
+
     df4pca_prescaling = df4pca.drop(['river', 'name'], axis=1)
 
     # Scaling with s-score apporach
     df4pca_final = df4pca_prescaling.apply(lambda x: (x - x.mean()) / x.std(), axis=0)
 
     # Build PCA
-    pca = PCA(n_components=3)
+    pca = PCA(n_components=4)
     components = pca.fit_transform(df4pca_final)
     variance = pca.explained_variance_ratio_
     cumulative_variance = np.cumsum(variance)
@@ -106,7 +91,7 @@ def get_PCA(df):
     fig2d = px.scatter_matrix(
         components,
         labels=labels,
-        dimensions=range(3),
+        dimensions=range(4),
         color=df4pca["river"],
         symbol=df4pca['river'],
         title=f'Total Explained Variance: {total_var2d:.2f}%',
@@ -115,6 +100,7 @@ def get_PCA(df):
         hover_name=df4pca['name'],
     )
     fig2d.update_traces(diagonal_visible=False)
+    # Set the desired width, height, and scale values
     pio.write_image(fig2d, 'pca_matrix.png', scale=4)
 
     # Plot data 3-dimensionaly in the new coordinate system of PCs
@@ -137,11 +123,11 @@ def get_PCA(df):
                           labels={'0': 'PC 1', '1': 'PC 2'},
                           title='Loadings',
                           color_discrete_sequence=px.colors.qualitative.Bold, )
-    feat_annotation = ['IDOC', 'Water level', 'kf', 'River',
-                        'n', 'd90', 'S0', 'dm',
+    feat_annotation = ['IDOC', 'Water depth', 'Slurping rate', 'River',
+                        'd84', 'dm', 'sigma_g',
                         'FSF < 2 mm',
-                       # 'FSF < 0.063 mm'
-                       ]
+                        'FSF < 0.5 mm'
+                ]
     annotate_dict = {features[i]: feat_annotation[i] for i in range(len(feat_annotation))}
     for i, feature in enumerate(df4pca_final.columns):
         fig_load.add_annotation(
