@@ -12,7 +12,7 @@ $(function() {
         // custom functionality for redirecting
         myDropzone.on("success", function(file){
         window.setTimeout(function(){
-        window.location.href="/flussdata/modify/upload/success_upload/"},
+        window.location.href="/riveranalyst/modify/upload/success_upload/"},
          2000)});
 })
 //var options = {

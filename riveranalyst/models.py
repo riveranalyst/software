@@ -90,8 +90,8 @@ class MeasPosition(models.Model):
                                    help_text='use "+" for wetted and "-" for dry locations')
     discharge = models.FloatField(null=True, blank=True,
                                   verbose_name='Discharge at recording time [m³/s]')
-    wl_m = models.FloatField(null=True, blank=True, verbose_name='Water level measured in-situ at recording time [m]')
-    wl_model_m = models.FloatField(null=True, blank=True, verbose_name='Modelled water level [m]')
+    wd_m = models.FloatField(null=True, blank=True, verbose_name='Water depth measured in situ [m]')
+    wd_model_m = models.FloatField(null=True, blank=True, verbose_name='Modelled water depth [m]')
     ALGAE = (
         ('YES', 'Yes'),
         ('NO', 'No'),

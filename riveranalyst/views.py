@@ -258,19 +258,19 @@ def upload_file(request):
     MESSAGE = 'Fail: Please select the collected data.'
     if request.method == 'POST':
         if request.POST['collected_data']:
-            try:
-                my_file = request.FILES['file']  # gets the table file from the post request
-                df = pd.read_csv(my_file.temporary_file_path(), encoding='utf-8',
-                                 parse_dates=['date'])
+            # try:
+            my_file = request.FILES['file']  # gets the table file from the post request
+            df = pd.read_csv(my_file.temporary_file_path(), encoding='utf-8',
+                             parse_dates=['date'])
 
-                #  append data from df read into the database
-                append_db(request.POST['collected_data'], df)
-                MESSAGE = 'Success: File was parsed and appended to the database.'
-            except Exception as e:
-                # TODO
-                # send message to user to make him selecte a collected data
-                MESSAGE = 'Fail: File could not be parsed and appended ' \
-                          'to the database. Error messages: \n' + str(e)
+            #  append data from df read into the database
+            append_db(request.POST['collected_data'], df)
+            MESSAGE = 'Success: File was parsed and appended to the database.'
+            # except Exception as e:
+            #     # TODO
+            #     # send message to user to make him selecte a collected data
+            #     MESSAGE = 'Fail: File could not be parsed and appended ' \
+            #               'to the database. Error messages: \n' + str(e)
     return JsonResponse({'post': 'false'})
 
 

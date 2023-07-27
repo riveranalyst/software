@@ -54,8 +54,8 @@ def fill_measpositions_model(df):
             bed_elevation_dhhn=row.bed_elevation_dhhn,
             pos_rel_WB=row.pos_rel_WB_m,
             discharge=row.dis_cumec,
-            wl_m=row.wl_m,
-            wl_model_m=row.wl_model_m,
+            wd_m=row.wd_m,
+            wd_model_m=row.wd_model_m,
             algae_cover=row.algae_cover,
             imbrication=row.imbrication,
             bed_slope=row.bed_slope,
@@ -73,8 +73,8 @@ def fill_do_model(df):
         )
 
         # Fill information about water levels if it wasn't available before
-        if st.wl_m is None:
-            st.wl_m = row.wl_m
+        if st.wd_m is None:
+            st.wd_m = row.wd_m
         st.save()
         # get or create the data class and add it to the stations information
         data_station = models.CollectedData.objects
@@ -108,8 +108,8 @@ def fill_kf_model(df):
         )
 
         # Fill information about water levels if it wasn't available before
-        if st.wl_m is None:
-            st.wl_m = row.wl_m
+        if st.wd_m is None:
+            st.wd_m = row.wd_m
         st.save()
 
         # get or create the data class and add it to the stations information

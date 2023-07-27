@@ -1,11 +1,11 @@
 from riveranalyst.utils.fill_funcs import *
 
 
-execute_fill_function = {'Stations': fill_measpositions_model,
+execute_fill_function = {'MeasPosition': fill_measpositions_model,
                          'SubsurfSed': fill_subsurf_model,
                          'SurfSed': fill_surf_model,
                          'IDO': fill_do_model,
-                         'kf': fill_kf_model,
+                         'Kf': fill_kf_model,
                          'Hydraulics': fill_hydraulics_model,
                          }
 
