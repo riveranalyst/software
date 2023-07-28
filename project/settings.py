@@ -156,6 +156,7 @@ PLOTLY_COMPONENTS = [
     'dpd_components'
 ]
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 100 * 1024 * 1024  # 10 MB
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/

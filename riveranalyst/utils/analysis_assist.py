@@ -60,7 +60,7 @@ def get_corr_fig():
 
 def get_PCA(df):
     # Preparing df for dimensinality reduction
-    features = ['idoc_mgl', 'wl_m', 'slurp_rate_avg_mls', 'river',
+    features = ['idoc_mgl', 'wd_m', 'slurp_rate_avg_mls', 'river',
                 'd84', 'dm', 'geom_std_grain',
                 'percent_finer_2mm',
                 'percent_finer_0_5mm',
