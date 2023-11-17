@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 model_names = ['MeasPosition', 'IDO', 'Kf', 'SubsurfaceSed', 'SurfaceSed', 'Hydraulics']
 table_paths = [BASE_DIR / 'media/db-baseline-positions.xlsx',
                BASE_DIR / 'media/db-baseline-idoc.xlsx',
-               BASE_DIR / 'media/db-baseline-kf.xlsx',
+               BASE_DIR / 'media/db-baseline-kf-fin.xlsx',
                BASE_DIR / 'media/db-baseline-subsurf.xlsx',
                BASE_DIR / 'media/db-baseline-surf.xlsx',
                BASE_DIR / 'media/db-baseline-hydraulics.xlsx'
