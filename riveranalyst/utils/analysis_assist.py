@@ -14,13 +14,14 @@ def get_corr_fig():
     # get object from data models
     models = [Hydraulics, SubsurfaceSed, IDO, Kf, MeasPosition]
     suffixes = {SubsurfaceSed: 'subsurf', Hydraulics: 'hyd'}
-    objects_list = []
+    # objects_list = []
+    dfs = []
     for m in models:
-        objects_list.append(m.objects.all())
-
+        # objects_list.append(m.objects.all())
+        dfs.append(read_frame(m.objects.all()))
     # creates df from filtered table
-    vectorized_readdfs = np.vectorize(lambda x: read_frame(x))
-    dfs = vectorized_readdfs(objects_list)
+    # vectorized_readdfs = np.vectorize(lambda x: read_frame(x))
+    # dfs = vectorized_readdfs(objects_list)
 
     # merge IDO table with Kf table
     df_global = dfs[-3].merge(dfs[-2], on=['meas_position', 'sample_id', 'dp_position'], how='outer')
