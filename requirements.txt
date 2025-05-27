@@ -89,7 +89,7 @@ scipy==1.10.1
 seaborn==0.12.2
 service-identity==21.1.0
 six==1.16.0
-sklearn==0.0.post1
+
 sqlparse==0.4.4
 tablib==3.2.1
 tenacity==8.0.1
